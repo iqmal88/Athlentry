@@ -6,22 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
-            $table->id();
+        Schema::create('User', function (Blueprint $table) {
+            // Standard Laravel user fields:
+            $table->id('UserID'); // PK - equivalent to Laravel's $table->id();
+            $table->string('Name', 255);
+            $table->string('Email', 255)->unique();
+            $table->string('Password', 255);
+
+            // Custom fields from your ERD:
+            $table->string('MatricNo', 50)->nullable();
+            $table->string('Role', 50);
+            $table->text('MedicalHistory')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('User');
     }
 };
