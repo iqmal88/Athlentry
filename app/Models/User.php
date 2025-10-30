@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable;
 
-    protected $table = 'User'; // Custom table name
+    protected $table = 'User'; // 
     protected $primaryKey = 'UserID';
-    public $timestamps = true;
 
     protected $fillable = [
         'Name',
         'Email',
-        'Password',
         'MatricNo',
         'PhoneNumber',
+        'Password',
         'MedicalHistory',
     ];
 
