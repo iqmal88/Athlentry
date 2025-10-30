@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,6 +19,16 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 
 //Logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Forgot Password Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('forgotpass.view');
+Route::post('/forgot-password', [AuthController::class, 'sendResetMessage'])->name('forgotpass.post');
+
+//Profile
+Route::get('/profile', [UserController::class, 'showProfile'])->name('profile.view');
+Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
+Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+
 
 // Example dashboard redirect after login
 Route::get('/dashboard', function () {

@@ -44,6 +44,13 @@
                 >
             </div>
 
+            <div class="text-right">
+                <a href="{{ route('forgotpass.view') }}" class="text-sm text-blue-600 hover:underline">
+                    Forgot Password?
+                </a>
+            </div>
+
+
             <button 
                 type="submit" 
                 class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-semibold"

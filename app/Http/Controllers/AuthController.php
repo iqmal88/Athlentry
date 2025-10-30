@@ -68,4 +68,29 @@ class AuthController extends Controller
         Session::forget('user');
         return redirect()->route('login.view');
     }
+
+    // Show forgot password view
+    public function showForgotPassword()
+    {
+        return view('Login.ForgotPass');
+    }
+
+    // Handle forgot password request
+    public function sendResetMessage(Request $request)
+    {
+        $request->validate([
+        'Email' => 'required|email',
+        ]);
+
+        $user = User::where('Email', $request->Email)->first();
+
+        if (!$user) {
+            return back()->with('error', 'Email not found in our records.');
+            }
+
+        // For now, just simulate message sent
+        // Later you can add actual email sending logic
+        return back()->with('success', 'A password reset link has been sent to your email (simulation).');
+    }
+
 }
