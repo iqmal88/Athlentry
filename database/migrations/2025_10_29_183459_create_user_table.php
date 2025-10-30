@@ -17,7 +17,7 @@ return new class extends Migration
 
             // Custom fields from your ERD:
             $table->string('MatricNo', 50)->nullable();
-            $table->string('Role', 50);
+            $table->string('PhoneNumber', 20)->nullable();
             $table->text('MedicalHistory')->nullable();
 
             $table->timestamps();
