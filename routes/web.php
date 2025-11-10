@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\AdminAuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,3 +34,10 @@ Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('
 Route::get('/dashboard', function () {
     return view('dashboard'); // create dashboard.blade.php later
 })->name('dashboard')->middleware('web');
+
+//Admin
+//Login
+Route::prefix('admin')->group(function () {
+Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+});
