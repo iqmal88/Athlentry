@@ -18,49 +18,53 @@ class AuthController extends Controller
     // Handle login
     public function login(Request $request)
     {
-        $request->validate([
-            'MatricNo' => 'required',
-            'Password' => 'required',
+        $data = $request->validate([
+        'identifier' => 'required|string',
+        'password' => 'required|string',
+        'remember' => 'nullable|boolean',
         ]);
 
-        $user = User::where('MatricNo', $request->MatricNo)->first();
+        $matric = $data['identifier'];
+        $user = \App\Models\User::where('MatricNo', $matric)->where('Role','student')->first();
 
-        if ($user && Hash::check($request->Password, $user->Password)) {
-            Session::put('user', $user);
-            return redirect()->route('dashboard'); // Change to your dashboard route
+        if (! $user || ! \Hash::check($data['password'], $user->Password)) {
+            return back()->withErrors(['identifier' => 'Invalid credentials'])->withInput();
         }
 
-        return back()->with('error', 'Invalid Matric No or Password.');
+        \Auth::login($user, (bool)$request->boolean('remember'));
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('student.dashboard'));
     }
+
 
     // Show registration view
-    public function showRegister()
-    {
-        return view('Register.RegisterView');
+    public function showRegisterForm(){ 
+        
+        return view('Register.RegisterView'); 
     }
 
-    // Handle registration
     public function register(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'Name' => 'required|string|max:255',
-            'Email' => 'required|email|unique:User,Email',
-            'MatricNo' => 'required|string|max:50|unique:User,MatricNo',
-            'PhoneNumber' => 'required|string|max:20',
-            'Password' => 'required|min:6',
+            'MatricNo' => 'required|string|unique:users,MatricNo',
+            'Email' => 'required|email|unique:users,Email',
+            'Password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = new User();
-        $user->Name = $request->Name;
-        $user->Email = $request->Email;
-        $user->MatricNo = $request->MatricNo;
-        $user->PhoneNumber = $request->PhoneNumber;
-        $user->Password = Hash::make($request->Password);
-        $user->MedicalHistory = $request->MedicalHistory;
-        $user->save();
+        $user = \App\Models\User::create([
+            'Name' => $data['Name'],
+            'MatricNo' => $data['MatricNo'],
+            'Email' => $data['Email'],
+            'Password' => \Hash::make($data['Password']),
+            'Role' => 'student',
+        ]);
 
-        return redirect()->route('login.view')->with('success', 'Registration successful! Please login.');
+        \Auth::login($user);
+        return redirect()->route('student.dashboard');
     }
+
 
     // Handle logout
     public function logout()

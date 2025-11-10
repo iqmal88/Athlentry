@@ -1,43 +1,29 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\StudentController; // if you have student dashboard
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Common login view (single page)
+Route::get('/login', function () { return view('Login.LoginView'); })->name('login.view');
+
+// Student auth (AuthController)
+Route::post('/login/student', [AuthController::class, 'login'])->name('login.submit');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('student.register.view');
+Route::post('/register', [AuthController::class, 'register'])->name('student.register.submit');
+
+// Admin auth (AdminAuthController)
+Route::post('/login/admin', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+Route::get('/admin/login', function(){ return view('Login.LoginView'); })->name('admin.login.view'); // optional direct link
+
+// Logout (shared)
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Protected dashboards (example)
+Route::middleware(['auth','is_admin'])->prefix('admin')->group(function(){
+    Route::get('dashboard', [App\Http\Controllers\AdminDashboardController::class,'index'])->name('admin.dashboard');
 });
-
-//Login
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login.view');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-//Register
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register.view');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-//Logout
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Forgot Password Routes
-Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('forgotpass.view');
-Route::post('/forgot-password', [AuthController::class, 'sendResetMessage'])->name('forgotpass.post');
-
-//Profile
-Route::get('/profile', [UserController::class, 'showProfile'])->name('profile.view');
-Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
-Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-
-
-// Example dashboard redirect after login
-Route::get('/dashboard', function () {
-    return view('dashboard'); // create dashboard.blade.php later
-})->name('dashboard')->middleware('web');
-
-//Admin
-//Login
-Route::prefix('admin')->group(function () {
-Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+Route::middleware(['auth','is_student'])->prefix('student')->group(function(){
+    Route::get('dashboard', [App\Http\Controllers\StudentDashboardController::class,'index'])->name('student.dashboard');
 });

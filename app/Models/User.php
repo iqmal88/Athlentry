@@ -2,29 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable
-{
-    use HasFactory, Notifiable;
-
-    protected $primaryKey = 'UserID';
-    public $incrementing = true;
-    protected $keyType = 'int';
-
-    protected $fillable = [
-        'Name', 'MatricNo', 'Email', 'Password', 'Role', 'MedicalHistory',
-    ];
-
-    protected $hidden = [
-        'Password',
-        'remember_token',
-    ];
-
-    public function isAdmin()
-    {
-        return $this->Role === 'admin';
-    }
+class User extends Authenticatable {
+  use HasFactory;
+  protected $primaryKey = 'UserID'; // if you used that earlier
+  protected $fillable = ['Name','MatricNo','Email','Password','Role','MedicalHistory'];
+  protected $hidden = ['Password','remember_token'];
+  public function getAuthPassword(){ return $this->Password; } // if column name is Password
 }
+

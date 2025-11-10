@@ -16,26 +16,22 @@ class AdminAuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'matric_no' => ['required', 'string'],
-            'password' => ['required', 'string'],
+        $data = $request->validate([
+            'identifier' => 'required|string', // from view
+            'password' => 'required|string',
+            'remember' => 'nullable|boolean',
         ]);
 
-        $user = User::where('MatricNo', $credentials['matric_no'])->first();
+        $matric = $data['identifier'];
+        $user = \App\Models\User::where('MatricNo', $matric)->where('Role','admin')->first();
 
-        if (! $user) {
-            return back()->withErrors(['matric_no' => 'No account found with that Matric Number.'])->withInput();
+        if (! $user || ! \Hash::check($data['password'], $user->Password)) {
+            return back()->withErrors(['identifier' => 'Invalid credentials'])->withInput();
         }
 
-        if ($user->Role !== 'admin') {
-            return back()->withErrors(['matric_no' => 'You are not authorized to access admin panel.'])->withInput();
-        }
+        \Auth::login($user, (bool)$request->boolean('remember'));
+        $request->session()->regenerate();
 
-        if (! Hash::check($credentials['password'], $user->Password)) {
-            return back()->withErrors(['password' => 'Invalid password'])->withInput();
-        }
-
-        Auth::login($user);
-        return redirect()->route('admin.dashboard');
+        return redirect()->intended(route('admin.dashboard'));
     }
 }
