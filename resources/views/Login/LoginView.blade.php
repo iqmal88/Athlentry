@@ -17,7 +17,7 @@
 
   <div id="box" class="fade w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
     <div class="flex justify-center mb-6">
-      <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-14 object-contain">
+      <img src="{{ asset('images/Athlentry-logo.jpg') }}" alt="Logo" class="h-14 object-contain">
     </div>
 
     <h1 class="text-2xl font-semibold text-center mb-1">Sign in</h1>

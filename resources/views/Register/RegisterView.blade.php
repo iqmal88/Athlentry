@@ -19,7 +19,7 @@
   <div id="box" class="fade w-full max-w-lg bg-white rounded-2xl shadow-xl p-8">
     <!-- Logo -->
     <div class="flex justify-center mb-6">
-      <img src="{{ asset('images/logo.png') }}" alt="Athlentry Logo" class="h-14 object-contain">
+      <img src="{{ asset('images/Athlentry-logo.jpg') }}" alt="Athlentry Logo" class="h-14 object-contain">
     </div>
 
     <h1 class="text-2xl font-semibold text-center mb-1 text-slate-800">Create your account</h1>
