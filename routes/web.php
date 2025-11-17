@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\StudentController; // if you have student dashboard
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +21,19 @@ Route::get('/admin/login', function(){ return view('Login.LoginView'); })->name(
 // Logout (shared)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Protected dashboards (example)
-Route::middleware(['auth','is_admin'])->prefix('admin')->group(function(){
-    Route::get('dashboard', [App\Http\Controllers\AdminDashboardController::class,'index'])->name('admin.dashboard');
+Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
+    Route::get('announcements', [AnnouncementController::class, 'adminIndex'])
+        ->name('admin.announcements.index');
+
+    Route::get('announcements/create', [AnnouncementController::class, 'create'])
+        ->name('admin.announcements.create');
+
+    Route::post('announcements', [AnnouncementController::class, 'store'])
+        ->name('admin.announcements.store');
 });
-Route::middleware(['auth','is_student'])->prefix('student')->group(function(){
-    Route::get('dashboard', [App\Http\Controllers\StudentDashboardController::class,'index'])->name('student.dashboard');
+
+Route::middleware(['auth','is_student'])->prefix('student')->group(function () {
+    Route::get('announcements', [AnnouncementController::class, 'studentIndex'])
+        ->name('student.announcements.index');
 });
+

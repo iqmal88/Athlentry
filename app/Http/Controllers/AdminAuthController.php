@@ -32,6 +32,15 @@ class AdminAuthController extends Controller
         \Auth::login($user, (bool)$request->boolean('remember'));
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->intended(route('admin.announcements.index'));
+    }
+
+    public function logout(request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login.view');
     }
 }
