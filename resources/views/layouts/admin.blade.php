@@ -1,50 +1,67 @@
-@extends('layouts.admin')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Admin Panel')</title>
 
-@section('content')
-<div class="min-h-screen bg-[rgb(235,100,100)]">
-  <div class="max-w-6xl mx-auto px-6 py-8">
+    {{-- Tailwind (if using CDN) --}}
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    {{-- Top bar / nav (visual only) --}}
-    <div class="flex items-center justify-between mb-6">
-      <div class="text-white">
-        <nav class="flex gap-6 text-sm">
-          <a class="opacity-90">Home</a>
-          <a class="opacity-90">Application</a>
-          <a class="opacity-90">Game Information</a>
-          <span class="font-bold">Dashboard and Report</span>
-          <a class="opacity-90">Status</a>
-        </nav>
-      </div>
+    {{-- Optional custom font --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700" rel="stylesheet" />
 
-      <div>
-        <a href="{{ route('admin.announcements.create') }}" class="inline-block bg-emerald-500 text-white px-4 py-2 rounded-full">Add</a>
-      </div>
-    </div>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
 
-    @if(session('success'))
-      <div class="mb-4 bg-green-100 text-green-800 p-3 rounded">{{ session('success') }}</div>
-    @endif
+<body class="bg-gray-100">
 
-    <div class="text-black/80 mb-4">
-      <h2 class="text-base font-semibold mb-2">Featured Events</h2>
-    </div>
+    {{-- =============== TOP NAVIGATION BAR (MAROON) =============== --}}
+    <nav class="bg-[#800000] text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-      @foreach($announcements as $announce)
-        @include('Announcement.components.card', ['announce' => $announce])
-      @endforeach
-    </div>
+            {{-- Left: Logo / Title --}}
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 7l9-4 9 4-9 4-9-4zm0 8l9 4 9-4M3 7v8m18-8v8"/>
+                </svg>
+                <span class="text-lg font-semibold">Admin Dashboard</span>
+            </div>
 
-    {{-- Special Offers example --}}
-    <div class="mb-6">
-      <h3 class="text-base font-semibold mb-3">Special Offers</h3>
-      <div class="w-48 bg-white p-3 rounded-lg shadow">
-        <img src="{{ asset('images/sample-offer.jpg') }}" alt="offer" class="w-full rounded mb-2">
-        <div class="text-xs font-semibold">Purchase Sukfac T-Shirt</div>
-        <div class="text-[11px] text-slate-600">26 October 2025, Sunday</div>
-      </div>
-    </div>
+            {{-- Right: Navigation + Logout --}}
+            <div class="flex items-center gap-6">
 
-  </div>
-</div>
-@endsection
+                <a href="{{ route('admin.announcements.index') }}"
+                   class="text-sm hover:text-gray-200">
+                    Announcements
+                </a>
+
+                {{-- Add more admin menu links here later
+                <a href="#" class="text-sm hover:text-gray-200">Users</a>
+                --}}
+
+                {{-- Logout --}}
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="bg-white text-[#800000] px-3 py-1 rounded-md font-medium hover:bg-gray-200">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    {{-- ===================== MAIN PAGE CONTENT ===================== --}}
+    <main class="max-w-7xl mx-auto p-6">
+        @yield('content')
+    </main>
+
+</body>
+</html>

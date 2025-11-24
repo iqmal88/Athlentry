@@ -2,40 +2,41 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Announcement extends Model
 {
-    // Primary key is AnnouncementID (not the default id)
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'announcements';
     protected $primaryKey = 'AnnouncementID';
 
-    // If your PK is not auto-incrementing integer, set $incrementing=false. 
-    // In your migration you used id() so it's incrementing — leave default.
-    // protected $keyType = 'int';
-
     protected $fillable = [
-        'Location',
         'Title',
+        'Location',
         'Date',
+        'TimeFrom',
+        'TimeUntil',
         'Description',
+        'Image',
         'CreatedBy',
     ];
 
-    // Optional: cast Date to date object
     protected $casts = [
-        'Date' => 'date',
+        'Date'      => 'date',
+        'TimeFrom'  => 'datetime:H:i',   // Stored as TIME, returned as Carbon
+        'TimeUntil' => 'datetime:H:i',   // Stored as TIME, returned as Carbon
     ];
 
-    // If you want an easy accessor for a human readable date
-    public function getFormattedDateAttribute()
-    {
-        if (!$this->Date) return null;
-        return $this->Date->format('j F Y, l'); // e.g. 31 March 2025, Sunday
-    }
+    protected $dates = [
+        'deleted_at',
+    ];
 
-    // Relationship to User (optional)
+    // Announcement belongs to user (creator)
     public function creator()
     {
-        return $this->belongsTo(\App\Models\User::class, 'CreatedBy', 'UserID');
+        return $this->belongsTo(User::class, 'CreatedBy', 'UserID');
     }
 }

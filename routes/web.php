@@ -21,6 +21,7 @@ Route::get('/admin/login', function(){ return view('Login.LoginView'); })->name(
 // Logout (shared)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//announcement
 Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::get('announcements', [AnnouncementController::class, 'adminIndex'])
         ->name('admin.announcements.index');
@@ -30,6 +31,14 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
 
     Route::post('announcements', [AnnouncementController::class, 'store'])
         ->name('admin.announcements.store');
+
+    Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForAdmin'])
+         ->name('admin.announcements.show');
+         // EDIT / UPDATE
+    Route::get('announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('admin.announcements.edit');
+    Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('admin.announcements.update');
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+
 });
 
 Route::middleware(['auth','is_student'])->prefix('student')->group(function () {

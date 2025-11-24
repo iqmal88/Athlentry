@@ -9,14 +9,32 @@ return new class extends Migration {
     {
         Schema::create('announcements', function (Blueprint $table) {
             $table->id('AnnouncementID');
-            $table->string('Location')->nullable();
+
             $table->string('Title');
+            $table->string('Location')->nullable();
             $table->date('Date')->nullable();
+
+            // Time columns (new)
+            $table->time('TimeFrom')->nullable();
+            $table->time('TimeUntil')->nullable();
+
             $table->text('Description')->nullable();
+
+            // uploaded image (stored as filename or path)
+            $table->string('Image')->nullable();
+
+            // foreign key to users table
             $table->unsignedBigInteger('CreatedBy');
+            $table->foreign('CreatedBy')
+                  ->references('UserID')
+                  ->on('users')
+                  ->onDelete('cascade');
+
+            // timestamps
             $table->timestamps();
 
-            $table->foreign('CreatedBy')->references('UserID')->on('users')->onDelete('cascade');
+            // recommended for admin deletion tracking
+            $table->softDeletes();
         });
     }
 
