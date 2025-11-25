@@ -41,6 +41,10 @@
                    class="text-sm hover:text-gray-200">
                     Announcements
                 </a>
+                <a href="#"
+                   class="text-sm hover:text-gray-200">
+                    Athlete Application
+                </a>
 
                 {{-- Add more admin menu links here later
                 <a href="#" class="text-sm hover:text-gray-200">Users</a>

@@ -10,9 +10,6 @@
   $imgSrc = $announcement->Image ? asset('storage/' . $announcement->Image) : $fallbackImage;
 @endphp
 
-<div class="min-h-screen bg-gray-50 py-8">
-  <div class="max-w-6xl mx-auto px-4">
-
     {{-- Header --}}
     <div class="mb-6 flex items-center justify-between">
       <div>
@@ -106,7 +103,7 @@
       {{-- Right: event info card with icons + actions --}}
       <aside class="bg-white rounded-xl shadow-md p-5">
         <div class="border-b pb-4 mb-4">
-          <h3 class="text-sm font-semibold text-gray-700">Event Info</h3>
+          <h3 class="text-center font-semibold text-gray-700">Event Info</h3>
         </div>
 
         <div class="space-y-4 text-sm text-gray-700">
