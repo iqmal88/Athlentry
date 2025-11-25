@@ -39,7 +39,7 @@ class GameInfoController extends Controller
             $q->orderBy('GameDate')->orderBy('GameName');
         }])->orderByDesc('StartDate')->get();
 
-        return view('Game.Admin.ListGames', compact('events'));
+        return view('GameInfo.Admin.ListGames', compact('events'));
     }
 
     /**
@@ -48,7 +48,7 @@ class GameInfoController extends Controller
     public function create()
     {
         $events = Event::orderByDesc('StartDate')->get();
-        return view('Game.Admin.AddGame', compact('events'));
+        return view('GameInfo.Admin.AddGame', compact('events'));
     }
 
     /**
@@ -82,7 +82,7 @@ class GameInfoController extends Controller
     public function showForAdmin(GameInfo $game)
     {
         $game->load(['event','applications.user','applications.status']);
-        return view('Game.Admin.ShowGame', compact('game'));
+        return view('GameInfo.Admin.ShowGame', compact('game'));
     }
 
     /**
@@ -91,7 +91,7 @@ class GameInfoController extends Controller
     public function edit(GameInfo $game)
     {
         $events = Event::orderByDesc('StartDate')->get();
-        return view('Game.Admin.EditGame', compact('game','events'));
+        return view('GameInfo.Admin.EditGame', compact('game','events'));
     }
 
     /**

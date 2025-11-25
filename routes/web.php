@@ -3,6 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\GameInfoController;
+use App\Http\Controllers\EventController;
+
 use Illuminate\Support\Facades\Route;
 
 // Common login view (single page)
@@ -20,15 +24,15 @@ Route::get('/admin/login', function(){ return view('Login.LoginView'); })->name(
 // Logout (shared)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth','is_admin'])->prefix('admin')->name('admin')->group(function () {
+Route::middleware(['auth','is_admin'])->prefix('admin')->name('admin.')->group(function () {
     //announcement
-    Route::get('announcements', [AnnouncementController::class, 'adminIndex'])->name('admin.announcements.index');
-    Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('admin.announcements.create');
-    Route::post('announcements', [AnnouncementController::class, 'store'])->name('admin.announcements.store');
-    Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForAdmin'])->name('admin.announcements.show');
-    Route::get('announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('admin.announcements.edit');
-    Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('admin.announcements.update');
-    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+    Route::get('announcements', [AnnouncementController::class, 'adminIndex'])->name('announcements.index');
+    Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('announcements.create');
+    Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+    Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForAdmin'])->name('announcements.show');
+    Route::get('announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
+    Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
     // events
     Route::get('events', [EventController::class,'adminIndex'])->name('events.index');
     Route::get('events/create', [EventController::class,'create'])->name('events.create');

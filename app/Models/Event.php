@@ -21,6 +21,12 @@ class Event extends Model
         'Status',
     ];
 
+    protected $casts = [
+    'StartDate' => 'date',
+    'EndDate' => 'date',
+    ];
+
+
     // Relations
     public function games()
     {

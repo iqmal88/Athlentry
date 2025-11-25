@@ -34,7 +34,7 @@ class ApplicationController extends Controller
         }
         $applications = $query->get();
 
-        return view('Application.Admin.ListApplications', compact('applications'));
+        return view('Application.Admin.ListApplication', compact('applications'));
     }
 
     /**
@@ -43,7 +43,7 @@ class ApplicationController extends Controller
     public function showForAdmin(GameInfo $game)
     {
         $game->load(['applications.user','applications.status','event']);
-        return view('Application.Admin.ForGame', compact('game'));
+        return view('Application.Admin.ListApplicant', compact('game'));
     }
 
     /**
@@ -52,7 +52,7 @@ class ApplicationController extends Controller
     public function showForAdminSingle(Application $application)
     {
         $application->load(['user','game.event','status']);
-        return view('Application.Admin.ShowApplication', compact('application'));
+        return view('Application.Admin.SelectedAthlete', compact('application'));
     }
 
     /**

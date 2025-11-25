@@ -41,7 +41,7 @@
                    class="text-sm hover:text-gray-200">
                     Announcements
                 </a>
-                <a href="#"
+                <a href="{{ route('admin.applications.index') }}"
                    class="text-sm hover:text-gray-200">
                     Athlete Application
                 </a>
