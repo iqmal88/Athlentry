@@ -20,6 +20,14 @@ Route::post('/register', [AuthController::class, 'register'])->name('student.reg
 // Admin auth (AdminAuthController)
 Route::post('/login/admin', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 Route::get('/admin/login', function(){ return view('Login.LoginView'); })->name('admin.login.view'); // optional direct link
+// show forgot password page
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('login.forgot.view');
+
+// handle direct reset form (student only)
+Route::post('/forgot-password/reset', [AuthController::class, 'resetPassword'])->name('student.password.reset');
+
+// (optional) existing send-reset-message simulation route
+Route::post('/forgot-password/send', [AuthController::class, 'sendResetMessage'])->name('login.forgot.send');
 
 // Logout (shared)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

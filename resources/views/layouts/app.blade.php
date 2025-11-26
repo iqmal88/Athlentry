@@ -20,8 +20,7 @@
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
       {{-- Left: Logo --}}
-      <a href="{{ route('student.announcements.index') }}" class="flex items-center gap-2">
-        <img src="{{ asset('images/logo.png') }}" onerror="this.style.display='none';"
+        <img src="#" onerror="this.style.display='none';"
              class="h-7" alt="">
         <span class="text-white text-xl font-semibold tracking-wide">Athlentry</span>
       </a>

@@ -106,7 +106,7 @@
 
           {{-- Add to calendar link --}}
           <div class="pt-2">
-            <a href="#" class="text-sm text-[#e7542e] hover:underline">Add to my calendar</a>
+            <a href="#" class="text-sm text-[#e7542e] hover:underline">Apply</a>
           </div>
         </div>
       </aside>
