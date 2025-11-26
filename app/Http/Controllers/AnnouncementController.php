@@ -86,13 +86,13 @@ class AnnouncementController extends Controller
         return view('Announcement.Admin.ShowAnnounce', compact('announcement'));
     }
 
-/**
- * Show announcement page for student (read-only)
- */
-public function showForStudent(Announcement $announcement)
-{
-    return view('Announcement.Student.ViewAnnouncement', compact('announcement'));
-}
+        /**
+        * Show announcement page for student (read-only)
+        */
+        public function showForStudent(Announcement $announcement)
+    {
+        return view('Announcement.Student.ViewAnnouncement', compact('announcement'));
+    }
 
 
     /**

@@ -41,9 +41,13 @@
                    class="text-sm hover:text-gray-200">
                     Announcements
                 </a>
-                <a href="{{ route('admin.applications.index') }}"
+                <a href="{{ route('admin.events.list') }}"
                    class="text-sm hover:text-gray-200">
                     Athlete Application
+                </a>
+                <a href="{{ route('admin.gameinfo.index') }}"
+                   class="text-sm hover:text-gray-200">
+                    Game Information
                 </a>
 
                 {{-- Add more admin menu links here later

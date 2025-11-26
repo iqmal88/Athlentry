@@ -1,4 +1,3 @@
-{{-- resources/views/Announcement/card.blade.php --}}
 @props([
     'announce',
     'detailRoute' => '#'

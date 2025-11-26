@@ -2,95 +2,302 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Application;
-use App\Models\GameInfo;
-use App\Models\Event;
-use App\Models\Status;
 use Illuminate\Http\Request;
+use App\Models\Event;
+use App\Models\GameInfo;
+use App\Models\Application;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
-    /**
-     * STUDENT PAGE - placeholder (we won't implement student UI now)
-     */
-    public function studentIndex()
+    /*
+    |--------------------------------------------------------------------------
+    | Helper - Get Current Admin/User ID
+    |--------------------------------------------------------------------------
+    */
+    protected function getUserId()
     {
-        // Later: list student's own applications
-        $applications = [];
-        return view('Application.Student.homepage', compact('applications'));
+        if (Auth::check()) return Auth::id();
+        return Session::get('user')->UserID ?? null;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | EVENT MANAGEMENT
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * List all events (with games and applications_count for each game)
+     */
+    public function listEvents()
+    {
+        // Load events with their games; each game includes applications_count
+        $events = Event::with(['games' => function($q){
+            $q->withCount('applications');
+        }])->orderBy('StartDate','desc')->get();
+
+        return view('application.admin.ListEvent', compact('events'));
     }
 
     /**
-     * ADMIN PAGE - list all applications (optionally filter)
+     * Show create event form
      */
-    public function adminIndex(Request $request)
+    public function createEvent()
     {
-        $query = Application::with(['user','game.event','status'])->orderByDesc('DateApplied');
+        // If you want to show available games to associate, keep this.
+        $availableGames = GameInfo::whereNull('EventID')->orderBy('GameName')->get();
 
-        if ($request->filled('GameID')) {
-            $query->where('GameID', $request->GameID);
-        }
-        $applications = $query->get();
-
-        return view('Application.Admin.ListApplication', compact('applications'));
+        return view('application.admin.AddEvent', compact('availableGames'));
     }
 
     /**
-     * ADMIN PAGE - show applicants for specific game
+     * Store event + minimal games (GameName, Category, Capacity)
      */
-    public function showForAdmin(GameInfo $game)
+    public function storeEvent(Request $request)
     {
-        $game->load(['applications.user','applications.status','event']);
-        return view('Application.Admin.ListApplicant', compact('game'));
-    }
+        $rules = [
+            'EventName' => 'required|string|max:255',
+            'Location' => 'nullable|string|max:255',
+            'StartDate' => 'nullable|date',
+            'EndDate' => 'nullable|date|after_or_equal:StartDate',
+            'Description' => 'nullable|string',
+            'Status' => 'nullable|in:Open,Closed,Cancelled',
 
-    /**
-     * ADMIN: show single application (applicant detail)
-     */
-    public function showForAdminSingle(Application $application)
-    {
-        $application->load(['user','game.event','status']);
-        return view('Application.Admin.SelectedAthlete', compact('application'));
-    }
+            'games' => 'nullable|array',
+            'games.*.GameName' => 'required_with:games|string|max:255',
+            'games.*.Category' => 'nullable|string|max:100',
+            'games.*.Capacity' => 'nullable|integer|min:1',
+        ];
 
-    /**
-     * ADMIN: Update status (approve/reject/waitlist)
-     */
-    public function update(Request $request, Application $application)
-    {
-        $validated = $request->validate([
-            'StatusID' => 'required|integer|exists:statuses,StatusID',
-        ]);
+        $validated = $request->validate($rules);
 
-        $newStatus = Status::find($validated['StatusID']);
+        DB::beginTransaction();
+        try {
+            $event = Event::create([
+                'EventName'   => $validated['EventName'],
+                'Location'    => $validated['Location'] ?? null,
+                'StartDate'   => $validated['StartDate'] ?? null,
+                'EndDate'     => $validated['EndDate'] ?? null,
+                'Description' => $validated['Description'] ?? null,
+                'CreatedBy'   => $this->getUserId(),
+                'Status'      => $validated['Status'] ?? 'Open',
+            ]);
 
-        // If accepting, ensure capacity not exceeded
-        if ($newStatus && strtolower($newStatus->Name) === 'accepted') {
-            $acceptedCount = Application::where('GameID', $application->GameID)
-                ->whereHas('status', function($q){
-                    $q->where('Name','Accepted');
-                })->count();
+            // Create minimal game_info entries linked to this event
+            if (!empty($validated['games']) && is_array($validated['games'])) {
+                foreach ($validated['games'] as $g) {
+                    if (empty($g['GameName'])) continue;
 
-            $capacity = optional($application->game)->Capacity;
-            if ($capacity !== null && $acceptedCount >= $capacity) {
-                return back()->with('error', 'Capacity full. Cannot accept more applicants.');
+                    GameInfo::create([
+                        'EventID' => $event->EventID,
+                        'GameName' => $g['GameName'],
+                        'Category' => $g['Category'] ?? null,
+                        'Capacity' => $g['Capacity'] ?? null,
+                        'Status'   => 'Open',
+                        // other fields left null for later editing in GameInfo module
+                        'GameDate' => null,
+                        'GameTime' => null,
+                        'SelectionPlace' => null,
+                        'CoachName' => null,
+                        'CoachPhone' => null,
+                        'Rules' => null,
+                        'Description' => null,
+                    ]);
+                }
             }
-        }
 
-        $application->StatusID = $validated['StatusID'];
+            DB::commit();
+
+            // Redirect to Edit Event page so admin can continue editing games/details
+            return redirect()->route('admin.events.edit', $event->EventID)
+                             ->with('success','Event and games created successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->withInput()
+                             ->with('error', 'Failed to create event: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Show Edit Event page (event fields + list of games + ability to add new simple games)
+     */
+    public function editEvent($EventID)
+    {
+        $event = Event::with('games')->where('EventID', $EventID)->firstOrFail();
+        return view('application.admin.EditEvent', compact('event'));
+    }
+
+    /**
+     * Update Event and sync/create simple game rows.
+     *
+     * Accepts games[] where each item may include:
+     * - GameID (optional) => update existing game
+     * - GameName, Category, Capacity => update/create fields
+     */
+    public function updateEvent(Request $request, $EventID)
+    {
+        $rules = [
+            'EventName' => 'required|string|max:255',
+            'Location'  => 'nullable|string|max:255',
+            'StartDate' => 'nullable|date',
+            'EndDate'   => 'nullable|date|after_or_equal:StartDate',
+            'Description' => 'nullable|string',
+            'Status'    => 'nullable|in:Open,Closed,Cancelled',
+
+            'games' => 'nullable|array',
+            'games.*.GameID' => 'nullable|integer|exists:game_info,GameID',
+            'games.*.GameName' => 'required_with:games|string|max:255',
+            'games.*.Category' => 'nullable|string|max:100',
+            'games.*.Capacity' => 'nullable|integer|min:0',
+        ];
+
+        $validated = $request->validate($rules);
+
+        DB::beginTransaction();
+        try {
+            // update event
+            $event = Event::findOrFail($EventID);
+            $event->update([
+                'EventName' => $validated['EventName'],
+                'Location'  => $validated['Location'] ?? null,
+                'StartDate' => $validated['StartDate'] ?? null,
+                'EndDate'   => $validated['EndDate'] ?? null,
+                'Description' => $validated['Description'] ?? null,
+                'Status'    => $validated['Status'] ?? $event->Status,
+            ]);
+            
+            // handle games
+            if (!empty($validated['games']) && is_array($validated['games'])) {
+                foreach ($validated['games'] as $g) {
+                    // if GameID present -> update existing game (ensure it belongs to this event or allow move)
+                    if (!empty($g['GameID'])) {
+                        $game = GameInfo::where('GameID', $g['GameID'])->first();
+                        if ($game) {
+                            // Only update fields we care about (minimal)
+                            $game->update([
+                                'GameName' => $g['GameName'],
+                                'Category' => $g['Category'] ?? null,
+                                'Capacity' => $g['Capacity'] ?? null,
+                                // ensure EventID remains this event
+                                'EventID'  => $event->EventID,
+                            ]);
+                        }
+                    } else {
+                        // create a new minimal game linked to the event
+                        GameInfo::create([
+                            'EventID' => $event->EventID,
+                            'GameName' => $g['GameName'],
+                            'Category' => $g['Category'] ?? null,
+                            'Capacity' => $g['Capacity'] ?? null,
+                            'Status' => 'Open',
+                            // other fields left null
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.events.list')->with('success', 'Event updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error', 'Failed to update: ' . $e->getMessage());
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | APPLICANT (GAME) VIEWS & ACTIONS
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Show all applicants for a given GameID (page: ViewApplicants)
+     */
+    public function viewApplicantsByGame($GameID)
+    {
+        $game = GameInfo::with('event')->where('GameID', $GameID)->firstOrFail();
+
+        $applications = Application::with('user')
+            ->where('GameID', $GameID)
+            ->orderBy('DateApplied', 'asc')
+            ->get();
+
+        $capacity = $game->Capacity ?? null;
+
+        return view('application.admin.ViewApplicants', compact('game','applications','capacity'));
+    }
+
+    /**
+     * Admin selects an applicant (sets StatusID or other flag)
+     */
+    public function selectApplicant(Request $request, $ApplicationID)
+    {
+        $application = Application::with('game')->findOrFail($ApplicationID);
+
+        // Replace with your real "selected" StatusID if you have statuses table
+        $selectedStatusId = $request->input('StatusID', 2);
+
+        $application->StatusID = $selectedStatusId;
         $application->save();
 
-        return back()->with('success', 'Application status updated.');
+        return redirect()->back()->with('success', 'Applicant selected successfully.');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | APPLICATION MANAGEMENT
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * List all applications (optionally filtered)
+     */
+    public function listApplications(Request $request)
+    {
+        $query = Application::with(['user','game','event']);
+
+        if ($request->EventID) {
+            $query->where('EventID', $request->EventID);
+        }
+
+        if ($request->GameID) {
+            $query->where('GameID', $request->GameID);
+        }
+
+        $applications = $query->orderBy('DateApplied','desc')->paginate(20);
+
+        return view('application.admin.ListApplication', compact('applications'));
     }
 
     /**
-     * ADMIN: Delete application
+     * Show a single application detail
      */
-    public function destroy(Application $application)
+    public function showApplication($ApplicationID)
     {
-        $application->delete();
-        return back()->with('success', 'Application deleted.');
+        $application = Application::with(['user','game','event'])
+            ->findOrFail($ApplicationID);
+
+        return view('application.admin.ShowApplication', compact('application'));
+    }
+
+    /**
+     * Update application status
+     */
+    public function updateStatus(Request $request, $ApplicationID)
+    {
+        $request->validate([
+            'StatusID' => 'required|integer'
+        ]);
+
+        $application = Application::findOrFail($ApplicationID);
+        $application->StatusID = $request->StatusID;
+        $application->save();
+
+        return back()->with('success','Application status updated.');
     }
 }

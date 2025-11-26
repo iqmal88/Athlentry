@@ -10,10 +10,11 @@ return new class extends Migration {
         Schema::create('applications', function (Blueprint $table) {
             $table->id('ApplicationID');
 
-            // references (keep your naming)
+            // references
             $table->unsignedBigInteger('UserID');
-            $table->unsignedBigInteger('GameID');
-            $table->unsignedBigInteger('StatusID')->nullable();
+            $table->unsignedBigInteger('EventID');     // REQUIRED: link to events
+            $table->unsignedBigInteger('GameID');      // REQUIRED: link to game_info
+            $table->unsignedBigInteger('StatusID')->nullable(); // optional status table
 
             // student's submitted info
             $table->string('SportType')->nullable();
@@ -31,10 +32,17 @@ return new class extends Migration {
             $table->timestamps();
 
             // foreign keys
-            // adapt these references if your users PK is 'id' or 'UserID'
+            // adapt these references if your users PK is 'id' instead of 'UserID'
             $table->foreign('UserID')->references('UserID')->on('users')->onDelete('cascade');
+            $table->foreign('EventID')->references('EventID')->on('events')->onDelete('cascade');
             $table->foreign('GameID')->references('GameID')->on('game_info')->onDelete('cascade');
+            // StatusID -> statuses table (if exists)
             $table->foreign('StatusID')->references('StatusID')->on('statuses')->onDelete('set null');
+
+            // indexes for faster lookups
+            $table->index(['EventID']);
+            $table->index(['GameID']);
+            $table->index(['UserID']);
         });
     }
 

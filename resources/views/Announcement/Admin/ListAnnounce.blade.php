@@ -1,4 +1,3 @@
-{{-- resources/views/Announcement/Admin/ListAnnounce.blade.php --}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Announcements')

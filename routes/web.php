@@ -33,35 +33,33 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->name('admin.')->group(f
     Route::get('announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
     Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
     Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
-    // events
-    Route::get('events', [EventController::class,'adminIndex'])->name('events.index');
-    Route::get('events/create', [EventController::class,'create'])->name('events.create');
-    Route::post('events', [EventController::class,'store'])->name('events.store');
-    Route::get('events/{event}', [EventController::class,'showForAdmin'])->name('events.show');
-    Route::get('events/{event}/edit', [EventController::class,'edit'])->name('events.edit');
-    Route::put('events/{event}', [EventController::class,'update'])->name('events.update');
-    Route::delete('events/{event}', [EventController::class,'destroy'])->name('events.destroy');
+    // EVENT (in Application module)
+    Route::get('/admin/events', [ApplicationController::class, 'listEvents'])->name('events.list');
+    Route::get('/admin/events/create', [ApplicationController::class, 'createEvent'])->name('events.create');
+    Route::post('/admin/events/store', [ApplicationController::class, 'storeEvent'])->name('events.store');
+    Route::get('/admin/events/{EventID}/edit', [ApplicationController::class, 'editEvent'])->name('events.edit');
+    Route::post('/admin/events/{EventID}/update', [ApplicationController::class, 'updateEvent'])->name('events.update');
 
-    // games
-    Route::get('games', [GameInfoController::class,'adminIndex'])->name('games.index');
-    Route::get('games/create', [GameInfoController::class,'create'])->name('games.create');
-    Route::post('games', [GameInfoController::class,'store'])->name('games.store');
-    Route::get('games/{game}', [GameInfoController::class,'showForAdmin'])->name('games.show');
-    Route::get('games/{game}/edit', [GameInfoController::class,'edit'])->name('games.edit');
-    Route::put('games/{game}', [GameInfoController::class,'update'])->name('games.update');
-    Route::delete('games/{game}', [GameInfoController::class,'destroy'])->name('games.destroy');
+    // APPLICATION
+    Route::get('/admin/applications', [ApplicationController::class, 'listApplications'])->name('applications.list');
+    Route::get('/admin/applications/{ApplicationID}', [ApplicationController::class, 'showApplication'])->name('applications.show');
+    Route::post('/admin/applications/{ApplicationID}/status', [ApplicationController::class, 'updateStatus'])->name('applications.status');
+    // Show applicants for a game
+    Route::get('/admin/games/{GameID}/applicants', [ApplicationController::class, 'viewApplicantsByGame'])->name('games.applicants');
+    // Mark an application as selected (admin action)
+    Route::post('/admin/applications/{ApplicationID}/select', [ApplicationController::class, 'selectApplicant'])->name('applications.select');
 
-    // applications (admin)
-    Route::get('applications', [ApplicationController::class,'adminIndex'])->name('applications.index');
-    Route::get('games/{game}/applications', [ApplicationController::class,'showForAdmin'])->name('games.applications');
-    Route::get('applications/{application}', [ApplicationController::class,'showForAdminSingle'])->name('applications.show');
-    Route::patch('applications/{application}', [ApplicationController::class,'update'])->name('applications.update');
-    Route::delete('applications/{application}', [ApplicationController::class,'destroy'])->name('applications.destroy');
+    // list games grouped by event
+    Route::get('/gameinfo', [GameInfoController::class, 'index'])->name('gameinfo.index');
+    // show game details
+    Route::get('/gameinfo/{GameID}', [GameInfoController::class, 'show'])->name('gameinfo.show');
+    // edit / update / destroy
+    Route::get('/gameinfo/{GameID}/edit', [GameInfoController::class, 'edit'])->name('gameinfo.edit');
+    Route::post('/gameinfo/{GameID}/update', [GameInfoController::class, 'update'])->name('gameinfo.update');
+    Route::delete('/gameinfo/{GameID}', [GameInfoController::class, 'destroy'])->name('gameinfo.destroy');
+
 });
-
-
 Route::middleware(['auth','is_student'])->prefix('student')->group(function () {
-    Route::get('announcements', [AnnouncementController::class, 'studentIndex'])
-        ->name('student.announcements.index');
+    Route::get('announcements', [AnnouncementController::class, 'studentIndex'])->name('student.announcements.index');
+    Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForStudent'])->name('student.announcements.show');
 });
-

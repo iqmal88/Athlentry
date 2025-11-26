@@ -8,8 +8,7 @@ class GameInfo extends Model
 {
     protected $table = 'game_info';
     protected $primaryKey = 'GameID';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $timestamps = true;
 
     protected $fillable = [
         'EventID',
@@ -23,32 +22,38 @@ class GameInfo extends Model
         'Capacity',
         'Rules',
         'Description',
-        'Status',
+        'Status'
     ];
 
-    protected $casts = [
-        'GameDate' => 'date',
-        'GameTime' => 'string',
-    ];
-
-    // Relations
+    // Relationship to parent event
     public function event()
     {
-        return $this->belongsTo(Event::class, 'EventID', 'EventID');
+        return $this->belongsTo(\App\Models\Event::class, 'EventID', 'EventID');
     }
 
+    // Relationship to applications (optional/useful)
     public function applications()
     {
-        // Application uses GameID foreign key
-        return $this->hasMany(Application::class, 'GameID', 'GameID');
+        return $this->hasMany(\App\Models\Application::class, 'GameID', 'GameID');
     }
 
-    // Count of accepted applications (helper)
-    public function acceptedApplications()
+    /**
+     * Effective status: if parent event is not Open, return the event's status,
+     * otherwise return the game's own Status.
+     *
+     * Usage in blade: $game->final_status
+     */
+    public function getFinalStatusAttribute()
     {
-        // assumes StatusID maps to statuses table; you can adapt the status id for "accepted"
-        return $this->applications()->whereHas('status', function($q){
-            $q->where('Name', 'Accepted');
-        });
+        // ensure event relationship available
+        if (! $this->relationLoaded('event')) {
+            $this->load('event');
+        }
+
+        if ($this->event && in_array($this->event->Status, ['Closed', 'Cancelled'])) {
+            return $this->event->Status;
+        }
+
+        return $this->Status ?? 'Open';
     }
 }

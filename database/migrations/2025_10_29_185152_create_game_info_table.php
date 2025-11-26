@@ -7,12 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        // If your original table exists, you should write an "alter" migration instead of create.
         Schema::create('game_info', function (Blueprint $table) {
             $table->id('GameID');
 
             // link to events table (Event header)
-            $table->unsignedBigInteger('EventID')->nullable();
+            $table->unsignedBigInteger('EventID');
 
             $table->string('GameName');
             $table->string('Category')->nullable();       // e.g. Team/Individual, Men/Women/Open
@@ -29,9 +28,11 @@ return new class extends Migration {
 
             $table->timestamps();
 
-            // foreign keys
+            // FK to events
             $table->foreign('EventID')->references('EventID')->on('events')->onDelete('cascade');
 
+            // index to speed queries
+            $table->index('EventID');
         });
     }
 

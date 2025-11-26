@@ -8,34 +8,19 @@ class Event extends Model
 {
     protected $table = 'events';
     protected $primaryKey = 'EventID';
-    public $incrementing = true;
-    protected $keyType = 'int';
-
+    public $timestamps = true;
+    
     protected $fillable = [
-        'EventName',
-        'Location',
-        'StartDate',
-        'EndDate',
-        'Description',
-        'CreatedBy',
-        'Status',
+        'EventName','Location','StartDate','EndDate','Description','CreatedBy','Status'
     ];
-
+    
     protected $casts = [
     'StartDate' => 'date',
-    'EndDate' => 'date',
+    'EndDate'   => 'date',
     ];
 
-
-    // Relations
     public function games()
     {
-        return $this->hasMany(GameInfo::class, 'EventID', 'EventID');
-    }
-
-    // Optionally: creator user relation (if CreatedBy stores UserID)
-    public function creator()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'CreatedBy', 'UserID');
+        return $this->hasMany(\App\Models\GameInfo::class, 'EventID', 'EventID');
     }
 }
