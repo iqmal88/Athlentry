@@ -65,7 +65,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('Login.LoginView');
+        return redirect()->route('login.view');
     }
 
     // Handle logout

@@ -10,7 +10,7 @@ use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 // Common login view (single page)
-Route::get('/login', function () { return view('Login.LoginView'); })->name('login.view');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login.view');
 
 // Student auth (AuthController)
 Route::post('/login/student', [AuthController::class, 'login'])->name('login.submit');
