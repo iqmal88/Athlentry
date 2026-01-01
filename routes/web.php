@@ -95,7 +95,12 @@ Route::middleware(['auth', 'is_student'])
     ->prefix('student')
     ->name('student.')
     ->group(function () {
-
+    //ANNOUNCEMENT
     Route::get('announcements', [AnnouncementController::class, 'studentIndex'])->name('announcements.index');
     Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForStudent'])->name('announcements.show');
+
+    //APPLICATION
+    Route::get('applications',[ApplicationController::class, 'studentApplicationIndex'])->name('application.index');
+    Route::get('applications/apply/{GameID}',[ApplicationController::class, 'showApplyForm'])->name('application.apply');
+    Route::post('applications/apply/{GameID}',[ApplicationController::class, 'submitApplication'])->name('application.submit');
 });

@@ -1,156 +1,244 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="antialiased">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Athlentry — Student Registration</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root { --maroon:#8B1E2F; --maroon-dark:#5e101b; }
-    body {
-      font-family: Poppins, Inter, system-ui;
-      background: radial-gradient(circle at 10% 20%, rgba(139,30,47,0.05), transparent 25%),
-                  radial-gradient(circle at 90% 80%, rgba(94,16,27,0.06), transparent 25%),
-                  linear-gradient(180deg,#fbfbfe,#f6f5fb);
+    :root{
+      --maroon: #8B1E2F;
+      --maroon-dark: #5e101b;
+      --muted: #6b7280;
+      --surface: #ffffff;
     }
 
-    .fade { opacity:0; transform:translateY(10px); transition:.4s ease; }
-    .fade.show { opacity:1; transform:translateY(0); }
+    html,body { height:100%; margin:0; }
+    body{
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      background: linear-gradient(180deg,#fbfbfe,#f6f5fb);
+    }
 
+    .panel-grid { min-height:100vh; display:grid; grid-template-columns:1fr; }
+    @media(min-width:768px){ .panel-grid { grid-template-columns:1fr 560px; } }
+
+    .left-illustration {
+      padding:5rem 3rem;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(139,30,47,0.04) 0.6px, transparent 0.6px),
+        linear-gradient(180deg,#fff6f6,#ffffff);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .form-panel {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:4rem 3rem;
+      background:var(--surface);
+    }
+
+    .form-body {
+      width:100%;
+      max-width:56rem;
+    }
+
+    .form-input {
+      font-size: 1rem;
+      padding: 0.95rem 1rem;
+    }
     .form-input:focus {
-      outline: none;
+      outline:none;
+      box-shadow: 0 10px 28px rgba(139,30,47,0.08), 0 0 0 4px rgba(139,30,47,0.06);
       border-color: var(--maroon);
-      box-shadow: 0 0 0 3px rgba(139,30,47,.15);
     }
 
-    .sport-pattern {
-      background-image: radial-gradient(circle, rgba(0,0,0,0.025) 1px, transparent 1px);
-      background-size: 14px 14px;
+    .hint { color:var(--muted); font-size:.95rem; }
+    .muted-link { color:var(--maroon); font-weight:700; }
+
+    .btn-primary {
+      padding: .95rem 1.1rem;
+      font-size: 1rem;
+      border-radius: .75rem;
+      box-shadow: 0 10px 30px rgba(139,30,47,0.12);
     }
+
+    .fade-up { opacity:0; transform:translateY(8px); transition: all .36s cubic-bezier(.2,.9,.3,1); }
+    .fade-up.show { opacity:1; transform:translateY(0); }
   </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center px-4">
+<body>
 
-  <div id="box" class="fade w-full max-w-5xl bg-white shadow-2xl rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+<main class="panel-grid">
 
-    <!-- LEFT PANEL -->
-    <div class="hidden md:flex flex-col justify-between p-10 sport-pattern bg-gradient-to-b from-white/80 to-white">
-      
-      <div>
-        <div class="flex items-center gap-3 mb-6">
-          <div class="p-3 rounded-xl bg-[var(--maroon)] shadow">
-            <img src="{{ asset('images/Athlentry-logo.png') }}" class="h-10">
-          </div>
-          <div>
-            <h2 class="text-lg font-semibold text-slate-800">Athlentry</h2>
-            <p class="text-xs text-slate-500">Campus sports registration</p>
-          </div>
-        </div>
-
-        <h1 class="text-3xl font-bold text-slate-800 leading-tight mb-2">Join as a student athlete</h1>
-        <p class="text-slate-600 text-sm max-w-sm">
-          Create your Athlentry account to register, apply for games, view announcements, and manage your sport activity.
-        </p>
-
-        <div class="mt-6">
-          <!-- small sport SVG illustration -->
-          <svg class="w-64 opacity-95" viewBox="0 0 600 300" fill="none">
-            <ellipse cx="300" cy="200" rx="220" ry="70" fill="rgba(139,30,47,0.06)" />
-            <circle cx="150" cy="120" r="26" fill="white" stroke="rgba(139,30,47,0.2)" stroke-width="3"/>
-            <circle cx="420" cy="210" r="34" fill="white" stroke="rgba(94,16,27,0.2)" stroke-width="3"/>
-            <path d="M80 200 Q260 120 520 190" stroke="rgba(139,30,47,0.25)" stroke-width="18" stroke-linecap="round"/>
-          </svg>
-        </div>
+  {{-- LEFT PANEL --}}
+  <aside class="left-illustration hidden md:flex" aria-hidden="true">
+    <div>
+      <div class="flex items-center gap-3 mb-6">
+        <img src="{{ asset('images/Athlentry-logo.png') }}" class="h-12 w-auto" alt="Athlentry logo">
+        <span class="inline-block bg-[color:var(--maroon)] text-white text-sm px-3 py-1 rounded-full font-semibold">
+          Athlentry
+        </span>
       </div>
 
-      <p class="text-xs text-slate-400 mt-10">© {{ date('Y') }} Athlentry</p>
+      <h2 class="text-3xl font-bold text-slate-900 mb-3">Join Athlentry</h2>
+      <p class="hint max-w-xs">
+        Register as a student athlete to apply for games, receive updates, and manage your activities.
+      </p>
+
+      <div class="mt-10">
+        <svg viewBox="0 0 560 300" class="w-full h-auto">
+          <ellipse cx="280" cy="200" rx="220" ry="70" fill="rgba(139,30,47,0.06)" />
+          <circle cx="120" cy="120" r="26" fill="white" stroke="rgba(139,30,47,0.18)" stroke-width="3"/>
+          <circle cx="420" cy="210" r="34" fill="white" stroke="rgba(94,16,27,0.18)" stroke-width="3"/>
+          <path d="M80 200 Q260 120 520 190" stroke="rgba(139,30,47,0.25)" stroke-width="18" stroke-linecap="round"/>
+        </svg>
+      </div>
     </div>
 
-    <!-- RIGHT FORM PANEL -->
-    <div class="p-8 md:p-12 flex flex-col justify-center">
-      <div class="max-w-md mx-auto w-full">
+    <div class="text-xs text-slate-400">© {{ date('Y') }} Athlentry</div>
+  </aside>
 
-        <div class="flex justify-center mb-6 md:hidden">
-          <img src="{{ asset('images/Athlentry-logo.jpg') }}" class="h-14">
+  {{-- RIGHT PANEL --}}
+  <section class="form-panel">
+    <div class="form-body fade-up" id="formBody">
+
+      <div class="mb-6 flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-semibold text-slate-900">Create your account</h1>
+          <p class="hint mt-1">Register as a student athlete</p>
         </div>
+        <a href="{{ route('login.view') }}" class="text-sm hint hover:underline">
+          Back to Login
+        </a>
+      </div>
 
-        <h1 class="text-2xl font-semibold text-slate-800 text-center md:text-left">
-          Create your account
-        </h1>
-        <p class="text-sm text-slate-500 text-center md:text-left mb-6">
-          Register as a student athlete to start using Athlentry
-        </p>
+      {{-- Validation Errors --}}
+      @if ($errors->any())
+        <div class="mb-4 rounded-md bg-red-50 border border-red-100 text-red-700 p-3 text-sm">
+          <ul class="list-disc list-inside space-y-1">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
 
-        @if ($errors->any())
-          <div class="mb-4 text-sm text-red-700 bg-red-50 p-3 rounded">
-            {{ $errors->first() }}
+      {{-- FORM --}}
+      <form action="{{ route('student.register.submit') }}" method="POST" class="space-y-6" novalidate>
+        @csrf
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-1">Full Name</label>
+            <input type="text" name="Name" value="{{ old('Name') }}" required autocomplete="name"
+                   class="form-input w-full border border-slate-200 rounded-lg"
+                   placeholder="Your full name">
           </div>
-        @endif
-
-        <form action="{{ route('student.register.submit') }}" method="POST" class="space-y-4">
-          @csrf
 
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-            <input type="text" name="Name" value="{{ old('Name') }}" required
-                   class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg">
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Matric Number</label>
+            <label class="block text-sm font-medium mb-1">Matric Number</label>
             <input type="text" name="MatricNo" value="{{ old('MatricNo') }}" required
-                   class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg">
+                   class="form-input w-full border border-slate-200 rounded-lg"
+                   placeholder="e.g. CB22047">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Email</label>
+          <input type="email" name="Email" value="{{ old('Email') }}" required autocomplete="email"
+                 class="form-input w-full border border-slate-200 rounded-lg"
+                 placeholder="you@campus.edu">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium mb-1">Password</label>
+            <div class="relative">
+              <input id="password" type="password" name="Password" required autocomplete="new-password"
+                     class="form-input w-full border border-slate-200 rounded-lg"
+                     placeholder="At least 8 characters">
+              <button type="button" id="togglePwd"
+                      class="absolute right-3 top-3 text-sm text-slate-500 hover:text-slate-700">
+                Show
+              </button>
+            </div>
+            <p class="text-xs hint mt-2">Strength: <strong id="pwdStrength">—</strong></p>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-            <input type="email" name="Email" value="{{ old('Email') }}" required
-                   class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg">
+            <label class="block text-sm font-medium mb-1">Confirm Password</label>
+            <input id="password_confirm" type="password" name="password_confirmation" required
+                   autocomplete="new-password"
+                   class="form-input w-full border border-slate-200 rounded-lg"
+                   placeholder="Retype password">
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-              <input type="password" name="Password" required
-                     class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg">
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
-              <input type="password" name="Password_confirmation" required
-                     class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg">
-            </div>
-          </div>
-
-          <button type="submit"
-                  class="w-full py-3 rounded-lg text-white font-semibold shadow-lg hover:opacity-95 transition"
-                  style="background: linear-gradient(90deg,var(--maroon),var(--maroon-dark));">
-            Register
-          </button>
-        </form>
-
-        <div class="text-center mt-6">
-          <p class="text-sm text-slate-600">
-            Already have an account?
-            <a href="{{ route('login.view') }}" class="text-[color:var(--maroon)] font-semibold hover:underline">
-              Back to Login
-            </a>
-          </p>
         </div>
 
+        <button type="submit" id="registerBtn"
+                class="btn-primary w-full rounded-xl text-white font-semibold tracking-wide"
+                style="background: linear-gradient(90deg,var(--maroon),var(--maroon-dark));">
+          Register
+        </button>
+      </form>
+
+      <div class="mt-6 text-center">
+        <p class="text-sm hint">
+          Already have an account?
+          <a href="{{ route('login.view') }}" class="muted-link">Sign in</a>
+        </p>
       </div>
+
     </div>
+  </section>
 
-  </div>
+</main>
 
-  <script>
-    window.addEventListener('load', () => {
-      document.getElementById('box').classList.add('show');
+<script>
+  window.addEventListener('load', () =>
+    document.getElementById('formBody')?.classList.add('show')
+  );
+
+  (function(){
+    const pwd = document.getElementById('password');
+    const confirm = document.getElementById('password_confirm');
+    const toggle = document.getElementById('togglePwd');
+    const strength = document.getElementById('pwdStrength');
+    const btn = document.getElementById('registerBtn');
+
+    toggle.addEventListener('click', () => {
+      pwd.type = pwd.type === 'password' ? 'text' : 'password';
+      toggle.textContent = pwd.type === 'password' ? 'Show' : 'Hide';
     });
-  </script>
+
+    pwd.addEventListener('input', () => {
+      let s = 0;
+      if (pwd.value.length >= 8) s++;
+      if (/[A-Z]/.test(pwd.value) && /[a-z]/.test(pwd.value)) s++;
+      if (/\d/.test(pwd.value)) s++;
+      if (/[\W_]/.test(pwd.value)) s++;
+      strength.textContent = ['—','Very weak','Weak','Good','Strong'][s];
+    });
+
+    document.querySelector('form').addEventListener('submit', e => {
+      if (pwd.value !== confirm.value) {
+        e.preventDefault();
+        alert('Passwords do not match.');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+    });
+  })();
+</script>
 
 </body>
 </html>

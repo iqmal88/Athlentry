@@ -53,7 +53,7 @@
         <span class="text-sm">Home</span>
       </a>
 
-      <a href="{{ '#' }}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[color:var(--brand)]/10 transition">
+      <a href="{{ route('student.application.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[color:var(--brand)]/10 transition">
         <svg class="w-5 h-5 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>
         <span class="text-sm">Application</span>
       </a>
@@ -178,7 +178,7 @@
 
         <nav class="px-4 py-4 space-y-1">
           <a href="{{ route('student.announcements.index') }}" class="block px-3 py-2 rounded hover:bg-gray-100">Home</a>
-          <a href="{{ '#' }}" class="block px-3 py-2 rounded hover:bg-gray-100">Application</a>
+          <a href="{{ route('student.application.index') }}" class="block px-3 py-2 rounded hover:bg-gray-100">Application</a>
           <a href="{{ '#' }}" class="block px-3 py-2 rounded hover:bg-gray-100">Game Info</a>
           <a href="{{ '#' }}" class="block px-3 py-2 rounded hover:bg-gray-100">Announcements</a>
           <a href="{{ '#' }}" class="block px-3 py-2 rounded hover:bg-gray-100">Status</a>

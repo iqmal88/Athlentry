@@ -300,4 +300,59 @@ class ApplicationController extends Controller
 
         return back()->with('success','Application status updated.');
     }
+
+    /**
+    * Student – View all events and games available for application
+    */
+    public function studentApplicationIndex()
+    {
+        $studentId = Auth::id();
+
+        $events = Event::with(['games' => function ($q) use ($studentId) {
+            $q->where('Status', 'Open')
+            ->withCount(['applications as applied' => function ($q2) use ($studentId) {
+                $q2->where('UserID', $studentId);
+                }]);
+            }])->where('Status', 'Open')->get();
+
+        return view('application.student.AthleteApplication', compact('events'));
+    }
+    /**
+    * Student – Show apply confirmation form
+    */
+    public function showApplyForm($GameID)
+    {
+        $game = GameInfo::with('event')->where('GameID', $GameID)->firstOrFail();
+
+        return view('application.student.ApplyForm', compact('game'));
+    }
+    /**
+    * Student – Submit application
+    */
+    public function submitApplication(Request $request, $GameID)
+    {
+        $studentId = Auth::id();
+        $game = GameInfo::findOrFail($GameID);
+
+        // Prevent duplicate application
+        $exists = Application::where('UserID', $studentId)
+            ->where('GameID', $GameID)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->route('student.application.index')
+                ->with('error', 'You have already applied for this game.');
+            }
+
+        Application::create([
+            'UserID'       => $studentId,
+            'EventID'      => $game->EventID,
+            'GameID'       => $game->GameID,
+            'DateApplied'  => now(),
+            'StatusID'     => null, // Pending selection
+        ]);
+
+        return redirect()->route('student.application.index')
+            ->with('success', 'Application submitted successfully.');
+    }
 }
