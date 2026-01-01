@@ -71,7 +71,7 @@
 
       <div>
         <h2 class="text-3xl md:text-4xl font-bold text-slate-800 leading-tight">Welcome back</h2>
-        <p class="mt-2 text-slate-600 max-w-xs">Sign in to manage your events, apply for matches, and track results — built for athletes and admins.</p>
+        <p class="mt-2 text-slate-600 max-w-xs">Sign in to apply for matches, and track results.</p>
       </div>
 
       <!-- Sport illustration (inline SVG) -->
@@ -111,7 +111,7 @@
         </svg>
       </div>
 
-      <p class="text-xs text-slate-500 mt-auto">Made for campus sports — simple, fast, and athlete-first.</p>
+      <p class="text-xs text-slate-500 mt-auto">Faculty of Computing Sports — simple, fast, and athlete-first.</p>
     </div>
 
     <!-- Right: Form card -->

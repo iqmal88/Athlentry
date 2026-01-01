@@ -1,7 +1,182 @@
 @extends('layouts.admin')
 
+@section('title', 'Events')
+
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-8">
+
+  {{-- DESIGN ONLY: improved UX visual styles (no markup/JS changed) --}}
+  <style>
+    :root {
+      /* use layout brand if available, otherwise fallback */
+      --local-brand: var(--brand, #800000);
+      --local-brand-600: rgba(128,0,0,0.9);
+      --muted-600: #6b7280;
+      --card-bg: linear-gradient(180deg,#ffffff,#fbfbfb);
+      --soft-border: rgba(15,23,42,0.06);
+      --focus-ring: 0 0 0 4px rgba(128,0,0,0.08);
+    }
+
+    /* Page header */
+    .max-w-7xl > .flex:first-child h1 {
+      font-size: 1.6rem;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .max-w-7xl > .flex:first-child p {
+      color: var(--muted-600);
+      margin-top: .25rem;
+    }
+
+    /* Search: larger, clearer */
+    #searchInput {
+      background: white;
+      border-radius: 12px;
+      padding-left: 3.25rem;
+      padding-right: .9rem;
+      height:44px;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+      border: 1px solid var(--soft-border);
+      transition: box-shadow .12s ease, transform .12s ease;
+      font-size: .95rem;
+    }
+    #searchInput:focus {
+      outline: none;
+      box-shadow: var(--focus-ring);
+      transform: translateY(-1px);
+    }
+    #searchInput::placeholder { color: #9aa3ad; }
+
+    /* Selects: pill look, larger tap area */
+    #statusFilter, #categoryFilter {
+      background: white;
+      border-radius: 999px;
+      padding: .55rem .85rem;
+      height:44px;
+      border: 1px solid var(--soft-border);
+      box-shadow: 0 1px 2px rgba(15,23,42,0.03);
+      font-size: .92rem;
+    }
+
+    /* Add Event button: prominent but friendly */
+    a[href*="events.create"], .add-event-btn {
+      background: linear-gradient(180deg, var(--local-brand), var(--local-brand-600));
+      border-radius: 10px;
+      padding: .5rem .9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: white;
+      box-shadow: 0 8px 20px rgba(107,13,13,0.12);
+      font-weight: 600;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    a[href*="events.create"]:hover, .add-event-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    /* Event card: cleaner, larger touch targets */
+    .event-card {
+      border-radius: 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--soft-border);
+      box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+      transition: transform .15s ease, box-shadow .15s ease;
+      overflow: hidden;
+    }
+    .event-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(15,23,42,0.07); }
+
+    /* Thumbnail: keep consistent aspect & better placeholder */
+    .event-card img {
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      background: linear-gradient(180deg,#f3f3f3,#ffffff);
+    }
+    .event-card .md\\:col-span-3 { padding: 1.25rem; }
+    .event-card .p-4 { padding: 1.15rem; }
+
+    /* Title and metadata */
+    .event-card a.text-lg { font-size: 1.05rem; }
+    .event-card .text-sm { font-size: .92rem; }
+
+    /* Action buttons: clearer primary / secondary */
+    .event-card .inline-flex, .event-card button {
+      border-radius: 10px;
+      padding: .45rem .7rem;
+      font-weight: 600;
+      font-size: .92rem;
+    }
+    .event-card a.inline-flex:hover, .event-card button:hover { transform: translateY(-2px); }
+
+    /* Games list: card-like rows with subtle separation */
+    .games-list { padding: 0; margin-top: .6rem; }
+    .game-row {
+      background: white;
+      border: 1px solid rgba(15,23,42,0.04);
+      border-radius: 10px;
+      padding: .72rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      transition: box-shadow .12s ease, transform .12s ease;
+      gap:.75rem;
+    }
+    .game-row + .game-row { margin-top: .6rem; }
+    .game-row:hover { box-shadow: 0 10px 30px rgba(15,23,42,0.04); transform: translateY(-3px); }
+
+    /* Game icon */
+    .game-row .w-10.h-10 { min-width:40px; min-height:40px; border-radius:8px; font-weight:700; }
+
+    /* Badges: readable, slightly larger */
+    .game-row .inline-flex.items-center.px-2 {
+      background: rgba(0,0,0,0.04);
+      border-radius: 999px;
+      padding: .25rem .5rem;
+      font-weight:700;
+      font-size:.78rem;
+    }
+
+    /* Toggle games button: clearer affordance */
+    .toggle-games {
+      background: linear-gradient(180deg,#ffffff,#fbfbfb);
+      border: 1px solid rgba(15,23,42,0.04);
+      border-radius: 10px;
+      padding: .55rem .8rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.5rem;
+      width:100%;
+      transition: background .12s ease, transform .12s ease;
+    }
+    .toggle-games:hover { transform: translateY(-2px); }
+    .toggle-games .chev { transition: transform .18s ease; }
+
+    /* Collapsed games on mobile: smoother animations */
+    .games-list.hidden { display: none !important; }
+
+    /* Focus states for accessibility */
+    .event-card a:focus, .event-card button:focus, #searchInput:focus, #statusFilter:focus, #categoryFilter:focus {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Small screens: spacing & tap targets */
+    @media (max-width: 767px) {
+      #searchInput { width:100%; }
+      #statusFilter, #categoryFilter { height:40px; padding:.45rem .6rem; font-size:.9rem; }
+      .games-list.hidden { display: none; }
+      .event-card .p-4 { padding: 1rem; }
+      .game-row { padding:.65rem; }
+    }
+
+    /* util: use brand color for links */
+    .text-sky-700 { color: var(--local-brand); }
+    a.text-sky-700:hover { color: var(--local-brand-600); text-decoration: underline; }
+  </style>
 
   {{-- Header / Controls --}}
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">

@@ -1,39 +1,49 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\GameInfoController;
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\AdminProfileController;
 
-use Illuminate\Support\Facades\Route;
-
-// Common login view (single page)
+/*
+|--------------------------------------------------------------------------
+| Authentication (Public)
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.view');
 
-// Student auth (AuthController)
+// Student Auth
 Route::post('/login/student', [AuthController::class, 'login'])->name('login.submit');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('student.register.view');
 Route::post('/register', [AuthController::class, 'register'])->name('student.register.submit');
 
-// Admin auth (AdminAuthController)
+// Admin Auth
+Route::get('/admin/login', fn () => view('Login.LoginView'))->name('admin.login.view');
 Route::post('/login/admin', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-Route::get('/admin/login', function(){ return view('Login.LoginView'); })->name('admin.login.view'); // optional direct link
-// show forgot password page
+
+// Forgot Password (Student)
 Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('login.forgot.view');
-
-// handle direct reset form (student only)
 Route::post('/forgot-password/reset', [AuthController::class, 'resetPassword'])->name('student.password.reset');
-
-// (optional) existing send-reset-message simulation route
 Route::post('/forgot-password/send', [AuthController::class, 'sendResetMessage'])->name('login.forgot.send');
 
-// Logout (shared)
+// Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth','is_admin'])->prefix('admin')->name('admin.')->group(function () {
-    //announcement
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'is_admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+    /* Announcements */
     Route::get('announcements', [AnnouncementController::class, 'adminIndex'])->name('announcements.index');
     Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('announcements.create');
     Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
@@ -41,33 +51,51 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->name('admin.')->group(f
     Route::get('announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
     Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
     Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
-    // EVENT (in Application module)
-    Route::get('/admin/events', [ApplicationController::class, 'listEvents'])->name('events.list');
-    Route::get('/admin/events/create', [ApplicationController::class, 'createEvent'])->name('events.create');
-    Route::post('/admin/events/store', [ApplicationController::class, 'storeEvent'])->name('events.store');
-    Route::get('/admin/events/{EventID}/edit', [ApplicationController::class, 'editEvent'])->name('events.edit');
-    Route::post('/admin/events/{EventID}/update', [ApplicationController::class, 'updateEvent'])->name('events.update');
 
-    // APPLICATION
-    Route::get('/admin/applications', [ApplicationController::class, 'listApplications'])->name('applications.list');
-    Route::get('/admin/applications/{ApplicationID}', [ApplicationController::class, 'showApplication'])->name('applications.show');
-    Route::post('/admin/applications/{ApplicationID}/status', [ApplicationController::class, 'updateStatus'])->name('applications.status');
-    // Show applicants for a game
-    Route::get('/admin/games/{GameID}/applicants', [ApplicationController::class, 'viewApplicantsByGame'])->name('games.applicants');
-    // Mark an application as selected (admin action)
-    Route::post('/admin/applications/{ApplicationID}/select', [ApplicationController::class, 'selectApplicant'])->name('applications.select');
+    /* Events (Application Module) */
+    Route::get('events', [ApplicationController::class, 'listEvents'])->name('events.list');
+    Route::get('events/create', [ApplicationController::class, 'createEvent'])->name('events.create');
+    Route::post('events', [ApplicationController::class, 'storeEvent'])->name('events.store');
+    Route::get('events/{EventID}/edit', [ApplicationController::class, 'editEvent'])->name('events.edit');
+    Route::post('events/{EventID}/update', [ApplicationController::class, 'updateEvent'])->name('events.update');
 
-    // list games grouped by event
-    Route::get('/gameinfo', [GameInfoController::class, 'index'])->name('gameinfo.index');
-    // show game details
-    Route::get('/gameinfo/{GameID}', [GameInfoController::class, 'show'])->name('gameinfo.show');
-    // edit / update / destroy
-    Route::get('/gameinfo/{GameID}/edit', [GameInfoController::class, 'edit'])->name('gameinfo.edit');
-    Route::post('/gameinfo/{GameID}/update', [GameInfoController::class, 'update'])->name('gameinfo.update');
-    Route::delete('/gameinfo/{GameID}', [GameInfoController::class, 'destroy'])->name('gameinfo.destroy');
+    /* Applications */
+    Route::get('applications', [ApplicationController::class, 'listApplications'])->name('applications.list');
+    Route::get('applications/{ApplicationID}', [ApplicationController::class, 'showApplication'])->name('applications.show');
+    Route::post('applications/{ApplicationID}/status', [ApplicationController::class, 'updateStatus'])->name('applications.status');
+    Route::post('applications/{ApplicationID}/select', [ApplicationController::class, 'selectApplicant'])->name('applications.select');
 
+    /* Game Applicants */
+    Route::get('games/{GameID}/applicants', [ApplicationController::class, 'viewApplicantsByGame'])
+        ->name('games.applicants');
+
+    /* Game Info */
+    Route::get('gameinfo', [GameInfoController::class, 'index'])->name('gameinfo.index');
+    Route::get('gameinfo/{GameID}', [GameInfoController::class, 'show'])->name('gameinfo.show');
+    Route::get('gameinfo/{GameID}/edit', [GameInfoController::class, 'edit'])->name('gameinfo.edit');
+    Route::post('gameinfo/{GameID}/update', [GameInfoController::class, 'update'])->name('gameinfo.update');
+    Route::delete('gameinfo/{GameID}', [GameInfoController::class, 'destroy'])->name('gameinfo.destroy');
+
+    /* Selection Status */
+    Route::get('selection-status', [StatusController::class, 'index'])->name('selection.status.index');
+    Route::put('selection-status/{ApplicationID}', [StatusController::class, 'update'])->name('selection.status.update');
+
+    /* Admin Profile */
+    Route::get('profile', [AdminProfileController::class, 'view'])->name('profile.view');
+    Route::get('profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [AdminProfileController::class, 'update'])->name('profile.update');
 });
-Route::middleware(['auth','is_student'])->prefix('student')->group(function () {
-    Route::get('announcements', [AnnouncementController::class, 'studentIndex'])->name('student.announcements.index');
-    Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForStudent'])->name('student.announcements.show');
+
+/*
+|--------------------------------------------------------------------------
+| Student Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'is_student'])
+    ->prefix('student')
+    ->name('student.')
+    ->group(function () {
+
+    Route::get('announcements', [AnnouncementController::class, 'studentIndex'])->name('announcements.index');
+    Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForStudent'])->name('announcements.show');
 });

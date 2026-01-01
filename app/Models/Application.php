@@ -58,4 +58,12 @@ class Application extends Model
     {
         return $this->belongsTo(GameInfo::class, 'GameID', 'GameID');
     }
+
+    /**
+     * Application belongs to a status
+     */
+        public function status()
+    {
+        return $this->belongsTo(Status::class, 'StatusID', 'StatusID');
+    }
 }
