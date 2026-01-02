@@ -53,14 +53,14 @@ class AuthController extends Controller
             'Name'     => 'required|string|max:255',
             'MatricNo' => 'required|string|unique:users,MatricNo',
             'Email'    => 'required|email|unique:users,Email',
-            'Password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
             'Name'     => $data['Name'],
             'MatricNo' => $data['MatricNo'],
             'Email'    => $data['Email'],
-            'Password' => Hash::make($data['Password']),
+            'Password' => Hash::make($data['password']),
             'Role'     => 'student',
         ]);
 

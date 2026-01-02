@@ -133,7 +133,7 @@
       @endif
 
       {{-- FORM --}}
-      <form action="{{ route('student.register.submit') }}" method="POST" class="space-y-6" novalidate>
+      <form id="registerForm" action="{{ route('student.register.submit') }}" method="POST" class="space-y-6" novalidate>
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -163,7 +163,7 @@
           <div class="md:col-span-2">
             <label class="block text-sm font-medium mb-1">Password</label>
             <div class="relative">
-              <input id="password" type="password" name="Password" required autocomplete="new-password"
+              <input id="password" type="password" name="password" required autocomplete="new-password"
                      class="form-input w-full border border-slate-200 rounded-lg"
                      placeholder="At least 8 characters">
               <button type="button" id="togglePwd"
@@ -203,42 +203,56 @@
 </main>
 
 <script>
-  window.addEventListener('load', () =>
-    document.getElementById('formBody')?.classList.add('show')
-  );
+  window.addEventListener('load', () => {
+    document.getElementById('formBody')?.classList.add('show');
+  });
 
-  (function(){
+  (function () {
+    const form = document.getElementById('registerForm'); // ✅ explicit form
     const pwd = document.getElementById('password');
-    const confirm = document.getElementById('password_confirm');
+    const confirmInput = document.getElementById('password_confirm');
     const toggle = document.getElementById('togglePwd');
     const strength = document.getElementById('pwdStrength');
     const btn = document.getElementById('registerBtn');
 
+    if (!form || !pwd || !confirmInput) return;
+
+    // Toggle password visibility
     toggle.addEventListener('click', () => {
       pwd.type = pwd.type === 'password' ? 'text' : 'password';
       toggle.textContent = pwd.type === 'password' ? 'Show' : 'Hide';
     });
 
+    // Password strength meter
     pwd.addEventListener('input', () => {
       let s = 0;
-      if (pwd.value.length >= 8) s++;
-      if (/[A-Z]/.test(pwd.value) && /[a-z]/.test(pwd.value)) s++;
-      if (/\d/.test(pwd.value)) s++;
-      if (/[\W_]/.test(pwd.value)) s++;
-      strength.textContent = ['—','Very weak','Weak','Good','Strong'][s];
+      const val = pwd.value;
+
+      if (val.length >= 8) s++;
+      if (/[A-Z]/.test(val) && /[a-z]/.test(val)) s++;
+      if (/\d/.test(val)) s++;
+      if (/[\W_]/.test(val)) s++;
+
+      strength.textContent = ['—', 'Very weak', 'Weak', 'Good', 'Strong'][s];
     });
 
-    document.querySelector('form').addEventListener('submit', e => {
-      if (pwd.value !== confirm.value) {
+    // Submit validation
+    form.addEventListener('submit', (e) => {
+      const password = pwd.value;
+      const confirmPassword = confirmInput.value;
+
+      if (password !== confirmPassword) {
         e.preventDefault();
         alert('Passwords do not match.');
         return;
       }
+
       btn.disabled = true;
       btn.textContent = 'Creating...';
     });
   })();
 </script>
+
 
 </body>
 </html>
