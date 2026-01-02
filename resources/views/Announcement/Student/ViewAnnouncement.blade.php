@@ -139,6 +139,12 @@
             </div>
           </div>
 
+          <!-- Apply -->
+          <div class="flex items-center justify-end gap-3">
+          <a href="{{ route('student.application.index') }}" class="inline-flex items-center px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white hover:shadow">
+            Apply
+          </a>
+
           <!-- Organizer / contact (if present) -->
           @if(!empty($announcement->Organizer))
             <div class="flex items-start gap-3">

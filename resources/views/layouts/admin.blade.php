@@ -1,318 +1,201 @@
 <!doctype html>
-<html lang="en" class="antialiased">
+<html lang="en" class="antialiased scroll-smooth">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>@yield('title', 'Admin Panel')</title>
+    <title>@yield('title', 'Admin Studio')</title>
 
-    <!-- Tailwind CDN (good for prototyping; compile Tailwind for production) -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --brand: #800000;
-            --muted: #6b7280;
+        :root { --brand: #800000; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            transition: background-color 0.3s ease;
         }
-        html.dark { --bg: #0b1220; --panel: #071226; --text: #e6eef8; --muted: #94a3b8; }
-        html:not(.dark) { --bg: #f3f4f6; --panel: #ffffff; --text: #0f172a; --muted: #6b7280; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-        /* small helpers */
-        .brand { background-color: var(--brand); }
-        .brand-text { color: var(--brand); }
+        html.dark body { background: #0c0c0c; color: #f8fafc; }
+        html:not(.dark) body { background: #fdfdfd; color: #0f172a; }
+
+        /* Modern Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass {
+            background: rgba(15, 15, 15, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="min-h-screen">
 
-<!-- Wrapper -->
-<div class="min-h-screen flex">
+<div class="flex h-screen overflow-hidden">
 
-    <!-- SIDEBAR (md+) -->
-    <aside id="sidebar" class="hidden md:flex md:flex-col w-64 bg-white/80 dark:bg-[color:var(--panel)] shadow-lg">
-        <div class="px-6 py-5 flex items-center gap-3 border-b dark:border-neutral-800">
-            <div class="bg-[color:var(--brand)]/10 rounded p-2">
-                <svg class="w-6 h-6 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M3 7l9-4 9 4-9 4-9-4zm0 8l9 4 9-4M3 7v8m18-8v8"/>
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-lg font-semibold">Admin Dashboard</h1>
-                <p class="text-xs text-[color:var(--muted)]">Manage your site</p>
+    <aside id="sidebar" class="hidden lg:flex flex-col w-[280px] bg-white dark:bg-[#111111] border-r border-gray-100 dark:border-white/5 transition-all">
+        <div class="p-8">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#800000] rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h1 class="text-xl font-extrabold tracking-tighter italic uppercase">ADMIN <span class="text-[#800000] not-italic">STUDIO</span></h1>
             </div>
         </div>
 
-        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-            <a href="{{ route('admin.announcements.index') }}"
-               class="group flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[color:var(--brand)]/10 transition">
-                <svg class="w-5 h-5 text-[color:var(--brand)] group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                <span class="text-sm">Announcements</span>
-            </a>
+        <nav class="flex-1 px-6 space-y-1">
+            <p class="px-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-600 mb-4 font-sans">Main Navigation</p>
+            
+            @php
+                $navItems = [
+                    ['route' => 'admin.announcements.index', 'icon' => 'M11 5.882V19.297A2.457 2.457 0 0111 19.297V5.882z', 'label' => 'Announcements'],
+                    ['route' => 'admin.events.list', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'label' => 'Athlete Apps'],
+                    ['route' => 'admin.gameinfo.index', 'icon' => 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', 'label' => 'Game Info'],
+                    ['route' => 'admin.selection.status.index', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Selection Status'],
+                ];
+            @endphp
 
-            <a href="{{ route('admin.events.list') }}"
-               class="group flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[color:var(--brand)]/10 transition">
-                <svg class="w-5 h-5 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z"/>
-                </svg>
-                <span class="text-sm">Athlete Application</span>
-            </a>
-
-            <a href="{{ route('admin.gameinfo.index') }}"
-               class="group flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[color:var(--brand)]/10 transition">
-                <svg class="w-5 h-5 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6M9 17H7a2 2 0 00-2 2v1h14v-1a2 2 0 00-2-2h-2"/>
-                </svg>
-                <span class="text-sm">Game Information</span>
-            </a>
-
-            <a href="{{ route('admin.selection.status.index') }}"
-               class="group flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[color:var(--brand)]/10 transition">
-                <svg class="w-5 h-5 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 12l2 2 4-4M7 7h.01M7 11h.01M7 15h.01M12 7h.01" />
-                </svg>
-                <span class="text-sm">Selection Status</span>
-            </a>
+            @foreach($navItems as $item)
+                <a href="{{ route($item['route']) }}" 
+                   class="group flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 {{ Request::routeIs($item['route'].'*') ? 'bg-[#800000] text-white shadow-lg shadow-red-900/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5' }}">
+                    <svg class="w-5 h-5 {{ Request::routeIs($item['route'].'*') ? 'text-white' : 'text-gray-400 group-hover:text-[#800000]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon'] }}" />
+                    </svg>
+                    <span class="text-sm font-bold tracking-tight">{{ $item['label'] }}</span>
+                </a>
+            @endforeach
         </nav>
 
-        <div class="px-4 py-4 border-t dark:border-neutral-800">
-            <a href="{{ route('admin.profile.view') }}" class="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 transition">
-                <div class="w-9 h-9 rounded-full bg-[color:var(--brand)]/10 text-[color:var(--brand)] flex items-center justify-center font-semibold">
-                    {{ strtoupper(substr(Auth::user()->Name ?? 'A', 0, 1)) }}
-                </div>
-                <div>
-                    <p class="text-sm font-medium">{{ Auth::user()->Name ?? 'Admin' }}</p>
-                    <p class="text-xs text-[color:var(--muted)]">View profile</p>
-                </div>
-            </a>
+        <div class="p-6">
+            <div class="p-4 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-transparent hover:border-gray-200 dark:hover:border-white/10 transition-all group">
+                <a href="{{ route('admin.profile.view') }}" class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-full bg-[#800000] text-white flex items-center justify-center font-black text-sm group-hover:scale-110 transition-transform">
+                        {{ strtoupper(substr(Auth::user()->Name ?? 'A', 0, 1)) }}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-black truncate dark:text-white group-hover:text-[#800000] transition-colors">{{ Auth::user()->Name ?? 'Admin' }}</p>
+                        <p class="text-[9px] text-gray-400 uppercase font-bold tracking-widest leading-none">Settings</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </a>
+                
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button class="w-full py-2 bg-white dark:bg-[#1a1a1a] text-red-600 text-[10px] font-black uppercase tracking-widest rounded-xl shadow-sm border border-red-50 dark:border-red-900/20 hover:bg-red-600 hover:text-white transition-all">
+                        Logout
+                    </button>
+                </form>
+            </div>
         </div>
     </aside>
 
-    <!-- Main area -->
-    <div class="flex-1 flex flex-col">
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        
+        <header class="h-20 flex items-center justify-between px-8 bg-transparent">
+            <div class="flex items-center gap-6">
+                <button id="mobile-toggle" class="lg:hidden p-2 rounded-xl bg-white shadow-sm border border-gray-100 dark:bg-[#111111] dark:border-white/10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
 
-        <!-- TOP NAVBAR -->
-        <header class="w-full bg-[color:var(--panel)] border-b dark:border-neutral-800 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-
-                    <!-- Left: Mobile menu button + Brand (mobile) -->
-                    <div class="flex items-center gap-3">
-                        <button id="mobile-toggle" class="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
-                                aria-label="Open sidebar">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M4 6h16M4 12h16M4 18h16"/>
-                            </svg>
-                        </button>
-
-                        <div class="hidden md:flex items-center gap-3">
-                            <div class="bg-[color:var(--brand)]/10 p-2 rounded-md">
-                                <svg class="w-6 h-6 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M3 7l9-4 9 4-9 4-9-4zm0 8l9 4 9-4M3 7v8m18-8v8"/>
-                                </svg>
-                            </div>
-                            <span class="font-semibold text-sm">Admin Dashboard</span>
-                        </div>
+                <nav class="hidden md:flex items-center gap-3">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/50 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-white/5">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Portal</span>
+                        <svg class="w-3 h-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#800000]">
+                            @php
+                                $segment = Request::segment(2);
+                                echo str_replace('-', ' ', $segment ?? 'Dashboard');
+                            @endphp
+                        </span>
                     </div>
+                </nav>
+            </div>
 
-                    <!-- Center: Search -->
-                    <div class="flex-1 mx-4">
-                        <form action="#" method="GET" class="max-w-xl mx-auto">
-                            <label for="global-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <input id="global-search" name="q" type="search"
-                                       class="w-full rounded-full border border-gray-200 dark:border-neutral-800 bg-white/90 dark:bg-neutral-900 px-4 py-2 pl-10 text-sm placeholder:text-[color:var(--muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)] transition"
-                                       placeholder="Search announcements, applicants, events..." />
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--muted)]">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Right: actions -->
-                    <div class="flex items-center gap-3">
-                        <!-- Dark mode -->
-                        <button id="dark-toggle" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 transition" title="Toggle dark mode">
-                            <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707.707M6.343 6.343l-.707.707m12.728 0l.707.707M6.343 17.657l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-                            </svg>
-                            <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 118.646 3.646 7 7 0 0020.354 15.354z"/>
-                            </svg>
-                        </button>
-
-                        <!-- Notifications -->
-                        <button class="relative p-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 transition" title="Notifications">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z"/>
-                            </svg>
-                            <span class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full">3</span>
-                        </button>
-
-                        <!-- Profile dropdown -->
-                        <div class="relative" x-data>
-                            <button id="profile-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition" aria-expanded="false" aria-haspopup="true">
-                                <div class="w-8 h-8 rounded-full bg-[color:var(--brand)]/10 text-[color:var(--brand)] flex items-center justify-center font-bold">
-                                    {{ strtoupper(substr(Auth::user()->Name ?? 'A', 0, 1)) }}
-                                </div>
-                                <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->Name ?? 'Admin' }}</span>
-                                <svg class="w-4 h-4 text-[color:var(--muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-
-                            <!-- dropdown -->
-                            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-900 text-sm rounded-md shadow-lg overflow-hidden z-10">
-                                <a href="{{ route('admin.profile.view') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800">My Profile</a>
-                                <div class="border-t dark:border-neutral-800"></div>
-                                <form action="{{ route('logout') }}" method="POST" class="m-0">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-neutral-800">Logout</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
+            <div class="flex items-center gap-4">
+                <button id="dark-toggle" class="p-3 rounded-2xl bg-white dark:bg-[#111111] border border-gray-100 dark:border-white/10 shadow-sm hover:scale-110 active:scale-95 transition-all">
+                    <svg id="icon-sun" class="w-5 h-5 hidden text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                    <svg id="icon-moon" class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                </button>
+                <div class="h-6 w-px bg-gray-200 dark:bg-white/10 hidden sm:block"></div>
+                <div class="hidden sm:block text-right">
+                    <p id="live-time" class="text-[11px] font-bold dark:text-white uppercase tracking-tighter tabular-nums text-gray-900">00:00:00</p>
+                    <p class="text-[9px] font-black uppercase text-gray-400 tracking-widest leading-none">System Clock</p>
                 </div>
             </div>
         </header>
 
-        <!-- Mobile overlay sidebar -->
-        <div id="mobile-sidebar" class="fixed inset-0 z-30 hidden">
-            <div id="mobile-backdrop" class="absolute inset-0 bg-black/40"></div>
-            <aside class="absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-neutral-900 shadow-xl">
-                <div class="px-4 py-5 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-[color:var(--brand)]/10 p-2 rounded">
-                            <svg class="w-6 h-6 text-[color:var(--brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M3 7l9-4 9 4-9 4-9-4zm0 8l9 4 9-4M3 7v8m18-8v8"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="font-semibold">Admin</h2>
-                            <p class="text-xs text-[color:var(--muted)]">Hello, {{ Auth::user()->Name ?? 'Admin' }}</p>
-                        </div>
-                    </div>
-                    <button id="mobile-close" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
+        <div class="flex-1 overflow-y-auto animate-fade-in custom-scrollbar p-8">
+            @yield('content')
+            
+            <footer class="mt-20 py-10 border-t border-gray-100 dark:border-white/5 opacity-50 grayscale flex items-center justify-between">
+                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">© {{ date('Y') }} Admin Studio v2.0</p>
+                <div class="flex gap-4">
+                    <div class="w-2 h-2 rounded-full bg-[#800000]"></div>
+                    <div class="w-2 h-2 rounded-full bg-gray-300"></div>
                 </div>
-
-                <nav class="px-4 py-4 space-y-1">
-                    <a href="{{ route('admin.announcements.index') }}" class="block px-3 py-2 rounded hover:bg-gray-100">Announcements</a>
-                    <a href="{{ route('admin.events.list') }}" class="block px-3 py-2 rounded hover:bg-gray-100">Athlete Application</a>
-                    <a href="{{ route('admin.gameinfo.index') }}" class="block px-3 py-2 rounded hover:bg-gray-100">Game Information</a>
-                    <a href="{{ route('admin.selection.status.index') }}" class="block px-3 py-2 rounded hover:bg-gray-100">Selection Status</a>
-                </nav>
-            </aside>
+            </footer>
         </div>
-
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 overflow-y-auto p-6">
-            <div class="max-w-7xl mx-auto">
-                @yield('content')
-            </div>
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="border-t dark:border-neutral-800 text-sm text-[color:var(--muted)]">
-            <div class="max-w-7xl mx-auto px-4 py-3">
-                <div class="flex items-center justify-between">
-                    <div>© {{ date('Y') }} Your Organization</div>
-                    <div class="hidden sm:block">Made with <span class="text-[color:var(--brand)]">❤</span></div>
-                </div>
-            </div>
-        </footer>
-    </div>
+    </main>
 </div>
 
-<!-- Minimal JS: toggle mobile sidebar, profile dropdown, dark mode -->
 <script>
-    (function () {
-        // Elements
-        const mobileToggle = document.getElementById('mobile-toggle');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const mobileBackdrop = document.getElementById('mobile-backdrop');
-        const mobileClose = document.getElementById('mobile-close');
+    // Theme Toggle
+    const darkToggle = document.getElementById('dark-toggle');
+    const iconSun = document.getElementById('icon-sun');
+    const iconMoon = document.getElementById('icon-moon');
 
-        const profileBtn = document.getElementById('profile-btn');
-        const profileMenu = document.getElementById('profile-menu');
-
-        const darkToggle = document.getElementById('dark-toggle');
-        const iconSun = document.getElementById('icon-sun');
-        const iconMoon = document.getElementById('icon-moon');
-
-        // Mobile open/close
-        function openMobile() { mobileSidebar.classList.remove('hidden'); }
-        function closeMobile() { mobileSidebar.classList.add('hidden'); }
-        mobileToggle && mobileToggle.addEventListener('click', openMobile);
-        mobileClose && mobileClose.addEventListener('click', closeMobile);
-        mobileBackdrop && mobileBackdrop.addEventListener('click', closeMobile);
-
-        // Profile dropdown
-        profileBtn && profileBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            const open = !profileMenu.classList.contains('hidden');
-            profileMenu.classList.toggle('hidden', open);
-        });
-        document.addEventListener('click', function () {
-            profileMenu && profileMenu.classList.add('hidden');
-        });
-
-        // Dark mode: check localStorage or prefers-color-scheme
-        function setDarkMode(dark) {
-            if (dark) {
-                document.documentElement.classList.add('dark');
-                iconSun.classList.remove('hidden');
-                iconMoon.classList.add('hidden');
-            } else {
-                document.documentElement.classList.remove('dark');
-                iconSun.classList.add('hidden');
-                iconMoon.classList.remove('hidden');
-            }
-            localStorage.setItem('admin-dark', dark ? '1' : '0');
-        }
-
-        // Initialize dark
-        const stored = localStorage.getItem('admin-dark');
-        if (stored === null) {
-            const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            setDarkMode(prefers);
+    function setDarkMode(dark) {
+        if (dark) {
+            document.documentElement.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
         } else {
-            setDarkMode(stored === '1');
+            document.documentElement.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
         }
+        localStorage.setItem('admin-studio-dark', dark ? '1' : '0');
+    }
 
-        darkToggle && darkToggle.addEventListener('click', function () {
-            const isDark = document.documentElement.classList.contains('dark');
-            setDarkMode(!isDark);
-        });
+    const stored = localStorage.getItem('admin-studio-dark');
+    if (stored === null) setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    else setDarkMode(stored === '1');
+    darkToggle.addEventListener('click', () => setDarkMode(!document.documentElement.classList.contains('dark')));
 
-        // Close on escape
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                closeMobile();
-                profileMenu && profileMenu.classList.add('hidden');
-            }
-        });
-    })();
+    // Mobile Sidebar
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const mobileBackdrop = document.getElementById('mobile-backdrop');
+    const mobileClose = document.getElementById('mobile-close');
+
+    if(mobileToggle) mobileToggle.addEventListener('click', () => mobileSidebar.classList.remove('hidden'));
+    [mobileBackdrop, mobileClose].forEach(el => el && el.addEventListener('click', () => mobileSidebar.classList.add('hidden')));
+
+    // Live Clock
+    function updateTime() {
+        const now = new Date();
+        const timeEl = document.getElementById('live-time');
+        if(timeEl) timeEl.innerText = now.toLocaleTimeString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
 </script>
 
 </body>

@@ -22,7 +22,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'identifier' => 'required|string',
             'password'   => 'required|string',
-            'remember'   => 'nullable|boolean',
+            'remember'   => 'nullable',
         ]);
 
         $matric = $data['identifier'];

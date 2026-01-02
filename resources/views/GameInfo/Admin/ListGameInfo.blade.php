@@ -1,101 +1,125 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-6 py-10">
-
-  {{-- Back + Header --}}
-  <div class="mb-6 flex items-start justify-between">
-    <div>
-      <h1 class="mt-3 text-3xl font-bold text-gray-900">Game Information</h1>
-      <p class="text-sm text-gray-500 mt-1">Grouped by event — click a game name to view full details.</p>
-    </div>
-
-    {{-- Small hint / count --}}
-    <div class="text-right">
-      <div class="text-sm text-gray-500">Events: <span class="font-medium">{{ $events->count() }}</span></div>
-      <div class="text-sm text-gray-500 mt-1">Games total: <span class="font-medium">{{ $events->sum(fn($e)=>$e->games->count()) }}</span></div>
-    </div>
-  </div>
-
-  {{-- Events & games (spacious cards) --}}
-  <div class="space-y-8">
-
-    @foreach($events as $event)
-      <section class="relative">
-        {{-- Event Card header with accent --}}
-        <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-          <div class="flex">
-            <div class="w-1 bg-[#800000]"></div>
-            <div class="flex-1 p-5">
-              <div class="flex items-start justify-between gap-6">
-                <div>
-                  <h2 class="text-xl font-semibold text-gray-900">{{ $event->EventName }}</h2>
-                  <p class="text-sm text-gray-500 mt-1">
-                    {{ $event->StartDate ? \Carbon\Carbon::parse($event->StartDate)->format('d M Y') : '-' }}
-                    — 
-                    {{ $event->EndDate ? \Carbon\Carbon::parse($event->EndDate)->format('d M Y') : '-' }}
-                  </p>
-                </div>
-
-                <div class="flex items-center gap-4">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                    @if($event->Status == 'Open') bg-green-50 text-green-700
-                    @elseif($event->Status == 'Closed') bg-gray-100 text-gray-700
-                    @else bg-red-50 text-red-700 @endif">
-                    {{ $event->Status }}
-                  </span>
-                </div>
-              </div>
-
-              {{-- Divider --}}
-              <div class="mt-5 border-t border-gray-100"></div>
-
-              {{-- Games list --}}
-              <div class="mt-4 grid gap-3">
-                @forelse($event->games as $game)
-                  <div class="flex items-center justify-between gap-4 bg-white rounded-lg border border-gray-100 p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-4 min-w-0">
-                      {{-- Initials avatar --}}
-                      <div class="flex-none rounded-full bg-[#fdecea] text-[#800000] font-semibold w-10 h-10 flex items-center justify-center">
-                        {{ strtoupper(substr($game->GameName,0,1) ?? '-') }}
-                      </div>
-
-                      <div class="min-w-0">
-                        <a href="{{ route('admin.gameinfo.show', $game->GameID) }}" class="block text-lg font-semibold text-sky-700 hover:underline truncate">
-                          {{ $game->GameName }}
-                        </a>
-                        <div class="mt-1 text-sm text-gray-500 flex flex-wrap gap-4">
-                          <div>Category: <span class="font-medium text-gray-700">{{ $game->Category ?? '-' }}</span></div>
-                          <div>Capacity: <span class="font-medium text-gray-700">{{ $game->Capacity ?? '-' }}</span></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {{-- Status + Edit --}}
-                    <div class="flex items-center gap-3">
-                      <div class="text-sm">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                          @if(strtolower($game->final_status) === 'open') bg-green-50 text-green-700
-                          @elseif(strtolower($game->final_status) === 'closed') bg-gray-100 text-gray-700
-                          @else bg-red-50 text-red-700 @endif">
-                          {{ $game->final_status }}
-                        </span>
-                      </div>
-
-                      <div class="flex-shrink-0">
-                      </div>
-                    </div>
-                  </div>
-                @empty
-                  <div class="text-sm text-gray-500 p-4">No games for this event.</div>
-                @endforelse
-              </div>
+<div class="min-h-screen bg-[#F8F9FA] pb-24 font-sans antialiased">
+    
+    {{-- Aesthetic Header: Floating Blur --}}
+      <div class="relative px-6 py-4">        
+          <div class="max-w-7xl mx-auto bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] rounded-[2rem] px-8 py-6 flex flex-col md:flex-row items-center justify-between">   
+            <div>
+                <h1 class="text-3xl font-[900] text-gray-900 tracking-tight italic">GAME <span class="text-[#800000] not-italic">INFORMATION</span></h1>
+                <p class="text-xs uppercase tracking-[0.3em] text-gray-400 font-bold mt-1">STORE EVERY GAME INFORMATION HERE</p>
             </div>
-          </div>
+            
+            <div class="flex items-center gap-8 mt-4 md:mt-0">
+                <div class="text-right">
+                    <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Total Events</span>
+                    <span class="text-2xl font-black text-gray-900 leading-none">{{ $events->count() }}</span>
+                </div>
+                <div class="w-px h-8 bg-gray-100"></div>
+                <div class="text-right">
+                    <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Total Games</span>
+                    <span class="text-2xl font-black text-[#800000] leading-none">{{ $events->sum(fn($e)=>$e->games->count()) }}</span>
+                </div>
+            </div>
         </div>
-      </section>
-    @endforeach
+    </div>
 
-  </div>
+    {{-- Main Body --}}
+    <div class="max-w-7xl mx-auto px-6 mt-12">
+        <div class="space-y-32">
+            
+            @foreach($events as $event)
+                <section class="animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    {{-- Section Label --}}
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="flex-none px-4 py-1 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
+                            {{ $event->Status }}
+                        </div>
+                        <h2 class="text-4xl font-black text-gray-900 tracking-tighter">{{ $event->EventName }}</h2>
+                        <div class="flex-1 h-[2px] bg-gradient-to-r from-gray-100 to-transparent"></div>
+                        <p class="text-sm font-medium text-gray-400 font-mono">
+                            {{ \Carbon\Carbon::parse($event->StartDate)->format('M.y') }} — {{ \Carbon\Carbon::parse($event->EndDate)->format('M.y') }}
+                        </p>
+                    </div>
+
+                    {{-- Bento Grid Layout --}}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @forelse($event->games as $game)
+                            @php
+                                $status = strtolower($game->final_status);
+                                // Define dynamic styles based on status
+                                $statusConfig = [
+                                    'open' => ['color' => 'text-green-600', 'bg' => 'bg-green-500', 'label' => 'OPEN', 'border' => 'border-green-100'],
+                                    'closed' => ['color' => 'text-gray-500', 'bg' => 'bg-gray-400', 'label' => 'CLOSED', 'border' => 'border-gray-200'],
+                                    'canceled' => ['color' => 'text-red-600', 'bg' => 'bg-red-500', 'label' => 'CANCELED', 'border' => 'border-red-100'],
+                                ];
+                                $currentStyle = $statusConfig[$status] ?? ['color' => 'text-gray-400', 'bg' => 'bg-gray-300', 'label' => strtoupper($status), 'border' => 'border-gray-100'];
+                            @endphp
+
+                            <a href="{{ route('admin.gameinfo.show', $game->GameID) }}" 
+                               class="group relative overflow-hidden bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-2">
+                                
+                                {{-- Background "Glow" --}}
+                                <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#800000]/5 rounded-full blur-3xl group-hover:bg-[#800000]/10 transition-colors"></div>
+
+                                <div class="relative z-10">
+                                    {{-- Game Header: Category & Dynamic Status --}}
+                                    <div class="flex justify-between items-start mb-12">
+                                        <div class="px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-gray-100">
+                                            {{ $game->Category ?? 'Game' }}
+                                        </div>
+
+                                        {{-- Corrected Dynamic Status Badge --}}
+                                        <div class="flex items-center gap-1.5">
+                                            @if($status === 'open')
+                                                <span class="relative flex h-2 w-2">
+                                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $currentStyle['bg'] }} opacity-75"></span>
+                                                    <span class="relative inline-flex rounded-full h-2 w-2 {{ $currentStyle['bg'] }}"></span>
+                                                </span>
+                                            @else
+                                                <span class="h-2 w-2 rounded-full {{ $currentStyle['bg'] }}"></span>
+                                            @endif
+                                            <span class="text-[10px] font-black {{ $currentStyle['color'] }} uppercase tracking-tighter">
+                                                {{ $currentStyle['label'] }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="text-2xl font-black text-gray-900 leading-tight group-hover:text-[#800000] transition-colors">
+                                        {{ $game->GameName }}
+                                    </h3>
+                                    
+                                    <div class="mt-8 flex items-end justify-between">
+                                        <div>
+                                            <p class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Capacity</p>
+                                            <p class="text-xl font-bold text-gray-800">{{ $game->Capacity }} <span class="text-xs font-medium text-gray-400 italic">person</span></p>
+                                        </div>
+                                        
+                                        <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 shadow-xl shadow-black/20">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        @empty
+                            <div class="col-span-full py-20 rounded-[3rem] border-2 border-dashed border-gray-100 flex flex-col items-center">
+                                <span class="text-4xl text-gray-200">empty_</span>
+                                <p class="text-gray-400 font-medium mt-2 uppercase tracking-widest text-[10px]">No games found in this quadrant</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
+            @endforeach
+
+        </div>
+    </div>
 </div>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
 @endsection
