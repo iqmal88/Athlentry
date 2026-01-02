@@ -101,6 +101,7 @@ Route::middleware(['auth', 'is_student'])
 
     //APPLICATION
     Route::get('applications',[ApplicationController::class, 'studentApplicationIndex'])->name('application.index');
-    Route::get('applications/apply/{GameID}',[ApplicationController::class, 'showApplyForm'])->name('application.apply');
-    Route::post('applications/apply/{GameID}',[ApplicationController::class, 'submitApplication'])->name('application.submit');
+    Route::post('applications/submit/{GameID}',[ApplicationController::class, 'submitApplication'])->name('application.submit');
+    Route::get('events/{EventID}', [ApplicationController::class, 'studentEventShow'])->name('events.show');
+
 });
