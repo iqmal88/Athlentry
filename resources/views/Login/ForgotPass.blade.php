@@ -1,281 +1,287 @@
 <!doctype html>
-<html lang="en" class="antialiased">
+<html lang="en" class="antialiased scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Forgot Password — Athlentry</title>
+  <title>Forgot Password — Athlentry Studio</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --maroon:#8B1E2F;
-      --maroon-dark:#5e101b;
-      --muted:#6b7280;
-      --surface:#ffffff;
+    :root {
+      --brand: #800000;
+      --brand-dark: #4a0000;
     }
 
-    html,body { height:100%; margin:0; }
-    body{
-      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      background: linear-gradient(180deg,#fbfbfe,#f6f5fb);
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0c0c0c;
+      color: #f8fafc;
     }
 
-    /* full-bleed split layout */
-    .panel-grid { min-height:100vh; display:grid; grid-template-columns:1fr; }
-    @media(min-width:768px){ .panel-grid { grid-template-columns:1fr 520px; } }
-
-    .left-illustration {
-      padding:5rem 3rem;
-      background:
-        radial-gradient(circle at 10% 20%, rgba(139,30,47,0.04) 0.6px, transparent 0.6px),
-        linear-gradient(180deg,#fff6f6,#ffffff);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
+    /* Studio Glass Effect */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* Form panel has NO centered card / container — inputs sit directly on panel */
-    .form-panel {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:3rem 2rem;
-      background:var(--surface);
+    .panel-grid {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr;
     }
 
-    .form-body {
-      width:100%;
-      max-width:36rem;
+    @media(min-width:1024px) {
+      .panel-grid { grid-template-columns: 1.1fr 0.9fr; }
     }
 
-    .form-section {
-      background: transparent; /* no card background */
-      border-radius: 0;
-      padding: 0;
+    .hero-side {
+      position: relative;
+      background: radial-gradient(circle at 0% 0%, #3a0000 0%, #0c0c0c 70%);
+      overflow: hidden;
+    }
+
+    .form-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .form-input:focus {
-      outline:none;
-      box-shadow: 0 10px 28px rgba(139,30,47,0.08), 0 0 0 4px rgba(139,30,47,0.06);
-      border-color: var(--maroon);
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.2);
     }
 
-    .role-pill { display:inline-flex; align-items:center; gap:.5rem; padding:.45rem .7rem; border-radius:999px; font-weight:600; cursor:pointer; }
-    .role-pill[aria-selected="true"] { background:var(--maroon); color:white; }
-    .role-pill[aria-selected="false"] { background:#f3f3f4; color:var(--muted); }
+    .btn-studio {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+      box-shadow: 0 10px 30px rgba(128, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
 
-    .hint { color:var(--muted); font-size:.95rem; }
-    .muted-link { color:var(--maroon); font-weight:600; }
+    .btn-studio:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .role-pill {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s ease;
+    }
+
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .blur-blob {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: var(--brand);
+      filter: blur(120px);
+      opacity: 0.15;
+    }
   </style>
 </head>
 <body>
 
-  @php $isAdmin = request()->query('role') === 'admin'; @endphp
+@php $isAdmin = request()->query('role') === 'admin'; @endphp
 
-  <!-- Full-bleed split panels (no centered container) -->
-  <main class="panel-grid">
+<main class="panel-grid">
 
-    <!-- Left: branding & illustration (hidden on small screens) -->
-    <aside class="left-illustration hidden md:flex" aria-hidden="true">
-      <div>
-        <div class="flex items-center gap-3 mb-6">
-          <img src="{{ asset('images/Athlentry-logo.png') }}" class="h-12 w-auto object-contain" alt="Athlentry logo">
-          <span class="inline-block bg-[color:var(--maroon)] text-white text-sm px-3 py-1 rounded-full font-semibold">Athlentry</span>
+  {{-- LEFT SIDE: EDITORIAL BRANDING --}}
+  <aside class="hero-side hidden lg:flex flex-col justify-between p-16">
+    <div class="blur-blob top-0 left-0"></div>
+    
+    <div class="relative z-10">
+      <div class="flex items-center gap-4 mb-12">
+        <div class="w-12 h-12 bg-[color:var(--brand)] rounded-2xl flex items-center justify-center shadow-lg shadow-red-900/40">
+           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
-
-        <h2 class="text-3xl font-bold text-slate-900 leading-tight mb-3">Reset your password</h2>
-        <p class="hint max-w-xs">Use this form to reset your student password. Admin accounts cannot reset here — contact IT/support.</p>
-
-        <div class="mt-8">
-          <svg viewBox="0 0 560 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <ellipse cx="280" cy="200" rx="220" ry="70" fill="rgba(139,30,47,0.06)" />
-            <circle cx="120" cy="120" r="26" fill="white" stroke="rgba(139,30,47,0.18)" stroke-width="3"/>
-            <circle cx="420" cy="210" r="34" fill="white" stroke="rgba(94,16,27,0.18)" stroke-width="3"/>
-            <path d="M80 200 Q260 120 520 190" stroke="rgba(139,30,47,0.25)" stroke-width="18" stroke-linecap="round"/>
-          </svg>
-        </div>
+        <h1 class="text-2xl font-extrabold tracking-tighter italic uppercase">ATHLENTRY <span class="text-[color:var(--brand)] not-italic">STUDIO</span></h1>
       </div>
 
-      <div class="text-xs text-slate-400">© {{ date('Y') }} Athlentry</div>
-    </aside>
+      <div class="max-w-md">
+        <h2 class="text-6xl font-black leading-[0.9] tracking-tighter mb-6 uppercase italic">Recover <br><span class="text-[color:var(--brand)] not-italic">Access.</span></h2>
+        <p class="text-slate-400 text-lg font-medium leading-relaxed">
+          Security protocol initiated. Students may verify their identity to establish a new access key. Admin accounts require manual authorization.
+        </p>
+      </div>
+    </div>
 
-    <!-- Right: form panel (no container) -->
-    <section class="form-panel">
-      <div class="form-body">
+    <div class="relative z-10 flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+      <span>© {{ date('Y') }} Security Module</span>
+      <div class="w-12 h-px bg-slate-800"></div>
+      <span>v2.0 Beta</span>
+    </div>
+  </aside>
 
-        <div class="form-section mb-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <h1 class="text-2xl font-semibold text-slate-900">Forgot password</h1>
-              <p class="text-sm hint mt-1">Student password recovery</p>
-            </div>
+  {{-- RIGHT SIDE: RECOVERY FORM --}}
+  <section class="flex items-center justify-center p-8 lg:p-16 bg-[#0f0f0f] border-l border-white/5">
+    <div class="w-full max-w-lg fade-in">
+      
+      <div class="mb-10">
+        <div class="flex justify-between items-end mb-2">
+          <h2 class="text-3xl font-black tracking-tight uppercase italic">IDENTITY <span class="text-[color:var(--brand)] not-italic">RECOVERY</span></h2>
+          <a href="{{ route('login.view') }}" class="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors">← Back</a>
+        </div>
+        <div class="h-1 w-12 bg-[color:var(--brand)] rounded-full"></div>
+      </div>
 
-            <a href="{{ route('login.view') }}" class="text-sm hint hover:underline">Back</a>
-          </div>
+      {{-- Alerts --}}
+      @if(session('status'))
+        <div class="mb-6 p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold uppercase tracking-wide">
+          {{ session('status') }}
+        </div>
+      @endif
+
+      @if($errors->any())
+        <div class="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-wide">
+          {!! implode('<br>', $errors->all()) !!}
+        </div>
+      @endif
+
+      @if($isAdmin)
+        <div class="mb-6 p-5 rounded-[2rem] bg-yellow-500/10 border border-yellow-500/20 text-yellow-500">
+          <p class="text-[10px] font-black uppercase tracking-widest leading-relaxed">
+            Administrative Alert: Self-service recovery is restricted for level-1 access. Please contact the Systems Administrator.
+          </p>
+        </div>
+      @endif
+
+      <form id="forgotForm" method="POST" action="{{ route('student.password.reset') }}" class="space-y-6 @if($isAdmin) opacity-30 pointer-events-none @endif" novalidate>
+        @csrf
+
+        {{-- Role View (Static) --}}
+        <div class="flex items-center gap-3 mb-8">
+            <span class="role-pill {{ $isAdmin ? 'bg-slate-800 text-slate-500' : 'bg-[color:var(--brand)] text-white shadow-lg shadow-red-900/20' }}">Student</span>
+            <span class="role-pill {{ $isAdmin ? 'bg-[color:var(--brand)] text-white shadow-lg shadow-red-900/20' : 'bg-slate-800 text-slate-500' }}">Admin</span>
         </div>
 
-        {{-- Session / errors --}}
-        @if(session('status'))
-          <div class="mb-4 rounded-md bg-green-50 border border-green-100 text-green-700 p-3 text-sm">
-            {{ session('status') }}
-          </div>
-        @endif
-
-        @if($errors->any())
-          <div class="mb-4 rounded-md bg-red-50 border border-red-100 text-red-700 p-3 text-sm">
-            {!! implode('<br>', $errors->all()) !!}
-          </div>
-        @endif
-
-        @if($isAdmin)
-          <div class="mb-4 rounded-md bg-yellow-50 border border-yellow-100 text-yellow-800 p-3 text-sm">
-            Admin accounts cannot reset passwords here. Please contact IT/support.
-          </div>
-        @endif
-
-        <!-- FORM: kept server behavior unchanged -->
-        <form id="forgotForm" method="POST" action="{{ route('student.password.reset') }}" class="@if($isAdmin) opacity-70 pointer-events-none @endif">
-          @csrf
-
-          <!-- role pills for clarity -->
-          <div class="mb-4 flex items-center gap-3" role="tablist" aria-label="Role">
-            <div class="role-pill" role="tab" aria-selected="{{ $isAdmin ? 'false' : 'true' }}" data-role="student">Student</div>
-            <div class="role-pill" role="tab" aria-selected="{{ $isAdmin ? 'true' : 'false' }}" data-role="admin">Admin</div>
-          </div>
-
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-slate-700 mb-1">Matric Number</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Matric Number</label>
             <input id="matric_no" name="matric_no" type="text" value="{{ old('matric_no') }}" required
-                   class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg" placeholder="e.g. CB22047">
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm" placeholder="CB22000">
           </div>
 
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-slate-700 mb-1">Email (optional)</label>
+          <div class="space-y-2">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Email (Optional)</label>
             <input id="email" name="email" type="email" value="{{ old('email') }}"
-                   class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg" placeholder="your@campus.edu">
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm" placeholder="you@campus.edu">
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-slate-700 mb-1">New Password</label>
-            <div class="relative">
-              <input id="new_password" name="password" type="password" required
-                     class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg" placeholder="At least 8 characters">
-              <button type="button" id="toggleNewPwd" class="absolute right-2 top-2.5 text-sm text-slate-500 hover:text-slate-700">Show</button>
+        <div class="space-y-2">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">New Access Key</label>
+          <div class="relative">
+            <input id="new_password" name="password" type="password" required
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm" placeholder="Min. 8 Characters">
+            <button type="button" id="toggleNewPwd" class="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-slate-500 hover:text-white">Show</button>
+          </div>
+          <div class="flex items-center justify-between px-1 mt-2">
+            <div class="flex gap-1">
+                <div id="str-1" class="h-1 w-4 rounded-full bg-slate-800 transition-all"></div>
+                <div id="str-2" class="h-1 w-4 rounded-full bg-slate-800 transition-all"></div>
+                <div id="str-3" class="h-1 w-4 rounded-full bg-slate-800 transition-all"></div>
+                <div id="str-4" class="h-1 w-4 rounded-full bg-slate-800 transition-all"></div>
             </div>
-            <p id="pwStrength" class="text-xs hint mt-2">Strength: <strong id="strengthLabel">—</strong></p>
+            <span id="strengthLabel" class="text-[9px] font-black uppercase tracking-widest text-slate-600">Strength: —</span>
           </div>
+        </div>
 
-          <div class="mb-6">
-            <label class="block text-sm font-medium text-slate-700 mb-1">Confirm New Password</label>
-            <input id="new_password_confirm" name="password_confirmation" type="password" required
-                   class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg" placeholder="Retype new password">
-          </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Confirm New Key</label>
+          <input id="new_password_confirm" name="password_confirmation" type="password" required
+                 class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm" placeholder="Retype Password">
+        </div>
 
-          <div id="clientMsg" class="hidden mb-4 text-sm rounded p-3"></div>
+        <div id="clientMsg" class="hidden text-[10px] font-bold uppercase tracking-wide text-red-500 p-2"></div>
 
-          <div class="mb-3">
-            <button type="submit" id="forgotSubmit" class="w-full py-3 rounded-lg text-white font-semibold" style="background: linear-gradient(90deg,var(--maroon),var(--maroon-dark));">
-              Reset Password
-            </button>
-          </div>
+        <div class="pt-4 space-y-4">
+          <button type="submit" id="forgotSubmit"
+                  class="btn-studio w-full rounded-2xl py-5 text-white text-[11px] font-black uppercase tracking-[0.2em]">
+            Authorize Reset
+          </button>
+          
+          <button type="button" class="w-full py-4 rounded-2xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-white/5 transition-all" 
+                  onclick="window.location.href='{{ route('login.view') }}'">
+            Request Support Hub
+          </button>
+        </div>
+      </form>
 
-          <div class="mb-6">
-            <button type="button" class="w-full py-3 rounded-lg border border-slate-200 text-slate-700 text-sm" onclick="window.location.href='{{ route('login.view') }}'">
-              Contact IT / Help
-            </button>
-          </div>
+    </div>
+  </section>
 
-          <p class="text-xs hint">Note: Server-side validation ensures only students can reset here.</p>
-        </form>
-      </div>
-    </section>
-  </main>
+</main>
 
-  <script>
-    // simple reveal for form body
-    window.addEventListener('load', () => {
-      document.querySelector('.form-body')?.classList.add('show');
+<script>
+  (function(){
+    const pwd = document.getElementById('new_password');
+    const pwdConfirm = document.getElementById('new_password_confirm');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const form = document.getElementById('forgotForm');
+    const submitBtn = document.getElementById('forgotSubmit');
+    const clientMsg = document.getElementById('clientMsg');
+
+    // Toggle Password
+    document.getElementById('toggleNewPwd').addEventListener('click', function() {
+      pwd.type = pwd.type === 'password' ? 'text' : 'password';
+      this.textContent = pwd.type === 'password' ? 'Show' : 'Hide';
     });
 
-    // password toggle, strength and basic client checks
-    (function(){
-      const toggle = document.getElementById('toggleNewPwd');
-      const pwd = document.getElementById('new_password');
-      const pwdConfirm = document.getElementById('new_password_confirm');
-      const strengthLabel = document.getElementById('strengthLabel');
-      const clientMsg = document.getElementById('clientMsg');
-      const form = document.getElementById('forgotForm');
-      const submitBtn = document.getElementById('forgotSubmit');
+    // Password strength logic
+    pwd.addEventListener('input', function() {
+      let score = 0;
+      const val = pwd.value;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/\d/.test(val)) score++;
+      if (/[\W_]/.test(val)) score++;
 
-      toggle && toggle.addEventListener('click', () => {
-        pwd.type = pwd.type === 'password' ? 'text' : 'password';
-        toggle.textContent = pwd.type === 'password' ? 'Show' : 'Hide';
-      });
+      const colors = ['#1e293b', '#ef4444', '#f59e0b', '#10b981', '#800000'];
+      const labels = ['—', 'Very weak', 'Weak', 'Good', 'Strong'];
+      
+      strengthLabel.textContent = `Strength: ${labels[score]}`;
+      strengthLabel.style.color = score > 0 ? colors[score] : '#475569';
+      
+      for(let i=1; i<=4; i++) {
+        document.getElementById(`str-${i}`).style.backgroundColor = (i <= score) ? colors[score] : '#1e293b';
+      }
+    });
 
-      function scorePassword(password) {
-        let score = 0;
-        if (!password) return score;
-        if (password.length >= 8) score++;
-        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) score++;
-        if (password.match(/\d/)) score++;
-        if (password.match(/[\W_]/)) score++;
-        return score;
+    // Client Validation
+    form.addEventListener('submit', function(e) {
+      clientMsg.classList.add('hidden');
+      
+      if (pwd.value.length < 8) {
+        e.preventDefault();
+        clientMsg.textContent = "Security constraint: Minimum 8 characters required.";
+        clientMsg.classList.remove('hidden');
+        return;
+      }
+      if (pwd.value !== pwdConfirm.value) {
+        e.preventDefault();
+        clientMsg.textContent = "Credential mismatch: Confirmation does not match.";
+        clientMsg.classList.remove('hidden');
+        return;
       }
 
-      function strengthText(score) {
-        switch(score) {
-          case 0: return '—';
-          case 1: return 'Very weak';
-          case 2: return 'Weak';
-          case 3: return 'Good';
-          case 4: return 'Strong';
-          default: return '—';
-        }
-      }
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="animate-pulse tracking-[0.4em]">PROCESSING...</span>';
+    });
+  })();
+</script>
 
-      pwd && pwd.addEventListener('input', function(){
-        const s = scorePassword(pwd.value);
-        strengthLabel.textContent = strengthText(s);
-      });
-
-      form && form.addEventListener('submit', function(e){
-        clientMsg.classList.add('hidden');
-        const pw = pwd.value || '';
-        const pwc = pwdConfirm.value || '';
-        const matric = document.getElementById('matric_no').value || '';
-
-        if (!matric.trim()) {
-          e.preventDefault();
-          clientMsg.className = 'mb-3 text-sm rounded p-3 bg-red-50 text-red-700';
-          clientMsg.textContent = 'Please enter your Matric Number.';
-          clientMsg.classList.remove('hidden');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          return;
-        }
-        if (pw.length < 8) {
-          e.preventDefault();
-          clientMsg.className = 'mb-3 text-sm rounded p-3 bg-red-50 text-red-700';
-          clientMsg.textContent = 'Password must be at least 8 characters.';
-          clientMsg.classList.remove('hidden');
-          return;
-        }
-        if (pw !== pwc) {
-          e.preventDefault();
-          clientMsg.className = 'mb-3 text-sm rounded p-3 bg-red-50 text-red-700';
-          clientMsg.textContent = 'Passwords do not match.';
-          clientMsg.classList.remove('hidden');
-          return;
-        }
-
-        // disable to avoid duplicates
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Processing...';
-      });
-    })();
-  </script>
 </body>
 </html>

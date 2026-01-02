@@ -1,248 +1,230 @@
 <!doctype html>
-<html lang="en" class="antialiased">
+<html lang="en" class="antialiased scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Athlentry — Sign in</title>
+  <title>Athlentry — Access Portal</title>
 
-  <!-- Tailwind (CDN for prototyping) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --maroon: #8B1E2F;
-      --maroon-dark:#5e101b;
-      --accent: #FFB703;
-      --surface: #ffffff;
-      --muted: #6b7280;
+    :root {
+      --brand: #800000;
+      --brand-dark: #4a0000;
     }
 
-    html,body { height:100%; }
-    body{
-      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      background: linear-gradient(180deg,#fbfbfe,#f6f5fb);
-      margin:0;
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0c0c0c;
+      color: #f8fafc;
     }
 
-    /* subtle card animation */
-    .card-appear { opacity: 0; transform: translateY(8px) scale(.995); transition: all .36s cubic-bezier(.2,.9,.3,1); }
-    .card-appear.show { opacity: 1; transform: translateY(0) scale(1); }
-
-    /* input focus */
-    .form-input:focus {
-      outline: none;
-      box-shadow: 0 8px 28px rgba(139,30,47,0.08), 0 0 0 4px rgba(139,30,47,0.06);
-      border-color: var(--maroon);
+    /* Glass Panels */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* small helpers */
-    .brand-btn {
-      background: linear-gradient(90deg,var(--maroon),var(--maroon-dark));
+    .panel-grid {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr;
     }
-
-    /* subtle left panel texture */
-    .left-illustration { background:
-      radial-gradient(circle at 10% 20%, rgba(139,30,47,0.04) 0.5px, transparent 0.5px),
-      linear-gradient(180deg, rgba(139,30,47,0.03), rgba(94,16,27,0.02)); }
-
-    /* make layout full-bleed */
-    .full-bleed { width: 100%; max-width: none; border-radius: 0; box-shadow: none; }
-
-    /* ensure left panel and form area have generous padding on large screens */
-    .left-panel { padding: 4.5rem 3rem; }
-    .form-panel { padding: 3.5rem 2.25rem; }
 
     @media(min-width:1024px) {
-      .left-panel { padding: 5.5rem 4rem; }
-      .form-panel { padding: 4.5rem 4rem; }
+      .panel-grid { grid-template-columns: 1.1fr 0.9fr; }
     }
 
-    /* remove rounded corners on full-bleed look */
-    .rounded-none-md { border-radius: 0; }
+    /* Input Styling */
+    .form-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.2);
+    }
+
+    /* Animations */
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .blur-blob {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: var(--brand);
+      filter: blur(120px);
+      opacity: 0.15;
+      z-index: 0;
+    }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="overflow-hidden">
 
-  <!-- FULL-BLEED LAYOUT: left branding + right form, stretches edge-to-edge -->
-  <main class="card-appear grid grid-cols-1 md:grid-cols-2 full-bleed bg-[color:var(--surface)]">
-    <!-- Left: Branding / Illustration (md+) -->
-    <section class="hidden md:flex left-panel left-illustration flex-col justify-between gap-6">
-      <div>
-        <div class="flex items-center gap-3 mb-6">
-          <img src="{{ asset('images/Athlentry-logo.png') }}" alt="Athlentry" class="h-12 w-auto object-contain">
-          <span class="inline-block bg-[color:var(--maroon)] text-white text-sm px-3 py-1 rounded-full font-semibold">Athlentry</span>
+<main class="panel-grid relative">
+  <div class="blur-blob -top-24 -left-24"></div>
+
+  {{-- LEFT SIDE: BRANDING (Editorial Style) --}}
+  <aside class="hidden lg:flex flex-col justify-between p-16 relative z-10 bg-gradient-to-br from-black to-transparent">
+    <div>
+      <div class="flex items-center gap-4 mb-20">
+        <div class="w-12 h-12 bg-[color:var(--brand)] rounded-2xl flex items-center justify-center shadow-lg shadow-red-900/40">
+           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h1 class="text-2xl font-extrabold tracking-tighter italic uppercase">ATHLENTRY <span class="text-[color:var(--brand)] not-italic">STUDIO</span></h1>
+      </div>
+
+      <div class="max-w-md">
+        <h2 class="text-7xl font-black leading-[0.85] tracking-tighter mb-8 uppercase italic">Enter the <br><span class="text-[color:var(--brand)] not-italic">Arena.</span></h2>
+        <p class="text-slate-400 text-lg font-medium leading-relaxed">
+          The unified registry for student athletes. Securely manage your matches, track progress, and stay updated with the sports community.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">
+      <span>Powered by Faculty of Computing</span>
+      <div class="w-12 h-px bg-slate-800"></div>
+      <span>v2.0 Beta</span>
+    </div>
+  </aside>
+
+  {{-- RIGHT SIDE: LOGIN PANEL --}}
+  <section class="flex items-center justify-center p-8 lg:p-16 bg-[#0f0f0f] relative z-10 border-l border-white/5">
+    <div class="w-full max-w-md fade-in">
+      
+      <header class="mb-10 text-center lg:text-left">
+        <h2 class="text-3xl font-black tracking-tight uppercase italic mb-2">Access <span class="text-[color:var(--brand)] not-italic">Portal</span></h2>
+        <p class="text-slate-500 text-sm font-bold uppercase tracking-widest">Sign in to continue</p>
+      </header>
+
+      {{-- Error Alert --}}
+      @if ($errors->any())
+        <div class="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-wide">
+            {!! implode('<br>', $errors->all()) !!}
+        </div>
+      @endif
+
+      <form id="loginForm" method="POST" action="{{ route('login.submit') }}" class="space-y-6" novalidate>
+        @csrf
+
+        {{-- Role Selectors (Bento Style) --}}
+        <div class="p-1 bg-white/5 rounded-2xl flex gap-1 mb-8" role="tablist">
+          <button type="button" class="role-tab flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 bg-[color:var(--brand)] text-white shadow-lg" data-role="student" role="tab" aria-selected="true">Student</button>
+          <button type="button" class="role-tab flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 text-slate-500 hover:text-white" data-role="admin" role="tab" aria-selected="false">Administrator</button>
         </div>
 
-        <h2 class="text-3xl font-bold text-slate-900 leading-tight mb-2">Welcome back</h2>
-        <p class="text-sm text-[color:var(--muted)] max-w-xs">Sign in to apply for matches, view updates, and manage applications.</p>
-      </div>
-
-      <div class="mt-6">
-        <!-- Decorative SVG -->
-        <svg viewBox="0 0 560 360" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="lg" x1="0" x2="1">
-              <stop offset="0" stop-color="#fff1f2" />
-              <stop offset="1" stop-color="#fff7f8" />
-            </linearGradient>
-          </defs>
-          <rect width="560" height="360" rx="18" fill="url(#lg)"/>
-          <g transform="translate(20,20)" opacity="0.95">
-            <ellipse cx="240" cy="170" rx="180" ry="70" fill="rgba(139,30,47,0.06)"/>
-            <circle cx="70" cy="120" r="28" fill="#fff" stroke="rgba(139,30,47,0.08)"/>
-            <circle cx="420" cy="220" r="34" fill="#fff" stroke="rgba(94,16,27,0.06)"/>
-          </g>
-        </svg>
-      </div>
-
-      <p class="text-xs text-[color:var(--muted)]">Faculty of Computing Sports — simple, fast, athlete-first.</p>
-    </section>
-
-    <!-- Right: Form area (spans 2 cols on md) -->
-    <section class="form-panel flex items-center">
-      <div class="w-full">
-        <div class="max-w-xl">
-          <header class="mb-6">
-            <h1 class="text-2xl font-semibold text-slate-900">Sign in</h1>
-            <p class="text-sm text-[color:var(--muted)] mt-1">Use your Matric Number or Admin ID to access your account.</p>
-          </header>
-
-          {{-- Validation errors --}}
-          @if ($errors->any())
-            <div class="mb-4 rounded-md bg-red-50 border border-red-100 p-3 text-red-700 text-sm">
-              {!! implode('<br>', $errors->all()) !!}
-            </div>
-          @endif
-
-          {{-- Login form --}}
-          <form id="loginForm" method="POST" action="{{ route('login.submit') }}" class="space-y-4" novalidate>
-            @csrf
-
-            <!-- role tabs -->
-            <div class="flex items-center gap-2 mb-2" role="tablist" aria-label="Select role">
-              <button type="button" class="role-tab px-4 py-2 rounded-full text-sm font-medium bg-[color:var(--maroon)] text-white" data-role="student" role="tab" aria-selected="true">Student</button>
-              <button type="button" class="role-tab px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-slate-700" data-role="admin" role="tab" aria-selected="false">Admin</button>
-            </div>
-
-            <div>
-              <label id="identifierLabel" for="identifier" class="block text-sm font-medium text-slate-700">Matric Number</label>
-              <input id="identifier" name="identifier" type="text" value="{{ old('identifier') }}" required
-                     class="form-input mt-2 w-full px-4 py-3 border border-slate-200 rounded-lg shadow-sm" placeholder="e.g. CB22047" aria-describedby="identifierHelp" />
-              <p id="identifierHelp" class="text-xs text-[color:var(--muted)] mt-2">Enter matric number or admin ID depending on role.</p>
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between">
-                <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
-                <a href="{{ route('login.forgot.view') }}" class="text-sm text-[color:var(--muted)] hover:underline">Forgot?</a>
-              </div>
-              <div class="relative mt-2">
-                <input id="password" name="password" type="password" required
-                       class="form-input w-full px-4 py-3 border border-slate-200 rounded-lg shadow-sm" aria-describedby="passwordHelp" />
-                <button type="button" id="togglePassword" aria-label="Toggle show password" class="absolute right-2 top-2.5 text-sm text-slate-500 hover:text-slate-700">Show</button>
-              </div>
-              <p id="passwordHelp" class="text-xs text-[color:var(--muted)] mt-2">Use the password provided by the organiser or reset if forgotten.</p>
-            </div>
-
-            <div class="flex items-center justify-between">
-              <label class="inline-flex items-center gap-2 text-sm">
-                <input type="checkbox" name="remember" class="h-4 w-4 rounded border-slate-300">
-                <span class="text-slate-700">Remember me</span>
-              </label>
-
-              <div class="text-sm">
-                <a href="{{ route('student.register.view') }}" class="text-[color:var(--maroon)] font-semibold hover:underline">Register</a>
-              </div>
-            </div>
-
-            <!-- hidden compatibility field (if controllers expect matric_no) -->
-            <input type="hidden" name="matric_no" id="matric_no_hidden" value="">
-
-            <div>
-              <button id="submitBtn" type="submit" class="w-full py-3 rounded-lg text-white font-semibold brand-btn shadow">
-                Sign In
-              </button>
-            </div>
-
-            <div class="mt-6 text-xs text-[color:var(--muted)]">
-              © {{ date('Y') }} Athlentry — Faculty of Computing Sports
-            </div>
-          </form>
+        {{-- Identifier --}}
+        <div class="space-y-2">
+          <label id="identifierLabel" for="identifier" class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Matric Number</label>
+          <div class="relative">
+            <input id="identifier" name="identifier" type="text" value="{{ old('identifier') }}" required
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm" placeholder="e.g. CB22047" />
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <!-- Scripts -->
-  <script>
-    // reveal card (now full-bleed) on load
-    window.addEventListener('load', () => {
-      document.querySelector('.card-appear')?.classList.add('show');
-    });
+        {{-- Password --}}
+        <div class="space-y-2">
+          <div class="flex items-center justify-between px-1">
+            <label for="password" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Access Key</label>
+            <a href="{{ route('login.forgot.view') }}" class="text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-[color:var(--brand)] transition-colors">Recover?</a>
+          </div>
+          <div class="relative">
+            <input id="password" name="password" type="password" required
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm" placeholder="••••••••" />
+            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase tracking-tighter text-slate-500 hover:text-white">Show</button>
+          </div>
+        </div>
 
-    // role tab logic
+        {{-- Utils --}}
+        <div class="flex items-center justify-between px-1">
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" name="remember" class="w-4 h-4 rounded border-white/10 bg-white/5 text-[color:var(--brand)] focus:ring-offset-0 focus:ring-0">
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-300 transition-colors">Stay Logged In</span>
+          </label>
+          <a href="{{ route('student.register.view') }}" class="text-[10px] font-black uppercase tracking-widest text-[color:var(--brand)] hover:brightness-125 transition-all underline underline-offset-4">Join Hub</a>
+        </div>
+
+        <input type="hidden" name="matric_no" id="matric_no_hidden" value="">
+
+        <button id="submitBtn" type="submit" 
+                class="w-full py-5 rounded-2xl text-white text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-300"
+                style="background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); box-shadow: 0 10px 30px rgba(128, 0, 0, 0.3);">
+          Authorize Session
+        </button>
+
+      </form>
+
+      <footer class="mt-12 text-center">
+        <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">
+            Official Tournament System <br> © {{ date('Y') }} All Rights Reserved
+        </p>
+      </footer>
+
+    </div>
+  </section>
+</main>
+
+<script>
     (function () {
       const roleTabs = Array.from(document.querySelectorAll('.role-tab'));
       const form = document.getElementById('loginForm');
       const identifier = document.getElementById('identifier');
+      const label = document.getElementById('identifierLabel');
       const hiddenMatric = document.getElementById('matric_no_hidden');
+      const btn = document.getElementById('submitBtn');
 
       function setRole(role) {
         roleTabs.forEach(btn => {
-          const is = btn.dataset.role === role;
-          btn.classList.toggle('bg-[color:var(--maroon)]', is);
-          btn.classList.toggle('text-white', is);
-          btn.classList.toggle('bg-gray-100', !is);
-          btn.classList.toggle('text-slate-700', !is);
-          btn.setAttribute('aria-selected', is ? 'true' : 'false');
+          const isSelected = btn.dataset.role === role;
+          btn.classList.toggle('bg-[color:var(--brand)]', isSelected);
+          btn.classList.toggle('text-white', isSelected);
+          btn.classList.toggle('shadow-lg', isSelected);
+          btn.classList.toggle('text-slate-500', !isSelected);
+          btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
         });
 
-        // change form action depending on role
         if (role === 'admin') {
           form.action = "{{ route('admin.login.submit') }}";
-          identifier.placeholder = 'ADMIN001';
-          document.getElementById('identifierLabel').textContent = 'Admin ID';
+          identifier.placeholder = 'ADMIN-8820';
+          label.textContent = 'Admin Identifier';
         } else {
           form.action = "{{ route('login.submit') }}";
           identifier.placeholder = 'e.g. CB22047';
-          document.getElementById('identifierLabel').textContent = 'Matric Number';
+          label.textContent = 'Matric Number';
         }
       }
 
       roleTabs.forEach(btn => btn.addEventListener('click', () => setRole(btn.dataset.role)));
-
-      // initialize from default (student)
       setRole('student');
 
-      // password toggle
+      // Password logic
       const toggle = document.getElementById('togglePassword');
       const pwd = document.getElementById('password');
       toggle.addEventListener('click', () => {
-        if (pwd.type === 'password') { pwd.type = 'text'; toggle.textContent = 'Hide'; }
-        else { pwd.type = 'password'; toggle.textContent = 'Show'; }
+        const isPwd = pwd.type === 'password';
+        pwd.type = isPwd ? 'text' : 'password';
+        toggle.textContent = isPwd ? 'Hide' : 'Show';
       });
 
-      // on submit copy identifier to matric_no_hidden for backward compatibility
       form.addEventListener('submit', () => {
         hiddenMatric.value = identifier.value || '';
-      });
-
-      // accessibility: keyboard switching of role tabs
-      roleTabs.forEach((tab, i) => {
-        tab.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-            const next = roleTabs[(i + (e.key === 'ArrowRight' ? 1 : roleTabs.length - 1)) % roleTabs.length];
-            next.focus();
-            setRole(next.dataset.role);
-          }
-        });
+        btn.innerHTML = '<span class="animate-pulse">Authorizing...</span>';
+        btn.style.opacity = '0.7';
       });
     })();
-  </script>
+</script>
 </body>
 </html>
