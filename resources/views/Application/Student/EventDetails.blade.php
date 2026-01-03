@@ -23,7 +23,7 @@
                 <a href="{{ route('student.application.index') }}"
                    class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest
                           text-slate-400 hover:text-teal-600 transition mb-8">
-                    ← Back to Events
+                    ← Back 
                 </a>
 
                 <h1 class="text-4xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900">
@@ -54,7 +54,7 @@
             <div class="bg-white rounded-[3rem] border border-slate-100 shadow-sm p-10 md:p-14">
 
                 <h2 class="text-[11px] font-black uppercase tracking-[0.35em] text-teal-600 mb-8">
-                    Event Overview
+                    Overview
                 </h2>
 
                 <div class="prose prose-lg max-w-none text-slate-700 leading-relaxed">
@@ -68,7 +68,7 @@
 
             <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8">
                 <h3 class="text-[11px] font-black uppercase tracking-[0.35em] text-slate-400 mb-6">
-                    Event Info
+                    Event Information
                 </h3>
 
                 <div class="space-y-5 text-sm text-slate-700">

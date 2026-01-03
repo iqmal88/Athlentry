@@ -3,103 +3,80 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class UserController extends Controller
 {
-    // Show the user profile
+    /**
+     * Show logged-in student profile
+     */
     public function showProfile()
     {
-        $user = Session::get('user');
+        $user = Auth::user(); // 🔥 AUTH ONLY
 
-        if (!$user) {
-            return redirect()->route('login.view')->with('error', 'Please log in first.');
+        return view('Profile.Student.AthleteProfile', compact('user'));
+    }
+
+    /**
+     * Show edit profile page
+     */
+    public function editProfile()
+    {
+        $user = Auth::user();
+
+        return view('Profile.Student.AthleteEditProfile', compact('user'));
+    }
+
+    /**
+     * Update student profile (email, phone, medical history)
+     */
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'Email'           => 'required|email',
+            'PhoneNumber'     => 'required|string|max:20',
+            'MedicalHistory'  => 'nullable|string',
+            'Password'        => 'nullable|min:6',
+        ]);
+
+        $user = Auth::user();
+
+        $user->Email          = $request->Email;
+        $user->PhoneNumber    = $request->PhoneNumber;
+        $user->MedicalHistory = $request->MedicalHistory;
+
+        // Optional password update
+        if ($request->filled('Password')) {
+            $user->Password = Hash::make($request->Password);
         }
 
-        // Refresh user data from DB
-        $user = User::find($user->UserID);
+        $user->save();
 
-        return view('Profile.FMProfile', compact('user'));
+        return back()->with('success', 'Profile updated successfully!');
     }
 
-    // Update user profile
-    public function updateProfile(Request $request)
-{
-    $request->validate([
-        'Email' => 'required|email',
-        'PhoneNumber' => 'required|string|max:20',
-        'MedicalHistory' => 'nullable|string',
-        'Password' => 'nullable|min:6', // optional password validation
-    ]);
-
-    $user = Session::get('user');
-
-    if (!$user) {
-        return redirect()->route('login.view')->with('error', 'Session expired. Please log in again.');
-    }
-
-    $dbUser = User::find($user->UserID);
-
-    // Update editable fields
-    $dbUser->Email = $request->Email;
-    $dbUser->PhoneNumber = $request->PhoneNumber;
-    $dbUser->MedicalHistory = $request->MedicalHistory;
-
-    // Update password only if provided
-    if ($request->filled('Password')) {
-        $dbUser->Password = \Illuminate\Support\Facades\Hash::make($request->Password);
-    }
-
-    $dbUser->save();
-
-    // Update session data
-    Session::put('user', $dbUser);
-
-    return back()->with('success', 'Profile updated successfully!');
-}
-
+    /**
+     * Change password (with current password verification)
+     */
     public function changePassword(Request $request)
     {
         $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed', // must match new_password_confirmation
+            'current_password'      => 'required',
+            'new_password'          => 'required|min:6|confirmed',
         ]);
 
-        $user = Session::get('user');
-        if (!$user) {
-            return redirect()->route('login.view')->with('error', 'Please log in again.');
+        $user = Auth::user();
+
+        // Check current password
+        if (!Hash::check($request->current_password, $user->Password)) {
+            return back()->with('error', 'Current password is incorrect.');
         }
 
-        $dbUser = \App\Models\User::find($user->UserID);
-
-        // Check if current password is correct
-        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $dbUser->Password)) {
-            return back()->with('error', 'Your current password is incorrect.');
-        }
-
-        // Update to new password
-        $dbUser->Password = \Illuminate\Support\Facades\Hash::make($request->new_password);
-        $dbUser->save();
-
-        // Update session
-        Session::put('user', $dbUser);
+        $user->Password = Hash::make($request->new_password);
+        $user->save();
 
         return back()->with('success', 'Password updated successfully!');
     }
-
-    public function editProfile()
-    {
-        $user = Session::get('user');
-
-        if (!$user) {
-            return redirect()->route('login.view')->with('error', 'Please log in first.');
-        }
-
-        $user = User::find($user->UserID);
-
-        return view('Profile.EditFmProfile', compact('user'));
-    }
-
-
 }

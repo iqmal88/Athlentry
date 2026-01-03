@@ -14,22 +14,11 @@
 
             <div class="relative z-10">
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight leading-none uppercase italic">
-                    STUDENT <span class="text-teal-600 not-italic">ANNOUNCEMENTS</span>
+                    LIVE <span class="text-teal-600 not-italic">ANNOUNCEMENTS</span>
                 </h1>
                 <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold mt-2">
-                    Campus Updates & Important Notices
+                    Athlete Searching Updates & Important Notices
                 </p>
-            </div>
-
-            <div class="relative z-10 flex items-center gap-8 text-right">
-                <div>
-                    <span class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                        Available
-                    </span>
-                    <span class="text-3xl font-black text-slate-900 tabular-nums">
-                        {{ $announcements->count() }}
-                    </span>
-                </div>
             </div>
         </div>
     </div>

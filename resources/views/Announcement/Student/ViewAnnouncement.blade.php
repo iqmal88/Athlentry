@@ -87,9 +87,6 @@
               Full Details
             </h3>
             <div class="flex-1 h-px bg-slate-100"></div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-              Student View
-            </p>
           </div>
 
           <div class="prose prose-xl max-w-none text-slate-600 leading-relaxed font-medium italic">
@@ -128,7 +125,7 @@
                     shadow-2xl relative overflow-hidden">
 
           <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-12">
-            Event Logistics
+            Event Informations
           </h3>
 
           <div class="space-y-12">

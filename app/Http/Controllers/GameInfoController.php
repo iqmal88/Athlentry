@@ -67,4 +67,36 @@ class GameInfoController extends Controller
         $game->delete();
         return redirect()->route('admin.gameinfo.index')->with('success','Game deleted.');
     }
+
+    // =======================
+    // STUDENT GAME INFO
+    // =======================
+
+    /**
+    * Student – List events with open games
+    */
+    public function studentIndex()
+    {
+        $events = Event::with(['games' => function ($q) {
+                $q->where('Status', 'Open')
+                ->orderBy('GameName');
+        }])
+        ->where('Status', 'Open')
+        ->orderBy('StartDate', 'desc')
+        ->get();
+
+        return view('gameinfo.student.AthleteListGameInfo', compact('events'));
+    }
+
+    /**
+    * Student – View single game info (read-only)
+    */
+    public function studentShow($GameID)
+    {
+        $game = GameInfo::with('event')
+                ->where('Status', 'Open')
+                ->findOrFail($GameID);
+
+        return view('gameinfo.student.AthleteShowGameInfo', compact('game'));
+    }
 }

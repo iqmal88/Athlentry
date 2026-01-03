@@ -14,10 +14,10 @@
 
             <div class="relative z-10">
                 <h1 class="text-3xl font-black italic uppercase tracking-tight text-slate-900">
-                    Events <span class="text-teal-600 not-italic">Hub</span>
+                    Featured <span class="text-teal-600 not-italic">Events</span>
                 </h1>
                 <p class="text-[10px] uppercase tracking-[0.35em] text-slate-400 font-bold mt-2">
-                    Athlete Registration & Event Intake
+                    Apply to Become An Athlete!
                 </p>
             </div>
 
@@ -154,10 +154,10 @@
 
             <div class="px-10 py-8 border-b border-slate-100">
                 <h2 class="text-xl font-black uppercase italic text-slate-900">
-                    Confirm <span class="text-teal-600 not-italic">Application</span>
+                    Want To Become <span class="text-teal-600 not-italic"> Athlete?</span>
                 </h2>
                 <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">
-                    Athlete Registration
+                    Confirm Apply Now!
                 </p>
             </div>
 
