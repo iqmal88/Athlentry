@@ -47,7 +47,7 @@
         <div class="grid grid-cols-1 gap-6">
             @forelse($applications as $app)
                 @php
-                    $userName = optional($app->user)->name ?? (optional($app->user)->FullName ?? 'User ' . $app->UserID);
+                    $userName = optional($app->user)->name ?? (optional($app->user)->Name ?? 'User ' . $app->UserID);
                     $initials = strtoupper(substr($userName, 0, 1));
                     $isSelected = ($app->StatusID == 2);
                 @endphp
