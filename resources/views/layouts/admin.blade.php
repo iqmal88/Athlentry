@@ -64,6 +64,7 @@
                     ['route' => 'admin.events.list', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'label' => 'Athlete Apps'],
                     ['route' => 'admin.gameinfo.index', 'icon' => 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', 'label' => 'Game Info'],
                     ['route' => 'admin.selection.index', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Selection Status'],
+                    ['route' => 'admin.reports.index','icon'  => 'M9 17v-2m3 2v-4m3 4v-6m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v9a2 2 0 01-2 2z','label' => 'Reports & Analytics'],
                 ];
             @endphp
 

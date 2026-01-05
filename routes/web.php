@@ -86,6 +86,13 @@ Route::middleware(['auth', 'is_admin'])
     Route::get('profile', [AdminProfileController::class, 'view'])->name('profile.view');
     Route::get('profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [AdminProfileController::class, 'update'])->name('profile.update');
+
+    //report
+    Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/export/applicants/csv', [ReportController::class, 'exportApplicantsCSV'])->name('reports.export.applicants.csv');
+    Route::get('reports/export/selected/csv', [ReportController::class, 'exportSelectedCSV'])->name('reports.export.selected.csv');
+    Route::get('reports/export/selected/pdf',[ReportController::class, 'exportSelectedPDF'])->name('reports.export.selected.pdf');
+
 });
 
 /*
@@ -119,8 +126,4 @@ Route::middleware(['auth', 'is_student'])
 
     //STATUS
     Route::get('applications/status',[ApplicationController::class, 'studentApplicationsStatus'])->name('applications.status');
-
-    //REPORT
-    Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
-    Route::post('reports',[ReportController::class, 'store'])->name('reports.store');
 });
