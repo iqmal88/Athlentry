@@ -8,6 +8,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\GameInfoController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,4 +120,7 @@ Route::middleware(['auth', 'is_student'])
     //STATUS
     Route::get('applications/status',[ApplicationController::class, 'studentApplicationsStatus'])->name('applications.status');
 
+    //REPORT
+    Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
+    Route::post('reports',[ReportController::class, 'store'])->name('reports.store');
 });

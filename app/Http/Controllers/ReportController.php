@@ -2,48 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Report;
 use App\Models\Application;
 use App\Models\Event;
+use App\Models\GameInfo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ApplicantsExport;
+use App\Exports\SelectedAthletesExport;
 
 class ReportController extends Controller
 {
-    /**
-     * Show report dashboard (admin)
-     */
-    public function index()
+    public function index(Request $request)
     {
+        /* =========================
+         | FILTERS
+         ========================= */
+        $eventId = $request->event;
+        $gameId = $request->game;
+
+        $applicationsQuery = Application::query();
+
+        if ($eventId) {
+            $applicationsQuery->where('EventID', $eventId);
+        }
+
+        if ($gameId) {
+            $applicationsQuery->where('GameID', $gameId);
+        }
+
         /* =========================
          | SUMMARY STATS
          ========================= */
+        $totalApplications = $applicationsQuery->count();
+        $approvedApplications = (clone $applicationsQuery)
+            ->where('ApplicationStatus', 'approved')->count();
 
-        $totalApplications = Application::count();
-        $approvedApplications = Application::where('ApplicationStatus', 'approved')->count();
-        $rejectedApplications = Application::where('ApplicationStatus', 'rejected')->count();
-        $selectedAthletes = Application::where('SelectionStatus', 'selected')->count();
+        $rejectedApplications = (clone $applicationsQuery)
+            ->where('ApplicationStatus', 'rejected')->count();
 
-        /* =========================
-         | APPLICATIONS BY EVENT
-         ========================= */
-        $applicationsByEvent = Event::withCount([
-            'games as applications_count' => function ($q) {
-                $q->join('applications', 'game_info.GameID', '=', 'applications.GameID');
-            }
-        ])->get();
+        $selectedAthletes = (clone $applicationsQuery)
+            ->where('SelectionStatus', 'selected')->count();
 
         /* =========================
-         | SELECTION OUTCOME
+         | CHART DATA
          ========================= */
+
+        // Applications by Event
+        $applicationsByEvent = Application::select(
+                'EventID',
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('EventID')
+            ->with('event')
+            ->get();
+
+        // Selection Outcome
         $selectionStats = Application::select(
-            'SelectionStatus',
-            DB::raw('COUNT(*) as total')
-        )
-        ->whereNotNull('SelectionStatus')
-        ->groupBy('SelectionStatus')
-        ->get();
+                'SelectionStatus',
+                DB::raw('COUNT(*) as total')
+            )
+            ->whereNotNull('SelectionStatus')
+            ->groupBy('SelectionStatus')
+            ->get();
+
+        /* =========================
+         | FILTER DATA
+         ========================= */
+        $events = Event::all();
+        $games = GameInfo::all();
 
         return view('reports.admin.Index', compact(
             'totalApplications',
@@ -51,22 +78,23 @@ class ReportController extends Controller
             'rejectedApplications',
             'selectedAthletes',
             'applicationsByEvent',
-            'selectionStats'
+            'selectionStats',
+            'events',
+            'games'
         ));
     }
 
-    /**
-     * Store generated report snapshot (optional)
-     */
-    public function store(Request $request)
-    {
-        Report::create([
-            'Content' => $request->input('content'),
-            'CreatedDate' => now(),
-            'UserID' => Auth::id(),
-            'ApplicationID' => $request->input('ApplicationID'),
-        ]);
+    /* =========================
+     | EXPORT
+     ========================= */
 
-        return back()->with('success', 'Report generated successfully.');
+    public function exportApplicants()
+    {
+        return Excel::download(new ApplicantsExport, 'all_applicants.xlsx');
+    }
+
+    public function exportSelected()
+    {
+        return Excel::download(new SelectedAthletesExport, 'selected_athletes.xlsx');
     }
 }
