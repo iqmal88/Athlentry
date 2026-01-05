@@ -181,12 +181,86 @@ class ApplicationController extends Controller
 
     public function selectApplicant(Request $request, $ApplicationID)
     {
+        $request->validate([
+            'action' => 'required|in:approve,reject'
+        ]);
+
         $application = Application::findOrFail($ApplicationID);
-        $application->StatusID = $request->input('StatusID', 2);
+
+        // hanya pending boleh diproses
+        if ($application->ApplicationStatus !== 'pending') {
+            return back()->with('error', 'This application has already been processed.');
+        }
+
+        if ($request->action === 'approve') {
+
+            // approve application → masuk selection
+            $application->ApplicationStatus = 'approved';
+            $application->SelectionStatus   = 'in_selection';
+
+        } else {
+
+            // reject application → tiada selection
+            $application->ApplicationStatus = 'rejected';
+            $application->SelectionStatus   = null;
+        }
+
+            $application->save();
+
+            return back()->with('success', 'Application status updated successfully.');
+    }
+
+
+    public function showApplication($ApplicationID)
+    {
+        $application = Application::with([
+            'user',
+            'event',
+            'game'
+        ])->findOrFail($ApplicationID);
+
+        return view('application.admin.ApplicationDetails', compact('application'));
+    }
+
+    public function selectionIndex()
+    {
+        $events = Event::with(['games' => function ($q) {
+            $q->whereHas('applications', function ($q2) {
+                    $q2->where('ApplicationStatus', 'approved');
+                })->with(['applications' => function ($q3) {
+                $q3->where('ApplicationStatus', 'approved')
+                ->whereIn('SelectionStatus', ['in_selection', 'selected', 'rejected'])
+                ->with('user')
+                ->orderBy('DateApplied');
+                }]);
+            }])->get();
+
+        return view('Status.Admin.StatusView', compact('events'));
+    }
+
+    public function updateSelection(Request $request, $ApplicationID)
+    {
+        $request->validate([
+            'decision' => 'required|in:selected,rejected'
+        ]);
+
+        $application = Application::findOrFail($ApplicationID);
+
+        // safety check
+        if (
+            $application->ApplicationStatus !== 'approved' ||
+            $application->SelectionStatus !== 'in_selection'
+        ) {
+            return back()->with('error', 'This application is not eligible for selection.');
+        }
+
+        $application->SelectionStatus = $request->decision;
         $application->save();
 
-        return back()->with('success', 'Applicant selected.');
+        return back()->with('success', 'Selection decision recorded.');
     }
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -242,11 +316,11 @@ class ApplicationController extends Controller
         }
 
         Application::create([
-            'UserID'      => $studentId,
-            'EventID'     => $game->EventID,
-            'GameID'      => $game->GameID,
-            'DateApplied' => now(),
-            'StatusID'    => null,
+            'UserID'            => $studentId,
+            'EventID'           => $game->EventID,
+            'GameID'            => $game->GameID,
+            'DateApplied'       => now(),
+            'ApplicationStatus' => 'pending',
         ]);
 
         return back()->with('success', 'Application submitted successfully.');
@@ -267,5 +341,20 @@ class ApplicationController extends Controller
 
         return view('application.student.EventDetails', compact('event'));
     }
+
+    public function studentApplicationsStatus()
+    {
+        $studentId = Auth::id();
+
+        $events = Event::with(['games.applications' => function ($q) use ($studentId) {
+            $q->where('UserID', $studentId)
+                ->orderBy('DateApplied', 'desc');
+        }])->whereHas('games.applications', function ($q) use ($studentId) {
+            $q->where('UserID', $studentId);
+        })->get();
+
+        return view('Status.Student.StatusUpdate', compact('events'));
+    }
+
 
 }

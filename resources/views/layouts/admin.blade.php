@@ -63,7 +63,7 @@
                     ['route' => 'admin.announcements.index', 'icon' => 'M11 5.882V19.297A2.457 2.457 0 0111 19.297V5.882z', 'label' => 'Announcements'],
                     ['route' => 'admin.events.list', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'label' => 'Athlete Apps'],
                     ['route' => 'admin.gameinfo.index', 'icon' => 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', 'label' => 'Game Info'],
-                    ['route' => 'admin.selection.status.index', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Selection Status'],
+                    ['route' => 'admin.selection.index', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Selection Status'],
                 ];
             @endphp
 

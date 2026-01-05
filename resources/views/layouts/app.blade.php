@@ -75,6 +75,8 @@
                     ['route' => 'student.announcements.index', 'label' => 'Homepage'],
                     ['route' => 'student.gameinfo.index', 'label' => 'Game Information'],
                     ['route' => 'student.application.index', 'label' => 'Apply'],
+                    ['route' => 'student.applications.status', 'label' => 'Status Update'],
+
 
                 ];
             @endphp

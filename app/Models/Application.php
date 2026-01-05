@@ -17,11 +17,16 @@ class Application extends Model
         'UserID',
         'EventID',
         'GameID',
-        'StatusID',
+
+        // NEW STATUS SYSTEM
+        'ApplicationStatus',
+        'SelectionStatus',
+
         'SportType',
         'Achievement',
         'MedicalHistory',
         'DateApplied',
+
         'SnapshotEventName',
         'SnapshotGameName',
         'SnapshotGameDate',
@@ -34,17 +39,20 @@ class Application extends Model
         'SnapshotGameDate' => 'date',
     ];
 
+    /* =========================
+     | RELATIONSHIPS
+     ========================= */
+
     /**
-     * Application belongs to a user (applicant)
-     * Adjust the foreign / owner keys if your users table uses 'id' instead of 'UserID'
+     * Applicant (Student)
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class, 'UserID', 'UserID');
+        return $this->belongsTo(User::class, 'UserID', 'UserID');
     }
 
     /**
-     * Application belongs to an event
+     * Related Event
      */
     public function event(): BelongsTo
     {
@@ -52,18 +60,44 @@ class Application extends Model
     }
 
     /**
-     * Application belongs to a game
+     * Related Game / Sport
      */
     public function game(): BelongsTo
     {
         return $this->belongsTo(GameInfo::class, 'GameID', 'GameID');
     }
 
-    /**
-     * Application belongs to a status
-     */
-        public function status()
+    /* =========================
+     | HELPER METHODS (OPTIONAL BUT GOOD)
+     ========================= */
+
+    public function isPending(): bool
     {
-        return $this->belongsTo(Status::class, 'StatusID', 'StatusID');
+        return $this->ApplicationStatus === 'pending';
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->ApplicationStatus === 'approved';
+    }
+
+    public function isRejected(): bool
+    {
+        return in_array($this->ApplicationStatus, ['rejected', 'withdrawn']);
+    }
+
+    public function isInSelection(): bool
+    {
+        return $this->SelectionStatus === 'in_selection';
+    }
+
+    public function isSelected(): bool
+    {
+        return $this->SelectionStatus === 'selected';
+    }
+
+    public function isSelectionRejected(): bool
+    {
+        return $this->SelectionStatus === 'rejected';
     }
 }

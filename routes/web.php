@@ -7,7 +7,6 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\GameInfoController;
-use App\Http\Controllers\StatusController;
 use App\Http\Controllers\AdminProfileController;
 
 /*
@@ -61,14 +60,19 @@ Route::middleware(['auth', 'is_admin'])
     Route::post('events/{EventID}/update', [ApplicationController::class, 'updateEvent'])->name('events.update');
 
     /* Applications */
-    Route::get('applications', [ApplicationController::class, 'listApplications'])->name('applications.list');
     Route::get('applications/{ApplicationID}', [ApplicationController::class, 'showApplication'])->name('applications.show');
-    Route::post('applications/{ApplicationID}/status', [ApplicationController::class, 'updateStatus'])->name('applications.status');
-    Route::post('applications/{ApplicationID}/select', [ApplicationController::class, 'selectApplicant'])->name('applications.select');
+    Route::put('applications/{ApplicationID}/select', [ApplicationController::class, 'selectApplicant'])->name('applications.select');
 
     /* Game Applicants */
-    Route::get('games/{GameID}/applicants', [ApplicationController::class, 'viewApplicantsByGame'])
-        ->name('games.applicants');
+    Route::get('games/{GameID}/applicants', [ApplicationController::class, 'viewApplicantsByGame'])->name('games.applicants');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selection Module
+    |--------------------------------------------------------------------------
+    */
+    Route::get('selection',[ApplicationController::class, 'selectionIndex'])->name('selection.index');
+    Route::put('selection/{ApplicationID}',[ApplicationController::class, 'updateSelection'])->name('selection.update');
 
     /* Game Info */
     Route::get('gameinfo', [GameInfoController::class, 'index'])->name('gameinfo.index');
@@ -76,10 +80,6 @@ Route::middleware(['auth', 'is_admin'])
     Route::get('gameinfo/{GameID}/edit', [GameInfoController::class, 'edit'])->name('gameinfo.edit');
     Route::post('gameinfo/{GameID}/update', [GameInfoController::class, 'update'])->name('gameinfo.update');
     Route::delete('gameinfo/{GameID}', [GameInfoController::class, 'destroy'])->name('gameinfo.destroy');
-
-    /* Selection Status */
-    Route::get('selection-status', [StatusController::class, 'index'])->name('selection.status.index');
-    Route::put('selection-status/{ApplicationID}', [StatusController::class, 'update'])->name('selection.status.update');
 
     /* Admin Profile */
     Route::get('profile', [AdminProfileController::class, 'view'])->name('profile.view');
@@ -115,4 +115,8 @@ Route::middleware(['auth', 'is_student'])
     //GAMEINFO
     Route::get('/game-info',[GameInfoController::class, 'studentIndex'])->name('gameinfo.index');
     Route::get('/game-info/{GameID}',[GameInfoController::class, 'studentShow'])->name('gameinfo.show');
+
+    //STATUS
+    Route::get('applications/status',[ApplicationController::class, 'studentApplicationsStatus'])->name('applications.status');
+
 });
