@@ -154,9 +154,9 @@
         {{-- Password --}}
         <div class="space-y-2">
           <div class="flex items-center justify-between px-1">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600">Access Key</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600">Password</label>
             <a href="{{ route('login.forgot.view') }}" class="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-[color:var(--brand)]">
-              Recover?
+              Forgot Password?
             </a>
           </div>
           <div class="relative">
@@ -181,7 +181,7 @@
           </label>
           <a href="{{ route('student.register.view') }}"
              class="text-[10px] font-black uppercase tracking-widest text-[color:var(--brand)] underline underline-offset-4">
-            Join Hub
+            Register
           </a>
         </div>
 

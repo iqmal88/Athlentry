@@ -189,7 +189,7 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Campus Email</label>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Email</label>
           <input type="email" name="Email" value="{{ old('Email') }}" required
                  class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
                  placeholder="name@student.edu">
@@ -197,7 +197,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Access Password</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Password</label>
             <div class="relative">
               <input id="password" type="password" name="password" required
                      class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
@@ -210,7 +210,7 @@
           </div>
 
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Confirm Access</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Confirm Password</label>
             <input id="password_confirm" type="password" name="password_confirmation" required
                    class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
                    placeholder="••••••••">
