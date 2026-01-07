@@ -101,9 +101,9 @@
     </div>
 
     <div class="flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">
-      <span>Powered by Faculty of Computing</span>
+      <span>Persatuan Mahasiswa Teknologi Komputer</span>
       <div class="w-12 h-px bg-slate-300"></div>
-      <span>v2.0 Beta</span>
+      <span>Faculty of Computing</span>
     </div>
   </aside>
 
@@ -116,7 +116,7 @@
           Access <span class="text-[color:var(--brand)] not-italic">Portal</span>
         </h2>
         <p class="text-slate-600 text-sm font-bold uppercase tracking-widest">
-          Sign in to continue
+          Login to continue
         </p>
       </header>
 
@@ -143,7 +143,7 @@
         {{-- Identifier --}}
         <div class="space-y-2">
           <label id="identifierLabel" class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">
-            Matric Number
+            Matric ID
           </label>
           <input id="identifier" name="identifier" type="text" required
                  value="{{ old('identifier') }}"
@@ -176,7 +176,7 @@
             <input type="checkbox" name="remember"
                    class="w-4 h-4 rounded border-slate-300 bg-white text-[color:var(--brand)] focus:ring-0">
             <span class="text-[10px] font-black uppercase tracking-widest text-slate-600">
-              Stay Logged In
+              Remember Me
             </span>
           </label>
           <a href="{{ route('student.register.view') }}"
@@ -191,7 +191,7 @@
                 class="w-full py-5 rounded-2xl text-white text-[11px] font-black uppercase tracking-[0.3em]"
                 style="background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
                        box-shadow: 0 10px 30px rgba(128, 0, 0, 0.25);">
-          Authorize Session
+          Login
         </button>
       </form>
 
@@ -225,11 +225,11 @@
 
     if (role === 'admin') {
       form.action = "{{ route('admin.login.submit') }}";
-      label.textContent = 'Admin Identifier';
+      label.textContent = 'Admin ID';
       identifier.placeholder = 'ADMIN-8820';
     } else {
       form.action = "{{ route('login.submit') }}";
-      label.textContent = 'Matric Number';
+      label.textContent = 'Matric ID';
       identifier.placeholder = 'e.g. CB22047';
     }
   }

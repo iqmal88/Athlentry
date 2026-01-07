@@ -146,7 +146,7 @@
       <div class="mb-10">
         <div class="flex justify-between items-end mb-2">
           <h2 class="text-3xl font-black tracking-tight uppercase italic text-slate-900">
-            JOIN THE <span class="text-[color:var(--brand)] not-italic">RANK.</span>
+            REGISTER <span class="text-[color:var(--brand)] not-italic">NOW.</span>
           </h2>
           <a href="{{ route('login.view') }}"
              class="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-[color:var(--brand)]">
@@ -177,7 +177,7 @@
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Full Name</label>
             <input type="text" name="Name" value="{{ old('Name') }}" required
                    class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
-                   placeholder="Ahmad Zulkifli">
+                   placeholder="Muhammad Iqmal Hafiy Bin Tajudin">
           </div>
 
           <div class="space-y-2">
@@ -192,7 +192,7 @@
           <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Email</label>
           <input type="email" name="Email" value="{{ old('Email') }}" required
                  class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
-                 placeholder="name@student.edu">
+                 placeholder="name@gmail.com">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -230,7 +230,7 @@
         <div class="pt-4">
           <button type="submit" id="registerBtn"
                   class="btn-studio w-full rounded-2xl py-5 text-white text-[11px] font-black uppercase tracking-[0.2em]">
-            Establish Account
+            Register
           </button>
         </div>
 

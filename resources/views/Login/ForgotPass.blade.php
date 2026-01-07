@@ -145,7 +145,7 @@
       <div class="mb-10">
         <div class="flex justify-between items-end mb-2">
           <h2 class="text-3xl font-black tracking-tight uppercase italic text-slate-900">
-            IDENTITY <span class="text-[color:var(--brand)] not-italic">RECOVERY</span>
+            CHANGE YOUR <span class="text-[color:var(--brand)] not-italic">PASSWORD</span>
           </h2>
           <a href="{{ route('login.view') }}"
              class="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-[color:var(--brand)]">
@@ -183,12 +183,11 @@
         {{-- Role --}}
         <div class="flex items-center gap-3 mb-8">
           <span class="role-pill {{ !$isAdmin ? 'bg-[color:var(--brand)] text-white' : 'bg-slate-200 text-slate-500' }}">Student</span>
-          <span class="role-pill {{ $isAdmin ? 'bg-[color:var(--brand)] text-white' : 'bg-slate-200 text-slate-500' }}">Admin</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Matric Number</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Matric ID</label>
             <input name="matric_no" type="text" value="{{ old('matric_no') }}" required
                    class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
                    placeholder="CB22000">
@@ -198,12 +197,12 @@
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Email (Optional)</label>
             <input name="email" type="email" value="{{ old('email') }}"
                    class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
-                   placeholder="you@campus.edu">
+                   placeholder="name@gmail.com">
           </div>
         </div>
 
         <div class="space-y-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">New Access Key</label>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">New Password</label>
           <div class="relative">
             <input id="new_password" name="password" type="password" required
                    class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
@@ -228,7 +227,7 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Confirm New Key</label>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Confirm Password</label>
           <input id="new_password_confirm" name="password_confirmation" type="password" required
                  class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm">
         </div>
@@ -238,7 +237,7 @@
         <div class="pt-4 space-y-4">
           <button id="forgotSubmit" type="submit"
                   class="btn-studio w-full rounded-2xl py-5 text-white text-[11px] font-black uppercase tracking-[0.2em]">
-            Authorize Reset
+            Reset Password
           </button>
 
           <button type="button"
