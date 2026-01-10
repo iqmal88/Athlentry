@@ -1,125 +1,218 @@
 @extends('layouts.admin')
 
+@section('title', 'Game Information Hub')
+
 @section('content')
-<div class="min-h-screen bg-[#F8F9FA] pb-24 font-sans antialiased">
-    
-    {{-- Aesthetic Header: Floating Blur --}}
-      <div class="relative px-6 py-4">        
-          <div class="max-w-7xl mx-auto bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] rounded-[2rem] px-8 py-6 flex flex-col md:flex-row items-center justify-between">   
-            <div>
-                <h1 class="text-3xl font-[900] text-gray-900 tracking-tight italic">GAME <span class="text-[#800000] not-italic">INFORMATION</span></h1>
-                <p class="text-xs uppercase tracking-[0.3em] text-gray-400 font-bold mt-1">STORE EVERY GAME INFORMATION HERE</p>
-            </div>
-            
-            <div class="flex items-center gap-8 mt-4 md:mt-0">
-                <div class="text-right">
-                    <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Total Events</span>
-                    <span class="text-2xl font-black text-gray-900 leading-none">{{ $events->count() }}</span>
-                </div>
-                <div class="w-px h-8 bg-gray-100"></div>
-                <div class="text-right">
-                    <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Total Games</span>
-                    <span class="text-2xl font-black text-[#800000] leading-none">{{ $events->sum(fn($e)=>$e->games->count()) }}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Main Body --}}
-    <div class="max-w-7xl mx-auto px-6 mt-12">
-        <div class="space-y-32">
-            
-            @foreach($events as $event)
-                <section class="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    {{-- Section Label --}}
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="flex-none px-4 py-1 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
-                            {{ $event->Status }}
-                        </div>
-                        <h2 class="text-4xl font-black text-gray-900 tracking-tighter">{{ $event->EventName }}</h2>
-                        <div class="flex-1 h-[2px] bg-gradient-to-r from-gray-100 to-transparent"></div>
-                        <p class="text-sm font-medium text-gray-400 font-mono">
-                            {{ \Carbon\Carbon::parse($event->StartDate)->format('M.y') }} — {{ \Carbon\Carbon::parse($event->EndDate)->format('M.y') }}
-                        </p>
-                    </div>
-
-                    {{-- Bento Grid Layout --}}
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        @forelse($event->games as $game)
-                            @php
-                                $status = strtolower($game->final_status);
-                                // Define dynamic styles based on status
-                                $statusConfig = [
-                                    'open' => ['color' => 'text-green-600', 'bg' => 'bg-green-500', 'label' => 'OPEN', 'border' => 'border-green-100'],
-                                    'closed' => ['color' => 'text-gray-500', 'bg' => 'bg-gray-400', 'label' => 'CLOSED', 'border' => 'border-gray-200'],
-                                    'canceled' => ['color' => 'text-red-600', 'bg' => 'bg-red-500', 'label' => 'CANCELED', 'border' => 'border-red-100'],
-                                ];
-                                $currentStyle = $statusConfig[$status] ?? ['color' => 'text-gray-400', 'bg' => 'bg-gray-300', 'label' => strtoupper($status), 'border' => 'border-gray-100'];
-                            @endphp
-
-                            <a href="{{ route('admin.gameinfo.show', $game->GameID) }}" 
-                               class="group relative overflow-hidden bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-2">
-                                
-                                {{-- Background "Glow" --}}
-                                <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#800000]/5 rounded-full blur-3xl group-hover:bg-[#800000]/10 transition-colors"></div>
-
-                                <div class="relative z-10">
-                                    {{-- Game Header: Category & Dynamic Status --}}
-                                    <div class="flex justify-between items-start mb-12">
-                                        <div class="px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-gray-100">
-                                            {{ $game->Category ?? 'Game' }}
-                                        </div>
-
-                                        {{-- Corrected Dynamic Status Badge --}}
-                                        <div class="flex items-center gap-1.5">
-                                            @if($status === 'open')
-                                                <span class="relative flex h-2 w-2">
-                                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $currentStyle['bg'] }} opacity-75"></span>
-                                                    <span class="relative inline-flex rounded-full h-2 w-2 {{ $currentStyle['bg'] }}"></span>
-                                                </span>
-                                            @else
-                                                <span class="h-2 w-2 rounded-full {{ $currentStyle['bg'] }}"></span>
-                                            @endif
-                                            <span class="text-[10px] font-black {{ $currentStyle['color'] }} uppercase tracking-tighter">
-                                                {{ $currentStyle['label'] }}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <h3 class="text-2xl font-black text-gray-900 leading-tight group-hover:text-[#800000] transition-colors">
-                                        {{ $game->GameName }}
-                                    </h3>
-                                    
-                                    <div class="mt-8 flex items-end justify-between">
-                                        <div>
-                                            <p class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Capacity</p>
-                                            <p class="text-xl font-bold text-gray-800">{{ $game->Capacity }} <span class="text-xs font-medium text-gray-400 italic">person</span></p>
-                                        </div>
-                                        
-                                        <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 shadow-xl shadow-black/20">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        @empty
-                            <div class="col-span-full py-20 rounded-[3rem] border-2 border-dashed border-gray-100 flex flex-col items-center">
-                                <span class="text-4xl text-gray-200">empty_</span>
-                                <p class="text-gray-400 font-medium mt-2 uppercase tracking-widest text-[10px]">No games found in this quadrant</p>
-                            </div>
-                        @endforelse
-                    </div>
-                </section>
-            @endforeach
-
-        </div>
-    </div>
-</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body {
+        background-color: #F2F4F7;
+        font-family: 'Inter', -apple-system, sans-serif;
+        color: #1A1C1E;
+        padding-top: 20px;
+    }
+
+    /* Header */
+    .premium-header-rounded {
+        background: #fff;
+        border-radius: 24px;
+        padding: 24px 40px;
+        margin-bottom: 30px;
+        border: 1px solid #E5E7EB;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .aura-glow {
+        position: absolute;
+        top: -100px;
+        right: -30px;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(128,0,0,0.05) 0%, rgba(255,255,255,0) 70%);
+        border-radius: 50%;
+    }
+
+    /* Event Block */
+    .menu-category-block {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 30px;
+        border: 1px solid #E5E7EB;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #F3F4F6;
+    }
+
+    .category-title {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        margin-bottom: 0;
+    }
+
+    .category-meta {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #9CA3AF;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Game Card */
+    .menu-item-card {
+        background: #F9FAFB;
+        border: 1px solid #F3F4F6;
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .menu-item-card:hover {
+        background: #fff;
+        border-color: #800000;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .item-icon-area {
+        width: 44px;
+        height: 44px;
+        background: #fff;
+        color: #800000;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+        border: 1px solid #E5E7EB;
+    }
+
+    .item-name {
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+        line-height: 1.2;
+    }
+
+    .item-stats {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6B7280;
+    }
+
+    .btn-mcd-action {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        width: 28px;
+        height: 28px;
+        background: #800000;
+        color: #fff;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .btn-mcd-action:hover {
+        background: #111827;
+        color: #fff;
+    }
+
+    .badge-status {
+        font-size: 0.6rem;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 4px;
+        text-transform: uppercase;
+    }
 </style>
+
+<div class="container">
+
+    {{-- Header --}}
+    <div class="premium-header-rounded">
+        <div class="aura-glow"></div>
+        <div class="row align-items-center position-relative">
+            <div class="col-7">
+                <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
+                    Game <span style="color:#800000;">Information</span>
+                </h1>
+                <p class="text-muted small mb-0">
+                    Manage and monitor all games grouped by event.
+                </p>
+            </div>
+            <div class="col-5 text-end">
+                <span class="text-muted small fw-bold">
+                    Total Events: {{ $events->count() }} |
+                    Total Games: {{ $events->sum(fn($e)=>$e->games->count()) }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Event → Games --}}
+    @foreach($events as $event)
+    <div class="menu-category-block">
+
+        <div class="category-header">
+            <div class="d-flex align-items-center gap-3">
+                <h2 class="category-title">{{ $event->EventName }}</h2>
+                <span class="badge badge-status {{ $event->Status == 'Open' ? 'bg-success text-white' : 'bg-light text-muted border' }}">
+                    {{ $event->Status }}
+                </span>
+                <div class="category-meta d-none d-md-block">
+                    {{ \Carbon\Carbon::parse($event->StartDate)->format('M d') }} –
+                    {{ \Carbon\Carbon::parse($event->EndDate)->format('d, Y') }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+            @forelse($event->games as $game)
+            <div class="col">
+                <div class="menu-item-card">
+                    <div class="item-icon-area">
+                        <i class="bi bi-controller"></i>
+                    </div>
+
+                    <div class="category-meta mb-1">{{ $game->Category ?? 'GAME' }}</div>
+                    <h3 class="item-name">{{ $game->GameName }}</h3>
+
+                    <div class="item-stats mt-2">
+                        Capacity: <span class="text-dark">{{ $game->Capacity }}</span>
+                    </div>
+
+                    <a href="{{ route('admin.gameinfo.show', $game->GameID) }}" class="btn-mcd-action">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+            @empty
+            <div class="col-12 text-center py-4 text-muted small fw-bold">
+                No games registered for this event.
+            </div>
+            @endforelse
+        </div>
+
+    </div>
+    @endforeach
+
+</div>
 @endsection

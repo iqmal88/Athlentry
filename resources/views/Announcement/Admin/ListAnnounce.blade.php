@@ -3,121 +3,237 @@
 @section('title', 'Manage Announcements')
 
 @section('content')
-<div class="min-h-screen bg-[#F8F9FA] pb-24 font-sans antialiased">
-    
-    {{-- Aesthetic Header Card --}}
-    <div class="relative px-6 py-6">        
-        <div class="max-w-7xl mx-auto bg-white border border-gray-100 shadow-sm rounded-[2rem] px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-            {{-- Subtle Background Glow --}}
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-[#800000]/5 rounded-full blur-3xl"></div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-            <div class="relative z-10">
-                <h1 class="text-3xl font-black text-gray-900 tracking-tight leading-none uppercase italic">MANAGE <span class="text-[#800000] not-italic">ANNOUNCEMENTS</span></h1>
-                <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-bold mt-2">Communication Hub & Student Broadcasts</p>
+<style>
+    body {
+        background-color: #F8F9FA;
+        font-family: 'Inter', -apple-system, sans-serif;
+        color: #1A1C1E;
+        padding-top: 20px;
+    }
+
+    /* 1. Rounded Island Header */
+    .premium-header-rounded {
+        background: #fff;
+        border-radius: 24px;
+        padding: 24px 40px;
+        margin-bottom: 30px;
+        border: 1px solid #E5E7EB;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    
+    .aura-glow {
+        position: absolute;
+        top: -100px;
+        right: -30px;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(128, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+    }
+
+    /* 2. Announcement Grid Card */
+    .announce-card {
+        background: #fff;
+        border-radius: 20px;
+        border: 1px solid #E5E7EB;
+        overflow: hidden;
+        height: 100%;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .announce-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+        border-color: #800000;
+    }
+
+    /* 3. Image Section with Badges */
+    .card-media {
+        position: relative;
+        height: 180px;
+        overflow: hidden;
+        background: #F3F4F6;
+    }
+
+    .card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .badge-overlay {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 10;
+    }
+
+    .visibility-dot {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(4px);
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    /* 4. Content Area */
+    .card-body-custom {
+        padding: 24px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .date-tag {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #800000;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 10px;
+    }
+
+    .announce-title {
+        font-weight: 800;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        color: #111827;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .announce-excerpt {
+        font-size: 0.85rem;
+        color: #6B7280;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    /* 5. Footer Actions */
+    .card-footer-custom {
+        padding-top: 15px;
+        border-top: 1px solid #F3F4F6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-action-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #E5E7EB;
+        color: #4B5563;
+        background: #fff;
+        transition: 0.2s;
+    }
+
+    .btn-action-icon:hover {
+        background: #800000;
+        color: #fff;
+        border-color: #800000;
+    }
+
+    .btn-maroon-pill {
+        background: #800000;
+        color: #fff;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        padding: 10px 24px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="container pb-5">
+    <div class="premium-header-rounded">
+        <div class="aura-glow"></div>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-7">
+                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.02em;">Manage <span style="color: #800000;">Announcements</span></h1>
+                <p class="text-muted small mb-0">Make Announcement for Everything Related With Sport.</p>
             </div>
-            
-            <div class="relative z-10 flex flex-wrap items-center gap-4">
-                <div class="flex items-center gap-8 mr-4 text-right">
-                    <div>
-                        <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-2">Published</span>
-                        <span class="text-3xl font-black text-gray-900 leading-none tabular-nums">{{ $announcements->count() }}</span>
-                    </div>
-                </div>
-                <a href="{{ route('admin.announcements.create') }}" 
-                   class="px-8 py-4 bg-[#800000] text-white text-[10px] font-black uppercase tracking-widest rounded-[1.5rem] shadow-xl shadow-red-900/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                    New Broadcast
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                <a href="{{ route('admin.announcements.create') }}" class="btn btn-maroon-pill shadow-sm">
+                    <i class="bi bi-plus-circle me-2"></i>New Announcement
                 </a>
             </div>
         </div>
     </div>
 
-    {{-- Main Content --}}
-    <div class="max-w-7xl mx-auto px-6 mt-6">
-        
-        @if(session('success'))
-            <div class="mb-8 p-5 rounded-[1.5rem] bg-green-50 border border-green-100 text-green-700 text-sm font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if($announcements->isEmpty())
-            <div class="bg-white rounded-[3rem] border-2 border-dashed border-gray-100 p-20 flex flex-col items-center justify-center text-center">
-                <div class="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mb-6">
-                    <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.297A2.457 2.457 0 0111 19.297V5.882z"/></svg>
-                </div>
-                <h3 class="text-xl font-black text-gray-900 uppercase">Silence in the Studio</h3>
-                <p class="text-gray-400 text-sm mt-2 max-w-xs font-medium">No announcements have been broadcasted yet.</p>
-            </div>
-        @else
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($announcements as $announce)
-                    {{-- Clickable Card Link --}}
-                    <a href="{{ route('admin.announcements.show', $announce->AnnouncementID) }}" 
-                       class="group relative bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-[0_20px_50px_-15px_rgba(128,0,0,0.1)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full overflow-hidden">
-                        
-                        {{-- Image/Header Section --}}
-                        <div class="relative aspect-video overflow-hidden">
-                            @if($announce->Image)
-                                <img src="{{ asset('storage/' . $announce->Image) }}" alt="Hero" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+    <div class="row g-4">
+        @forelse($announcements as $announce)
+            <div class="col-md-6 col-lg-4">
+                <div class="announce-card">
+                    <div class="card-media">
+                        <div class="badge-overlay">
+                            <span class="badge bg-white text-dark shadow-sm fw-bold uppercase" style="font-size: 0.6rem;">
+                                {{ $announce->Category ?? 'News' }}
+                            </span>
+                        </div>
+                        <div class="visibility-dot">
+                            @if(strtolower($announce->visibility ?? 'public') == 'public')
+                                <i class="bi bi-eye text-success" style="font-size: 0.9rem;"></i>
                             @else
-                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300 italic text-xs font-bold uppercase tracking-widest">No Media Attached</div>
+                                <i class="bi bi-eye-slash text-secondary" style="font-size: 0.9rem;"></i>
                             @endif
-                            
-                            {{-- Category Badge --}}
-                            <div class="absolute top-5 left-5">
-                                <span class="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-xl text-[9px] font-black uppercase tracking-widest text-gray-900 shadow-sm">
-                                    {{ $announce->Category ?? 'General' }}
-                                </span>
-                            </div>
-
-                            {{-- Visibility Icon --}}
-                            <div class="absolute top-5 right-5 h-8 w-8 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center border border-white/20">
-                                @if(strtolower($announce->visibility ?? 'public') == 'public')
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                @else
-                                    <svg class="w-4 h-4 text-red-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                                @endif
-                            </div>
                         </div>
-
-                        {{-- Content Section --}}
-                        <div class="p-8 flex-1 flex flex-col">
-                            <div class="mb-4">
-                                <span class="text-[10px] font-black text-[#800000] uppercase tracking-widest opacity-60">
-                                    {{ \Carbon\Carbon::parse($announce->Date)->format('d F Y') }}
-                                </span>
-                                <h3 class="text-xl font-black text-gray-900 mt-1 leading-tight line-clamp-2 group-hover:text-[#800000] transition-colors">
-                                    {{ $announce->Title }}
-                                </h3>
+                        @if($announce->Image)
+                            <img src="{{ asset('storage/' . $announce->Image) }}" alt="Thumbnail">
+                        @else
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light opacity-50">
+                                <i class="bi bi-image h3 text-muted"></i>
                             </div>
+                        @endif
+                    </div>
 
-                            <p class="text-sm text-gray-400 font-medium line-clamp-3 mb-8">
-                                {{ Str::limit($announce->Description, 120) }}
-                            </p>
-
-                            {{-- Subtle Hint Icon --}}
-                            <div class="mt-auto pt-6 border-t border-gray-50 flex items-center justify-end">
-                                <div class="text-[9px] font-black uppercase tracking-widest text-gray-300 group-hover:text-[#800000] transition-colors flex items-center gap-2">
-                                    View Entry <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                                </div>
-                            </div>
+                    <div class="card-body-custom">
+                        <div class="date-tag">
+                            {{ \Carbon\Carbon::parse($announce->Date)->format('d M, Y') }}
                         </div>
-                    </a>
-                @endforeach
+                        <h3 class="announce-title">{{ $announce->Title }}</h3>
+                        <p class="announce-excerpt">
+                            {{ Str::limit($announce->Description, 100) }}
+                        </p>
+
+                        <div class="card-footer-custom mt-auto">
+                            <a href="{{ route('admin.announcements.show', $announce->AnnouncementID) }}" class="text-maroon fw-bold text-decoration-none small">
+                                Full Article <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        @endif
+        @empty
+            <div class="col-12 text-center py-5">
+                <div class="bg-white rounded-5 border border-dashed p-5">
+                    <i class="bi bi-chat-left-dots text-light h1"></i>
+                    <p class="text-muted mt-3 fw-bold">No announcements in the registry yet.</p>
+                </div>
+            </div>
+        @endforelse
     </div>
 </div>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    
-    .animate-in {
-        animation-delay: 0.1s;
-        animation-fill-mode: both;
-    }
-</style>
 @endsection
