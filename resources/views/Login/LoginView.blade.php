@@ -11,8 +11,8 @@
 
   <style>
     :root {
-      --brand: #800000;
-      --brand-dark: #4a0000;
+      --brand: #0d9488;
+      --brand-dark: #0f766e;
     }
 
     body {
@@ -21,7 +21,6 @@
       color: #0f172a;
     }
 
-    /* Glass Panels */
     .glass-card {
       background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(14px);
@@ -38,7 +37,6 @@
       .panel-grid { grid-template-columns: 1.1fr 0.9fr; }
     }
 
-    /* Input Styling */
     .form-input {
       background: #ffffff;
       border: 1px solid rgba(15, 23, 42, 0.15);
@@ -50,10 +48,9 @@
       outline: none;
       background: #ffffff;
       border-color: var(--brand);
-      box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.15);
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
     }
 
-    /* Animations */
     .fade-in { animation: fadeIn 0.8s ease-out forwards; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -76,11 +73,10 @@
 <main class="panel-grid relative">
   <div class="blur-blob -top-24 -left-24"></div>
 
-  {{-- LEFT SIDE: BRANDING --}}
   <aside class="hidden lg:flex flex-col justify-between p-16 relative z-10 bg-gradient-to-br from-white to-slate-100">
     <div>
       <div class="flex items-center gap-4 mb-20">
-        <div class="w-12 h-12 bg-[color:var(--brand)] rounded-2xl flex items-center justify-center shadow-lg shadow-red-900/20">
+        <div class="w-12 h-12 bg-[color:var(--brand)] rounded-2xl flex items-center justify-center shadow-lg shadow-teal-900/20">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
@@ -107,7 +103,6 @@
     </div>
   </aside>
 
-  {{-- RIGHT SIDE: LOGIN --}}
   <section class="flex items-center justify-center p-8 lg:p-16 bg-white relative z-10 border-l border-slate-200">
     <div class="w-full max-w-md fade-in">
 
@@ -120,7 +115,6 @@
         </p>
       </header>
 
-      {{-- Error Alert --}}
       @if ($errors->any())
         <div class="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-600 text-xs font-bold uppercase tracking-wide">
           {!! implode('<br>', $errors->all()) !!}
@@ -130,7 +124,6 @@
       <form id="loginForm" method="POST" action="{{ route('login.submit') }}" class="space-y-6" novalidate>
         @csrf
 
-        {{-- Role Selector --}}
         <div class="p-1 bg-slate-100 rounded-2xl flex gap-1 mb-8">
           <button type="button" class="role-tab flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest bg-[color:var(--brand)] text-white shadow-lg" data-role="student">
             Student
@@ -140,7 +133,6 @@
           </button>
         </div>
 
-        {{-- Identifier --}}
         <div class="space-y-2">
           <label id="identifierLabel" class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">
             Matric ID
@@ -151,7 +143,6 @@
                  placeholder="e.g. CB22047">
         </div>
 
-        {{-- Password --}}
         <div class="space-y-2">
           <div class="flex items-center justify-between px-1">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-600">Password</label>
@@ -170,7 +161,6 @@
           </div>
         </div>
 
-        {{-- Utilities --}}
         <div class="flex items-center justify-between px-1">
           <label class="flex items-center gap-3 cursor-pointer">
             <input type="checkbox" name="remember"
@@ -190,14 +180,14 @@
         <button id="submitBtn" type="submit"
                 class="w-full py-5 rounded-2xl text-white text-[11px] font-black uppercase tracking-[0.3em]"
                 style="background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
-                       box-shadow: 0 10px 30px rgba(128, 0, 0, 0.25);">
+                       box-shadow: 0 10px 30px rgba(13, 148, 136, 0.25);">
           Login
         </button>
       </form>
 
       <footer class="mt-12 text-center">
         <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">
-          Official Tournament System <br> © {{ date('Y') }} All Rights Reserved
+          Develop by Iqmal Hafiy <br> © {{ date('Y') }} All Rights Reserved
         </p>
       </footer>
 

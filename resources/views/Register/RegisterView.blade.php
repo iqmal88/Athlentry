@@ -11,8 +11,8 @@
 
   <style>
     :root {
-      --brand: #800000;
-      --brand-dark: #4a0000;
+      --brand: #0d9488;
+      --brand-dark: #0f766e;
     }
 
     body {
@@ -21,7 +21,6 @@
       color: #0f172a;
     }
 
-    /* Glass Panel */
     .glass-panel {
       background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(14px);
@@ -65,7 +64,7 @@
     .form-input:focus {
       outline: none;
       border-color: var(--brand);
-      box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.15);
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
       transform: translateY(-1px);
     }
 
@@ -76,12 +75,12 @@
     .btn-studio {
       background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
       transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(128, 0, 0, 0.25);
+      box-shadow: 0 10px 30px rgba(13, 148, 136, 0.25);
     }
 
     .btn-studio:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(128, 0, 0, 0.35);
+      box-shadow: 0 15px 40px rgba(13, 148, 136, 0.35);
       filter: brightness(1.1);
     }
 
@@ -104,13 +103,12 @@
 
 <main class="panel-grid">
 
-  {{-- LEFT SIDE: BRANDING --}}
   <aside class="hero-side hidden lg:flex flex-col justify-between p-16">
     <div class="blur-blob -top-24 -left-24"></div>
 
     <div class="relative z-10">
       <div class="flex items-center gap-4 mb-12">
-        <div class="w-12 h-12 bg-[color:var(--brand)] rounded-2xl flex items-center justify-center shadow-lg shadow-red-900/20">
+        <div class="w-12 h-12 bg-[color:var(--brand)] rounded-2xl flex items-center justify-center shadow-lg shadow-teal-900/20">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                   d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -133,13 +131,12 @@
     </div>
 
     <div class="relative z-10 flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-      <span>© {{ date('Y') }} Registry Module</span>
+      <span>PERSATUAN MAHASISWA TEKNOLOGI KOMPUTER</span>
       <div class="w-12 h-px bg-slate-300"></div>
-      <span>v2.0 Beta</span>
+      <span>FACULTY OF COMPUTING</span>
     </div>
   </aside>
 
-  {{-- RIGHT SIDE: REGISTER FORM --}}
   <section class="flex items-center justify-center p-8 lg:p-16 bg-white">
     <div class="w-full max-w-lg fade-in">
 
@@ -217,7 +214,6 @@
           </div>
         </div>
 
-        {{-- Password Strength --}}
         <div class="flex items-center gap-3 px-1">
           <div class="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
             <div id="strengthBar" class="h-full w-0 transition-all duration-500"></div>
@@ -268,7 +264,7 @@
     if (/\d/.test(v)) s++;
     if (/[\W_]/.test(v)) s++;
 
-    const colors = ['#cbd5f5', '#ef4444', '#f59e0b', '#10b981', '#800000'];
+    const colors = ['#cbd5f5', '#ef4444', '#f59e0b', '#10b981', '#0d9488'];
     const labels = ['—', 'Weak', 'Fair', 'Good', 'Strong'];
     const widths = ['0%', '25%', '50%', '75%', '100%'];
 
