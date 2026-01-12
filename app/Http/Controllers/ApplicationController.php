@@ -271,22 +271,24 @@ class ApplicationController extends Controller
     /**
      * Student – List all open events & games
      */
-    public function studentApplicationIndex()
-    {
-        $studentId = Auth::id();
+/**
+ * Student – List all open events & games
+ */
+public function studentApplicationIndex()
+{
+    $studentId = Auth::id();
 
-        $events = Event::with(['games' => function ($q) use ($studentId) {
-            $q->where('Status', 'Open')
-              ->withCount([
-                  'applications as applied' => function ($q2) use ($studentId) {
-                      $q2->where('UserID', $studentId);
-                  },
-                  'applications as total_applied'
-              ]);
-        }])->where('Status', 'Open')->get();
+    $events = Event::with(['games' => function ($q) use ($studentId) {
+        $q->where('Status', 'Open')
+          ->withCount(['applications as total_applied'])
+          // GET THE SPECIFIC APPLICATION FOR THIS USER
+          ->with(['applications' => function ($q2) use ($studentId) {
+              $q2->where('UserID', $studentId);
+          }]);
+    }])->where('Status', 'Open')->get();
 
-        return view('application.student.AthleteApplication', compact('events'));
-    }
+    return view('application.student.AthleteApplication', compact('events'));
+}
 
     /**
      * Student – Submit application (MODAL POST)

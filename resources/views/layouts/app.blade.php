@@ -7,152 +7,219 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
-        :root { --brand: #0D9488; --brand-dark: #0F766E; }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f8fafc;
-            color: #0f172a;
+            background: #ffffff;
+            color: #1A1D1F;
         }
 
-        .glass-student {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(13, 148, 136, 0.1);
+        /* Sidebar Canva Style (Student Teal) */
+        #sidebar {
+            width: 280px;
+            min-width: 280px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #F3F5F7;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 50;
+            position: relative;
         }
 
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        .nav-active {
-            background: var(--brand);
-            color: white !important;
-            box-shadow: 0 10px 15px -3px rgba(13, 148, 136, 0.2);
+        .sidebar-hidden {
+            margin-left: -280px;
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out;
+        /* Nav Item Styling */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #6F767E;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            text-decoration: none !important;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .nav-item:hover {
+            background: #F4F4F4;
+            color: #1A1D1F;
+        }
+
+        .nav-item.active {
+            background: #F4F4F4;
+            color: #0D9488; /* Teal Blue Pelajar */
+        }
+
+        /* Floating Toggle Button */
+        #sidebar-toggle {
+            position: fixed;
+            left: 265px;
+            top: 32px;
+            z-index: 100;
+            width: 32px;
+            height: 32px;
+            background: #ffffff;
+            border: 1px solid #F3F5F7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #sidebar-toggle.collapsed {
+            left: 16px;
+        }
+
+        #sidebar-toggle:hover {
+            background: #0D9488;
+            color: #ffffff;
+        }
+
+        .main-content {
+            background: #FCFCFC;
+            height: 100vh;
+            overflow-y: auto;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #EBEBEB; border-radius: 10px; }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9A9FA5;
+            padding: 0 16px;
+            margin-bottom: 12px;
+            margin-top: 24px;
         }
     </style>
 </head>
+<body class="flex overflow-hidden">
 
-<body class="min-h-screen overflow-hidden">
-
-<div class="flex h-screen overflow-hidden">
-
-    {{-- SIDEBAR --}}
-    <aside class="hidden md:flex flex-col w-72 bg-white border-r border-teal-50 shadow-sm">
-
-        {{-- LOGO --}}
-        <div class="p-8">
+    <aside id="sidebar" class="flex flex-col flex-shrink-0">
+        <div class="h-24 flex items-center px-8">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                              d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                <div class="w-10 h-10 bg-[#0D9488] rounded-xl flex items-center justify-center shadow-lg shadow-teal-900/10">
+                    <i class="bi bi-lightning-fill text-white h5 mb-0"></i>
                 </div>
-                <h1 class="text-xl font-extrabold italic uppercase text-teal-950">
-                    ATHLE<span class="text-teal-600 not-italic">NTRY</span>
-                </h1>
+                <div class="flex flex-col">
+                    <span class="text-lg font-extrabold tracking-tighter leading-none uppercase text-teal-950">Athle<span class="text-[#0D9488]">ntry</span></span>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Student Portal</span>
+                </div>
             </div>
         </div>
 
-        {{-- NAV --}}
-        <nav class="flex-1 px-6 space-y-2">
-            <p class="px-2 text-[10px] font-black uppercase tracking-[0.2em] text-teal-400 mb-4">
-                Athlete Menu
-            </p>
-
+        <nav class="flex-1 px-4 custom-scrollbar overflow-y-auto">
+            <div class="section-label">Main Menu</div>
+            
             @php
                 $navItems = [
-                    ['route' => 'student.announcements.index', 'label' => 'Homepage'],
-                    ['route' => 'student.gameinfo.index', 'label' => 'Game Information'],
-                    ['route' => 'student.application.index', 'label' => 'Apply'],
-                    ['route' => 'student.applications.status', 'label' => 'Status Update'],
-
-
+                    ['route' => 'student.announcements.index', 'icon' => 'bi-house-door', 'label' => 'Homepage'],
+                    ['route' => 'student.gameinfo.index', 'icon' => 'bi-info-circle', 'label' => 'Game Information'],
+                    ['route' => 'student.application.index', 'icon' => 'bi-plus-square', 'label' => 'Apply Athletes'],
+                    ['route' => 'student.applications.status', 'icon' => 'bi-activity', 'label' => 'Status Update'],
                 ];
             @endphp
 
             @foreach($navItems as $item)
-                <a href="{{ route($item['route']) }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all
-                   {{ request()->routeIs($item['route']) ? 'nav-active' : 'text-slate-500 hover:bg-teal-50 hover:text-teal-700' }}">
-                    <span class="text-sm font-bold">{{ $item['label'] }}</span>
+                <a href="{{ route($item['route']) }}" class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+                    <i class="bi {{ $item['icon'] }}"></i>
+                    <span>{{ $item['label'] }}</span>
                 </a>
             @endforeach
         </nav>
 
-        {{-- ✅ PROFILE LINK (FIXED) --}}
-        <div class="p-6">
-            <a href="{{ route('student.profile.show') }}"
-               class="block p-4 bg-teal-50/50 rounded-3xl border border-teal-100 flex items-center gap-3 group hover:bg-teal-100 transition-all">
-
-                <div class="w-10 h-10 rounded-full bg-teal-600 text-white
-                            flex items-center justify-center font-black text-sm
-                            group-hover:rotate-12 transition-transform">
-                    {{ strtoupper(substr(Auth::user()->Name ?? 'S', 0, 1)) }}
-                </div>
-
-                <div class="min-w-0 flex-1">
-                    <p class="text-sm font-black text-teal-950 truncate">
-                        {{ Auth::user()->Name ?? 'Student' }}
-                    </p>
-                    <p class="text-[10px] text-teal-600 uppercase font-bold tracking-widest">
-                        Athlete Profile
-                    </p>
-                </div>
-
-                <svg class="w-4 h-4 text-teal-400 group-hover:translate-x-1 transition-transform"
-                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 5l7 7-7 7" />
-                </svg>
-            </a>
+        <div class="p-6 border-t border-gray-50">
+            <div class="flex items-center justify-between p-3 rounded-2xl hover:bg-gray-50 transition-all cursor-pointer group">
+                <a href="{{ route('student.profile.show') }}" class="flex items-center gap-3 no-underline">
+                    <div class="w-10 h-10 rounded-full bg-[#0D9488]/5 text-[#0D9488] border border-[#0D9488]/10 flex items-center justify-center font-bold">
+                        {{ strtoupper(substr(Auth::user()->Name ?? 'S', 0, 1)) }}
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold text-gray-900 leading-none">{{ Auth::user()->Name ?? 'Student' }}</span>
+                        <span class="text-[10px] font-medium text-gray-400 mt-1">Athlete Profile</span>
+                    </div>
+                </a>
+            </div>
         </div>
     </aside>
 
-    {{-- MAIN --}}
-    <main class="flex-1 flex flex-col min-w-0 bg-[#fdfdfd]">
+    <div id="sidebar-toggle">
+        <i class="bi bi-chevron-left" id="toggle-icon"></i>
+    </div>
 
-        {{-- HEADER --}}
-        <header class="h-20 flex items-center justify-between px-8">
-            <h2 class="font-black uppercase tracking-widest text-teal-600 text-sm">
-                Student Dashboard
-            </h2>
+    <main class="main-content flex flex-col">
+        <header class="h-20 flex items-center justify-between px-10 flex-shrink-0 bg-white/50 backdrop-blur-md sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <nav class="text-sm font-semibold text-gray-400">
+                    <span class="hover:text-gray-600 cursor-pointer uppercase tracking-widest text-[10px]">Portal</span>
+                    <i class="bi bi-chevron-right mx-2 text-[10px]"></i>
+                    <span class="text-gray-900 capitalize text-[10px] uppercase tracking-widest">
+                        {{ str_replace('.', ' ', request()->route()->getName()) }}
+                    </span>
+                </nav>
+            </div>
 
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit"
-                        class="px-6 py-2 rounded-2xl bg-teal-50 text-teal-700
-                               text-xs font-black uppercase tracking-widest
-                               hover:bg-teal-600 hover:text-white transition">
-                    Sign Out
-                </button>
-            </form>
+            <div class="flex items-center gap-6">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="px-5 py-2.5 bg-gray-100 text-gray-600 text-xs font-bold rounded-xl hover:bg-red-600 hover:text-white transition-all">
+                        Sign Out
+                    </button>
+                </form>
+            </div>
         </header>
 
-        {{-- CONTENT --}}
-        <div class="flex-1 overflow-y-auto p-8 animate-fade-in">
-            <div class="max-w-7xl mx-auto">
+        <div class="flex-1 p-10 custom-scrollbar">
+            <div class="max-w-[1400px] mx-auto">
                 @yield('content')
             </div>
 
-            <footer class="mt-20 py-10 border-t border-teal-50 text-center">
-                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-teal-300">
-                    © {{ date('Y') }} Athlentry Student Studio
-                </p>
+            <footer class="mt-20 py-10 border-t border-gray-100 flex items-center justify-between opacity-30">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">© {{ date('Y') }} Athlentry Student Studio</span>
             </footer>
         </div>
     </main>
-</div>
 
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebar-toggle');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = sidebar.classList.toggle('sidebar-hidden');
+            toggleBtn.classList.toggle('collapsed');
+            
+            if (isHidden) {
+                toggleIcon.classList.replace('bi-chevron-left', 'bi-chevron-right');
+                localStorage.setItem('student-sidebar-pref', 'hidden');
+            } else {
+                toggleIcon.classList.replace('bi-chevron-right', 'bi-chevron-left');
+                localStorage.setItem('student-sidebar-pref', 'visible');
+            }
+        });
+
+        // Simpan pilihan user
+        if (localStorage.getItem('student-sidebar-pref') === 'hidden') {
+            sidebar.classList.add('sidebar-hidden');
+            toggleBtn.classList.add('collapsed');
+            toggleIcon.classList.replace('bi-chevron-left', 'bi-chevron-right');
+        }
+    </script>
 </body>
 </html>
