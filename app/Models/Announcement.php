@@ -16,18 +16,16 @@ class Announcement extends Model
     protected $fillable = [
         'Title',
         'Location',
-        'Date',
-        'TimeFrom',
-        'TimeUntil',
+        'DateClose',
+        'TimeClose',
         'Description',
         'Image',
         'CreatedBy',
     ];
 
     protected $casts = [
-        'Date'      => 'date',
-        'TimeFrom'  => 'datetime:H:i',   // Stored as TIME, returned as Carbon
-        'TimeUntil' => 'datetime:H:i',   // Stored as TIME, returned as Carbon
+        'DateClose' => 'date',
+        'TimeClose' => 'datetime:H:i',
     ];
 
     protected $dates = [

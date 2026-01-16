@@ -10,39 +10,27 @@ return new class extends Migration {
         Schema::create('applications', function (Blueprint $table) {
             $table->id('ApplicationID');
 
-            // references
             $table->unsignedBigInteger('UserID');
-            $table->unsignedBigInteger('EventID');     // REQUIRED: link to events
-            $table->unsignedBigInteger('GameID');      // REQUIRED: link to game_info
-            $table->unsignedBigInteger('StatusID')->nullable(); // optional status table
+            $table->unsignedBigInteger('EventID');
+            $table->unsignedBigInteger('GameID');
 
-            // student's submitted info
-            $table->string('SportType')->nullable();
-            $table->text('Achievement')->nullable();
-            $table->text('MedicalHistory')->nullable();
-            $table->dateTime('DateApplied')->useCurrent();
+            $table->string('ApplicationStatus');
+            $table->string('SelectionStatus');
+            $table->string('SportType');
+            $table->date('DateApplied');
 
-            // snapshot fields (preserve game/event info at time of application)
-            $table->string('SnapshotEventName')->nullable();
-            $table->string('SnapshotGameName')->nullable();
-            $table->date('SnapshotGameDate')->nullable();
-            $table->string('SnapshotLocation')->nullable();
-            $table->unsignedInteger('SnapshotCapacity')->nullable();
+            // Snapshot fields
+            $table->string('SnapshotEventName');
+            $table->string('SnapshotGameName');
+            $table->date('SnapshotGameDate');
+            $table->string('SnapshotLocation');
+            $table->integer('SnapshotCapacity');
 
             $table->timestamps();
 
-            // foreign keys
-            // adapt these references if your users PK is 'id' instead of 'UserID'
             $table->foreign('UserID')->references('UserID')->on('users')->onDelete('cascade');
             $table->foreign('EventID')->references('EventID')->on('events')->onDelete('cascade');
             $table->foreign('GameID')->references('GameID')->on('game_info')->onDelete('cascade');
-            // StatusID -> statuses table (if exists)
-            $table->foreign('StatusID')->references('StatusID')->on('statuses')->onDelete('set null');
-
-            // indexes for faster lookups
-            $table->index(['EventID']);
-            $table->index(['GameID']);
-            $table->index(['UserID']);
         });
     }
 

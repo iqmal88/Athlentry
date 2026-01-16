@@ -11,30 +11,20 @@ return new class extends Migration {
             $table->id('AnnouncementID');
 
             $table->string('Title');
-            $table->string('Location')->nullable();
-            $table->date('Date')->nullable();
-
-            // Time columns (new)
-            $table->time('TimeFrom')->nullable();
-            $table->time('TimeUntil')->nullable();
-
-            $table->text('Description')->nullable();
-
-            // uploaded image (stored as filename or path)
+            $table->string('Location');
+            $table->date('DateClose');
+            $table->time('TimeClose');
+            $table->text('Description');
             $table->string('Image')->nullable();
 
-            // foreign key to users table
             $table->unsignedBigInteger('CreatedBy');
-            $table->foreign('CreatedBy')
-                  ->references('UserID')
-                  ->on('users')
-                  ->onDelete('cascade');
-
-            // timestamps
             $table->timestamps();
-
-            // recommended for admin deletion tracking
             $table->softDeletes();
+
+            $table->foreign('CreatedBy')
+                ->references('UserID')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

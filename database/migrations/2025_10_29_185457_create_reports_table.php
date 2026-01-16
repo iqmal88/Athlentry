@@ -9,14 +9,24 @@ return new class extends Migration {
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id('ReportID');
-            $table->text('Content');
-            $table->date('CreatedDate')->useCurrent();
+
             $table->unsignedBigInteger('UserID');
             $table->unsignedBigInteger('ApplicationID');
+
+            $table->text('Content');
+            $table->date('CreatedDate');
+
             $table->timestamps();
 
-            $table->foreign('UserID')->references('UserID')->on('users')->onDelete('cascade');
-            $table->foreign('ApplicationID')->references('ApplicationID')->on('applications')->onDelete('cascade');
+            $table->foreign('UserID')
+                ->references('UserID')
+                ->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('ApplicationID')
+                ->references('ApplicationID')
+                ->on('applications')
+                ->onDelete('cascade');
         });
     }
 

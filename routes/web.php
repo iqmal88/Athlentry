@@ -15,7 +15,7 @@ use App\Http\Controllers\ReportController;
 | Authentication (Public)
 |--------------------------------------------------------------------------
 */
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login.view');
+Route::get('/', [AuthController::class, 'showLogin'])->name('login.view');
 
 // Student Auth
 Route::post('/login/student', [AuthController::class, 'login'])->name('login.submit');

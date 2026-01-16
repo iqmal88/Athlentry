@@ -9,17 +9,21 @@ return new class extends Migration {
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id('EventID');
+
             $table->string('EventName');
-            $table->string('Location')->nullable();
-            $table->date('StartDate')->nullable();
-            $table->date('EndDate')->nullable();
-            $table->text('Description')->nullable();
-            $table->unsignedBigInteger('CreatedBy')->nullable(); // admin user id (optional)
-            $table->enum('Status', ['Open','Closed','Cancelled'])->default('Open');
+            $table->string('Location');
+            $table->date('StartDate');
+            $table->date('EndDate');
+            $table->text('Description');
+            $table->unsignedBigInteger('CreatedBy');
+            $table->string('Status');
+
             $table->timestamps();
 
-            // If your users table primary key is UserID uncomment and adapt:
-            // $table->foreign('CreatedBy')->references('UserID')->on('users')->onDelete('set null');
+            $table->foreign('CreatedBy')
+                ->references('UserID')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

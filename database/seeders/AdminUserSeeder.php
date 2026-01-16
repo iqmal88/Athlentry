@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
         DB::table('users')->insert([
             'Name' => 'MUHAMMAD IQMAL HAFIY BIN TAJUDIN',
             'MatricNo' => 'CB22047',
-            'Email' => null, //unused
+            'Email' => 'admin@athlentry.com',
             'Password' => Hash::make('Admin2425'),
             'Role' => 'admin',
             'created_at' => now(),

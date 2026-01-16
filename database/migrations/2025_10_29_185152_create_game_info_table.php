@@ -10,29 +10,25 @@ return new class extends Migration {
         Schema::create('game_info', function (Blueprint $table) {
             $table->id('GameID');
 
-            // link to events table (Event header)
             $table->unsignedBigInteger('EventID');
-
             $table->string('GameName');
-            $table->string('Category')->nullable();       // e.g. Team/Individual, Men/Women/Open
-            $table->date('GameDate')->nullable();
-            $table->time('GameTime')->nullable();
-            $table->string('SelectionPlace')->nullable(); // venue
-            $table->string('CoachName')->nullable();
-            $table->string('CoachPhone')->nullable();
-            $table->unsignedInteger('Capacity')->nullable(); // max participants
-            $table->text('Rules')->nullable();
-            $table->text('Description')->nullable();
-
-            $table->enum('Status', ['Open','Closed','Cancelled'])->default('Open');
+            $table->string('Category');
+            $table->date('GameDate');
+            $table->time('GameTime');
+            $table->string('SelectionPlace');
+            $table->string('CoachName');
+            $table->string('CoachPhone');
+            $table->integer('Capacity');
+            $table->text('Rules');
+            $table->text('Description');
+            $table->string('Status');
 
             $table->timestamps();
 
-            // FK to events
-            $table->foreign('EventID')->references('EventID')->on('events')->onDelete('cascade');
-
-            // index to speed queries
-            $table->index('EventID');
+            $table->foreign('EventID')
+                ->references('EventID')
+                ->on('events')
+                ->onDelete('cascade');
         });
     }
 
