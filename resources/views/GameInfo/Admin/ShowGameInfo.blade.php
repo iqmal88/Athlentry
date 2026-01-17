@@ -1,168 +1,274 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="min-h-screen bg-[#F8F9FA] pb-24 font-sans antialiased">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-    {{-- Aesthetic Header: Floating Blur --}}
-      <div class="relative px-6 py-4">        
-          <div class="max-w-7xl mx-auto bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] rounded-[2rem] px-8 py-6 flex flex-col md:flex-row items-center justify-between">   
-            <div class="flex items-center gap-4">
-                <a href="{{ route('admin.gameinfo.index') }}" class="group flex items-center justify-center w-10 h-10 bg-white border border-gray-100 rounded-full shadow-sm hover:bg-[#800000] hover:text-white transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </a>
-                <div>
-                    <h1 class="text-3xl font-[900] text-gray-900 tracking-tight italic uppercase">GAME <span class="text-[#800000] not-italic">DETAILS</span></h1>
-                    <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-black mt-1">Detailed Oversight </p>
+<style>
+    body {
+        background-color: #F2F4F7;
+        font-family: 'Inter', -apple-system, sans-serif;
+        color: #1A1C1E;
+    }
+
+    /* 1. Header Styling */
+    .premium-header-rounded {
+        background: #fff;
+        border-radius: 24px;
+        padding: 24px 40px;
+        margin-bottom: 30px;
+        border: 1px solid #E5E7EB;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    
+    .aura-glow {
+        position: absolute;
+        top: -100px;
+        right: -30px;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(128, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+    }
+
+    /* 2. Content Islands */
+    .detail-island {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 32px;
+        border: 1px solid #E5E7EB;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 24px;
+    }
+
+    .bento-dark {
+        background: #111827;
+        color: #fff;
+        border-radius: 24px;
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 3. Typography & Badges */
+    .meta-label {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #9CA3AF;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .status-badge {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .status-open { background: #E6F4EA; color: #1E7E34; border: 1px solid #D1E7DD; }
+    .status-closed { background: #FCE8E6; color: #C5221F; border: 1px solid #F8D7DA; }
+
+    /* 4. Action Buttons */
+    .btn-maroon-pill {
+        background: #800000;
+        color: #fff !important;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 10px 24px;
+        border: none;
+        transition: 0.3s;
+    }
+    .btn-maroon-pill:hover { background: #600000; transform: translateY(-1px); }
+
+    .rule-item {
+        background: #F9FAFB;
+        border: 1px solid #F3F4F6;
+        border-radius: 16px;
+        padding: 16px;
+        transition: 0.2s;
+    }
+    .rule-item:hover { border-color: #800000; background: #fff; }
+
+    .fw-black { font-weight: 900; }
+    .text-maroon { color: #800000 !important; }
+</style>
+
+<div class="container py-4">
+
+    {{-- HEADER ISLAND --}}
+    <div class="premium-header-rounded">
+        <div class="aura-glow"></div>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-7">
+                <div class="d-flex align-items-center gap-3">
+                    <a href="{{ route('admin.gameinfo.index') }}" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px; background: #fff;">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="fw-bold mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">
+                            Game <span class="text-maroon">Details</span>
+                        </h1>
+                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Unified Management Hub</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="flex items-center gap-3 mt-4 md:mt-0">
-                <a href="{{ route('admin.gameinfo.edit', $game->GameID) }}" 
-                   class="px-6 py-2.5 bg-[#800000] text-white text-xs font-black uppercase tracking-widest rounded-xl shadow-lg shadow-red-900/20 hover:scale-105 transition-all">
-                    Modify Game
+            <div class="col-md-5 text-md-end mt-3 mt-md-0 d-flex gap-2 justify-content-md-end">
+                <a href="{{ route('admin.gameinfo.edit', $game->GameID) }}" class="btn-maroon-pill">
+                    <i class="bi bi-pencil-square me-2"></i> Modify Game
                 </a>
                 <form action="{{ route('admin.gameinfo.destroy', $game->GameID) }}" method="POST" onsubmit="return confirm('Delete this game?');">
                     @csrf @method('DELETE')
-                    <button class="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                    <button class="btn btn-outline-danger rounded-pill px-4 fw-bold" style="font-size: 0.8rem;">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </form>
             </div>
         </div>
     </div>
 
-    {{-- Content Body --}}
-    <div class="max-w-7xl mx-auto px-6 mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            {{-- Left Column: Content --}}
-            <div class="lg:col-span-2 space-y-8">
-                
-                {{-- Hero Information Card --}}
-                <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-gray-100 shadow-sm relative overflow-hidden">
-                    {{-- Decorative Watermark --}}
-                    <div class="absolute -top-10 -right-10 text-[12rem] font-black text-gray-50 pointer-events-none select-none italic leading-none">
-                        {{ substr($game->GameName, 0, 1) }}
-                    </div>
-
-                    <div class="relative z-10">
-                        @php
-                            $status = strtolower($game->final_status);
-                            $badgeColor = $status === 'open' ? 'text-green-600 bg-green-50' : ($status === 'cancelled' ? 'text-red-600 bg-red-50' : 'text-gray-500 bg-gray-100');
-                        @endphp
-                        
-                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full {{ $badgeColor }} text-[10px] font-black uppercase tracking-widest mb-6">
-                            @if($status === 'open') <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> @endif
-                            {{ $game->final_status }}
-                        </div>
-
-                        <h2 class="text-5xl font-black text-gray-900 tracking-tighter mb-4">{{ $game->GameName }}</h2>
-                        <p class="text-gray-400 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            {{ $game->event->EventName ?? 'Standalone Event' }}
-                        </p>
-
-                        <div class="mt-12 h-px bg-gray-100 w-full"></div>
-
-                        <div class="mt-12">
-                            <h3 class="text-[10px] font-black text-[#800000] uppercase tracking-[0.3em] mb-4">About the Game</h3>
-                            <p class="text-xl text-gray-600 leading-relaxed font-light">
-                                {{ $game->Description ?: 'No description has been provided for this game yet.' }}
-                            </p>
-                        </div>
-                    </div>
+    <div class="row g-4">
+        {{-- LEFT COLUMN: Main Info --}}
+        <div class="col-lg-8">
+            {{-- HERO INFO CARD --}}
+            <div class="detail-island position-relative overflow-hidden">
+                <div class="position-absolute top-0 end-0 p-4 opacity-10">
+                    <span class="fw-black italic display-1">{{ substr($game->GameName, 0, 1) }}</span>
                 </div>
 
-                {{-- Rules Card --}}
-                <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-gray-100 shadow-sm">
-                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-8">Game Regulations</h3>
-                    
-                    @if($game->Rules)
-                        <div class="grid grid-cols-1 gap-4">
-                            @foreach(explode("\n", $game->Rules) as $rule)
-                                @if(trim($rule))
-                                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#800000]/20 transition-colors">
-                                        <div class="w-6 h-6 shrink-0 rounded-full bg-[#800000] flex items-center justify-center text-[10px] font-bold text-white mt-0.5">
-                                            {{ $loop->iteration }}
-                                        </div>
-                                        <p class="text-gray-700 font-medium leading-relaxed">{{ trim($rule) }}</p>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-10">
-                            <p class="text-gray-400 italic">No rules provided.</p>
-                        </div>
-                    @endif
+                <div class="position-relative z-1">
+                    @php $status = strtolower($game->final_status); @endphp
+                    <span class="status-badge {{ $status === 'open' ? 'status-open' : 'status-closed' }} mb-4">
+                        <i class="bi {{ $status === 'open' ? 'bi-circle-fill' : 'bi-x-circle-fill' }} small"></i>
+                        {{ $game->final_status }}
+                    </span>
+
+                    <h2 class="display-5 fw-black text-dark tracking-tighter mb-2">{{ $game->GameName }}</h2>
+                    <p class="text-muted fw-bold text-uppercase tracking-widest small mb-5">
+                        <i class="bi bi-collection-play text-maroon me-2"></i>
+                        {{ $game->event->EventName ?? 'Standalone Event' }}
+                    </p>
+
+                    <div class="mb-5 pt-4 border-top">
+                        <span class="meta-label">About the Game</span>
+                        <p class="fs-5 text-secondary fw-light leading-relaxed">
+                            {{ $game->Description ?: 'No description has been provided for this game yet.' }}
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {{-- Right Column: Sidebar Specs --}}
-            <div class="space-y-8">
+            {{-- RULES CARD --}}
+            <div class="detail-island">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <i class="bi bi-shield-check text-maroon"></i>
+                    <span class="meta-label mb-0">Game Regulations</span>
+                </div>
                 
-                {{-- Logistics Bento Card --}}
-                <div class="bg-black rounded-[3rem] p-10 text-white shadow-xl shadow-black/10 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-8 opacity-10">
-                        <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                @if($game->Rules)
+                    <div class="row g-3">
+                        @foreach(explode("\n", $game->Rules) as $rule)
+                            @if(trim($rule))
+                                <div class="col-12">
+                                    <div class="rule-item d-flex gap-3 align-items-center">
+                                        <div class="flex-shrink-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                            {{ $loop->iteration }}
+                                        </div>
+                                        <p class="mb-0 fw-medium text-dark small">{{ trim($rule) }}</p>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
-                    
-                    <h3 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] mb-10">Selection Details</h3>
-                    
-                    <div class="space-y-8">
-                        <div>
-                            <p class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1">Venue</p>
-                            <p class="text-2xl font-bold tracking-tight">{{ $game->SelectionPlace ?: 'TBA' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1">Schedule</p>
-                            <p class="text-2xl font-bold tracking-tight">
-                                {{ $game->GameDate ? \Carbon\Carbon::parse($game->GameDate)->format('d M, Y') : 'TBA' }}
+                @else
+                    <div class="text-center py-4 bg-light rounded-4 border border-dashed">
+                        <p class="text-muted small mb-0 italic">No specific rules provided.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- RIGHT COLUMN: Sidebar --}}
+        <div class="col-lg-4">
+            {{-- LOGISTICS BENTO (VENUE & SCHEDULE) --}}
+            <div class="bento-dark shadow-xl mb-4">
+                <i class="bi bi-geo-alt position-absolute opacity-10" style="font-size: 5rem; bottom: -10px; right: -10px;"></i>
+                
+                <div class="mb-4">
+                    <p class="meta-label text-danger">Game Venue</p>
+                    <p class="h4 fw-bold tracking-tight text-white">{{ $game->GameVenue ?: 'To Be Announced' }}</p>
+                </div>
+
+                <div class="mb-0">
+                    <p class="meta-label text-danger">Match Schedule</p>
+                    <p class="h4 fw-bold tracking-tight mb-2 text-white">
+                        {{ $game->GameDate ? \Carbon\Carbon::parse($game->GameDate)->format('d M, Y') : 'TBA' }}
+                    </p>
+                    <span class="badge rounded-pill px-3 py-2 fw-black" style="font-size: 0.75rem; background: #800000; color: white; border: 1px solid rgba(255,255,255,0.1);">
+                        <i class="bi bi-clock me-1"></i> {{ $game->TimeStart }} – {{ $game->TimeEnd }}
+                    </span>
+                </div>
+            </div>
+
+            {{-- PERSONNEL CARD (PIC UPDATED) --}}
+            <div class="detail-island">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <i class="bi bi-people-fill text-maroon"></i>
+                    <span class="meta-label mb-0">Personnel & Staffing</span>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-white shadow-sm mb-4">
+                    <div class="bg-white text-maroon rounded-3 d-flex align-items-center justify-content-center shadow-sm" 
+                         style="width: 52px; height: 52px; border: 1px solid #E5E7EB;">
+                        <i class="bi bi-person-badge-fill" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <div>
+                        <span class="meta-label" style="font-size: 0.6rem; color: #800000;">Person In-Charge</span>
+                        <p class="fw-black text-dark mb-0" style="font-size: 0.95rem; letter-spacing: -0.01em;">
+                            {{ $game->PICName ?: 'Unassigned' }}
+                        </p>
+                        @if($game->PICPhone)
+                            <p class="text-muted mb-0 small fw-bold">
+                                <i class="bi bi-telephone me-1"></i> {{ $game->PICPhone }}
                             </p>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
-                {{-- Team/Staff Card --}}
-                <div class="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm">
-                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-10">Personnel</h3>
-                    
-                    <div class="space-y-8">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-[#800000]">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Coach In-Charge</p>
-                                <p class="text-lg font-bold text-gray-900 leading-tight">{{ $game->CoachName ?: 'Not Assigned' }}</p>
-                                <p class="text-xs text-gray-500 font-medium mt-1">{{ $game->CoachPhone ?: '' }}</p>
-                            </div>
-                        </div>
+                <hr class="my-4 opacity-50">
 
-                        <div class="flex items-center gap-4 pt-8 border-t border-gray-50">
-                            <div class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-[#800000]">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Specifications</p>
-                                <p class="text-lg font-bold text-gray-900 leading-tight">{{ $game->Category }}</p>
-                                <p class="text-xs text-gray-500 font-medium mt-1">{{ $game->Capacity }} Max Seats</p>
-                            </div>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="p-1">
+                            <span class="meta-label">Specification</span>
+                            <p class="fw-bold text-dark small mb-0">{{ $game->Category }}</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-1 border-start">
+                            <span class="meta-label">Max Capacity</span>
+                            <p class="fw-bold text-dark small mb-0">{{ $game->Capacity }} Pax</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
+            {{-- FOOTER HELP --}}
+            <div class="text-center p-3 rounded-4 bg-white border border-dashed shadow-sm">
+                <p class="text-muted small mb-0 fw-bold">
+                    <i class="bi bi-info-circle me-1 text-maroon"></i> Live Oversight Active
+                </p>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-</style>
 @endsection

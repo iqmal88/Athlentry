@@ -47,11 +47,11 @@ class GameInfoController extends Controller
             'TimeStart'       => 'required|date_format:H:i',
             'TimeEnd'         => 'required|date_format:H:i|after:TimeStart',
 
-            'SelectionPlace' => 'nullable|string|max:255',
-            'CoachName'      => 'nullable|string|max:255',
-            'CoachPhone'     => 'nullable|string|max:50',
-            'Rules'          => 'nullable|string',
-            'Description'    => 'nullable|string',
+            'GameVenue'       => 'nullable|string|max:255',
+            'PICName'       => 'nullable|string|max:255',
+            'PICPhone'      => 'nullable|string|max:50',
+            'Rules'           => 'nullable|string',
+            'Description'     => 'nullable|string',
 
             'Status'          => 'required|in:Open,Closed,Cancelled',
         ]);

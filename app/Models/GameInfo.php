@@ -21,9 +21,9 @@ class GameInfo extends Model
         'TimeStart',
         'TimeEnd',
 
-        'SelectionPlace',
-        'CoachName',
-        'CoachPhone',
+        'GameVenue',
+        'PICName',
+        'PICPhone',
 
         'Capacity',
         'Rules',
