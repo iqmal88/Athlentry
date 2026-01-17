@@ -1,163 +1,95 @@
 @extends('layouts.app')
 
-@section('title', 'My Profile')
+@section('title', 'My Athlete Profile')
 
 @section('content')
 <div class="min-h-screen bg-[#F8FAFC] pb-24 font-sans antialiased">
-    
-    {{-- 1. PROFILE HEADER --}}
-    <div class="relative px-6 py-6">        
-        <div class="max-w-7xl mx-auto bg-white border border-slate-100 shadow-sm
-                    rounded-[2.5rem] px-10 py-8 flex flex-col md:flex-row
-                    items-center justify-between gap-8 relative overflow-hidden">
 
-            {{-- Glow --}}
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
-
-            <div class="relative z-10 flex items-center gap-6">
-                <div>
-                    <h1 class="text-3xl font-black text-slate-900 tracking-tight leading-none uppercase italic">
-                        STUDENT <span class="text-teal-600 not-italic">PROFILE</span>
-                    </h1>
-                    <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold mt-2">
-                        Athlete Identity & Personal Information
-                    </p>
-                </div>
+    {{-- HEADER --}}
+    <div class="relative px-6 py-6">
+        <div class="max-w-5xl mx-auto bg-white border border-slate-100 shadow-sm rounded-[2.5rem] px-10 py-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-black italic uppercase tracking-tight text-slate-900">
+                    Athlete <span class="text-teal-600 not-italic">Profile</span>
+                </h1>
+                <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold mt-2">
+                    Official Recruitment Identity
+                </p>
             </div>
 
-            <div class="relative z-10">
-                <a href="{{ route('student.profile.edit') }}"
-                   class="px-8 py-4 bg-slate-900 text-white
-                          text-[10px] font-black uppercase tracking-widest
-                          rounded-[1.5rem] shadow-xl
-                          hover:bg-teal-600 hover:scale-105 transition-all
-                          flex items-center gap-3">
-                    ✏️ Edit Profile
-                </a>
-            </div>
+            <a href="{{ route('student.profile.edit') }}"
+               class="px-8 py-3 rounded-2xl bg-teal-600 text-white text-xs font-black uppercase tracking-widest hover:brightness-110 transition shadow-lg shadow-teal-600/20">
+                Edit Profile
+            </a>
         </div>
     </div>
 
-    {{-- 2. MAIN CONTENT --}}
-    <div class="max-w-7xl mx-auto px-6 mt-4 animate-fade-in">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="max-w-5xl mx-auto px-6 mt-6 space-y-6">
 
-            {{-- LEFT: AVATAR --}}
-            <div class="lg:col-span-4 space-y-8">
+        {{-- PROGRESS TRACKER --}}
+        @php $status = auth()->user()->getCompletionStatus(); @endphp
+        <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-800">Completion Progress</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-1">
+                        {{ $status['is_complete'] ? 'Profile verified' : 'Required for event applications' }}
+                    </p>
+                </div>
+                <span class="text-3xl font-black italic text-teal-600">{{ $status['percentage'] }}%</span>
+            </div>
+            
+            <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden shadow-inner">
+                <div class="bg-teal-500 h-full transition-all duration-1000 ease-out shadow-[0_0_20px_rgba(20,184,166,0.4)]" 
+                     style="width: {{ $status['percentage'] }}%"></div>
+            </div>
+        </div>
 
-                <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100
-                            shadow-sm text-center relative overflow-hidden">
-
-                    <div class="w-40 h-40 mx-auto rounded-[3rem] bg-teal-50
-                                border-4 border-white shadow-xl
-                                flex items-center justify-center text-6xl
-                                font-black text-teal-600 italic">
-                        {{ strtoupper(substr(Auth::user()->Name ?? 'S', 0, 1)) }}
-                    </div>
-
-                    <div class="mt-8">
-                        <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight">
-                            {{ Auth::user()->Name }}
-                        </h2>
-                        <p class="text-[10px] font-black text-teal-600 uppercase tracking-[0.2em] mt-1 italic">
-                            Student Athlete
-                        </p>
-                    </div>
-
-                    <div class="mt-8 pt-8 border-t border-slate-100
-                                flex items-center justify-center gap-6">
-                        <div class="text-center">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                Status
-                            </p>
-                            <p class="text-sm font-bold text-green-600 mt-1 flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                Active
-                            </p>
+        {{-- MAIN INFO CARD --}}
+        <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-12">
+            
+            {{-- PROFILE PHOTO --}}
+            <div class="flex flex-col items-center text-center">
+                <div class="relative">
+                    <img class="h-48 w-48 object-cover rounded-[2.5rem] border-8 border-slate-50 shadow-xl" 
+                         src="{{ $user->ProfilePhoto ? asset('storage/' . $user->ProfilePhoto) : 'https://ui-avatars.com/api/?name='.urlencode($user->Name).'&background=0D9488&color=fff&size=512' }}" 
+                         alt="Profile photo">
+                    @if($status['is_complete'])
+                        <div class="absolute -bottom-2 -right-2 bg-teal-500 text-white p-2 rounded-2xl shadow-lg border-4 border-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
-                    </div>
+                    @endif
                 </div>
-
-                {{-- MEMBER SINCE --}}
-                <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl">
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                        Member Since
-                    </p>
-                    <p class="text-xl font-bold tracking-tight italic">
-                        {{ Auth::user()->created_at->format('M d, Y') }}
-                    </p>
-                </div>
+                <h2 class="mt-6 text-2xl font-black text-slate-900 uppercase italic">{{ $user->Name }}</h2>
+                <span class="mt-1 text-[10px] font-black uppercase tracking-widest text-teal-600 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 italic">{{ $user->MatricNo }}</span>
             </div>
 
-            {{-- RIGHT: INFO --}}
-            <div class="lg:col-span-8 space-y-8">
-
-                {{-- ACCOUNT DETAILS --}}
-                <div class="bg-white rounded-[3rem] p-10 md:p-14
-                            border border-slate-100 shadow-sm">
-
-                    <div class="flex items-center gap-4 mb-12">
-                        <h3 class="text-[10px] font-black text-teal-600 uppercase tracking-[0.3em]">
-                            Account Details
-                        </h3>
-                        <div class="flex-1 h-px bg-slate-100"></div>
+            {{-- DETAILS --}}
+            <div class="md:col-span-2 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Address</label>
+                        <p class="mt-2 text-slate-700 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">{{ $user->Email }}</p>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-
-                        {{-- Name --}}
-                        <div>
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                                Full Name
-                            </p>
-                            <p class="text-lg font-bold text-slate-900">
-                                {{ Auth::user()->Name }}
-                            </p>
-                        </div>
-
-                        {{-- Matric --}}
-                        <div>
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                                Matric Number
-                            </p>
-                            <p class="text-lg font-bold text-slate-900">
-                                {{ Auth::user()->MatricNo ?? '—' }}
-                            </p>
-                        </div>
-
-                        {{-- Email --}}
-                        <div>
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                                Email Address
-                            </p>
-                            <p class="text-lg font-bold text-slate-900 break-all">
-                                {{ Auth::user()->Email }}
-                            </p>
-                        </div>
-
-                        {{-- Phone --}}
-                        <div>
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                                Phone Number
-                            </p>
-                            <p class="text-lg font-bold text-slate-900">
-                                {{ Auth::user()->PhoneNumber ?? '—' }}
-                            </p>
-                        </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Phone Number</label>
+                        <p class="mt-2 text-slate-700 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">{{ $user->PhoneNumber ?? 'Not set' }}</p>
                     </div>
                 </div>
 
-                {{-- MEDICAL HISTORY --}}
-                <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm">
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
-                        Medical History
-                    </h3>
-                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100
-                                italic font-medium text-slate-600 leading-relaxed">
-                        {{ Auth::user()->MedicalHistory ?? 'No medical history provided.' }}
+                <div>
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Sports Achievement</label>
+                    <div class="mt-2 text-slate-700 font-medium bg-slate-50 p-6 rounded-2xl border border-slate-100 min-h-[100px]">
+                        {{ $user->Achievement ?? 'No achievements listed yet.' }}
                     </div>
                 </div>
 
+                <div>
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Medical History</label>
+                    <div class="mt-2 text-slate-700 font-medium bg-slate-50 p-6 rounded-2xl border border-slate-100 min-h-[100px]">
+                        {{ $user->MedicalHistory ?? 'No medical history recorded.' }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

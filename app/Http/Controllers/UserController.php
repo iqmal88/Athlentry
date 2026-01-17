@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function showProfile()
     {
-        $user = Auth::user(); // 🔥 AUTH ONLY
+        $user = Auth::user(); 
 
         return view('Profile.Student.AthleteProfile', compact('user'));
     }
@@ -25,7 +25,6 @@ class UserController extends Controller
     public function editProfile()
     {
         $user = Auth::user();
-
         return view('Profile.Student.AthleteEditProfile', compact('user'));
     }
 
@@ -38,6 +37,8 @@ class UserController extends Controller
             'Email'           => 'required|email',
             'PhoneNumber'     => 'required|string|max:20',
             'MedicalHistory'  => 'nullable|string',
+            'Achievement'     => 'nullable|string',
+            'ProfilePhoto'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Password'        => 'nullable|min:6',
         ]);
 
@@ -46,13 +47,37 @@ class UserController extends Controller
         $user->Email          = $request->Email;
         $user->PhoneNumber    = $request->PhoneNumber;
         $user->MedicalHistory = $request->MedicalHistory;
+        $user->Achievement    = $request->Achievement;
+
+        // Profile photo upload
+        if ($request->hasFile('ProfilePhoto')) {
+            $path = $request->file('ProfilePhoto')->store('profile_photos', 'public');
+            $user->ProfilePhoto = $path;
+        }
 
         // Optional password update
         if ($request->filled('Password')) {
             $user->Password = Hash::make($request->Password);
         }
 
+        // 🔒 Profile completion check (STUDENT ONLY)
+        if ($user->Role === 'student') {
+            // Check if all core student fields are filled
+            $isComplete = !empty($user->PhoneNumber) &&
+                          !empty($user->ProfilePhoto) &&
+                          !empty($user->Achievement) &&
+                          !empty($user->MedicalHistory);
+            
+            $user->ProfileCompleted = $isComplete;
+        }
+
         $user->save();
+
+        // Redirect with different messages based on status
+        if ($user->Role === 'student' && $user->ProfileCompleted) {
+            return redirect()->route('student.announcements.index')
+                ->with('success', 'Profile 100% complete! You can now apply for games.');
+        }
 
         return back()->with('success', 'Profile updated successfully!');
     }

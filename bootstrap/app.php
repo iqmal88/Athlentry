@@ -2,6 +2,9 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
+use App\Http\Middleware\EnsureProfileCompleted;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsStudent;
 use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -20,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // If your routes use camelCase names, register them too:
             'isAdmin'   => \App\Http\Middleware\IsAdmin::class,
             'isStudent' => \App\Http\Middleware\IsStudent::class,
+            'profileCompleted' => \App\Http\Middleware\EnsureProfileCompleted::class,
     ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

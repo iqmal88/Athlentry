@@ -16,7 +16,9 @@ class AuthController extends Controller
         return view('Login.LoginView');
     }
 
-    // Handle login
+    /**
+     * Handle login with Profile Completion Check
+     */
     public function login(Request $request)
     {
         $data = $request->validate([
@@ -36,6 +38,15 @@ class AuthController extends Controller
 
         Auth::login($user, (bool) $request->boolean('remember'));
         $request->session()->regenerate();
+
+        // 🔒 CHECK PROFILE COMPLETION FOR WARNING MESSAGE
+        if (!$user->ProfileCompleted) {
+            $status = $user->getCompletionStatus();
+            
+            return redirect()->route('student.announcements.index')
+                ->with('warning', "Welcome! Your profile is only {$status['percentage']}% complete. Please finish it to unlock all features.")
+                ->with('completion', $status['percentage']);
+        }
 
         return redirect()->intended(route('student.announcements.index'));
     }
@@ -62,10 +73,16 @@ class AuthController extends Controller
             'Email'    => $data['Email'],
             'Password' => Hash::make($data['password']),
             'Role'     => 'student',
+            'ProfileCompleted' => false, // Ensure they start as incomplete
         ]);
 
         Auth::login($user);
-        return redirect()->route('login.view');
+        
+        // After registration, send them straight to announcements with the warning
+        $status = $user->getCompletionStatus();
+        return redirect()->route('student.announcements.index')
+            ->with('warning', 'Registration successful! Please complete your profile to apply for games.')
+            ->with('completion', $status['percentage']);
     }
 
     // Handle logout
@@ -81,54 +98,37 @@ class AuthController extends Controller
     // Show forgot password view
     public function showForgotPassword(Request $request)
     {
-        // Optionally pass role query param to the view for UX (e.g. ?role=admin)
         return view('Login.ForgotPass');
     }
 
-    /**
-     * Handle the actual reset request from the ForgotPass form.
-     * This endpoint updates the password immediately for the given matric_no,
-     * ONLY if the matric record exists and Role === 'student'.
-     *
-     * IMPORTANT: This is a direct reset flow (form supplies new password).
-     * If you prefer token/email-based reset, adapt this to generate a token and send email instead.
-     */
     public function resetPassword(Request $request)
     {
         $data = $request->validate([
             'matric_no'             => 'required|string',
             'email'                 => 'nullable|email',
-            'password'              => 'required|string|min:8|confirmed', // expects password_confirmation
+            'password'              => 'required|string|min:8|confirmed', 
         ]);
 
-        // Find user by MatricNo
         $user = User::where('MatricNo', $data['matric_no'])->first();
 
         if (! $user) {
             return back()->withErrors(['matric_no' => 'Matric number not found.'])->withInput();
         }
 
-        // Enforce server-side: only students may reset here
         if ($user->Role !== 'student') {
-            return back()->withErrors(['matric_no' => 'Password resets via this form are for students only. Please contact system administrator for admin accounts.']);
+            return back()->withErrors(['matric_no' => 'Password resets via this form are for students only.']);
         }
 
-        // Optional: if email provided, match it for added safety
         if (! empty($data['email']) && $user->Email !== $data['email']) {
-            return back()->withErrors(['email' => 'Email does not match our records for this matric number.'])->withInput();
+            return back()->withErrors(['email' => 'Email does not match our records.'])->withInput();
         }
 
-        // Update the password securely
         $user->Password = Hash::make($data['password']);
         $user->save();
 
-        // Optionally: log the user in automatically after reset
-        // Auth::login($user);
-
-        return redirect()->route('login.view')->with('status', 'Password updated successfully. You may now sign in with your new password.');
+        return redirect()->route('login.view')->with('status', 'Password updated successfully.');
     }
 
-    // Handle forgot-password "send reset" message (simulation)
     public function sendResetMessage(Request $request)
     {
         $request->validate([
@@ -141,8 +141,6 @@ class AuthController extends Controller
             return back()->with('error', 'Email not found in our records.');
         }
 
-        // For now, just simulate message sent
-        // Later you can add actual email sending logic (e.g. Notification::send / Mail::to(...)->send(...))
         return back()->with('success', 'A password reset link has been sent to your email (simulation).');
     }
 }

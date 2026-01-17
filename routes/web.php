@@ -106,24 +106,31 @@ Route::middleware(['auth', 'is_student'])
     ->group(function () {
     
     //PROFILE
-    Route::get('/student/profile', [UserController::class, 'showProfile'])->name('profile.show');
-    Route::get('/student/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
-    Route::post('/student/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/student/profile/password', [UserController::class, 'changePassword'])->name('profile.password');
-
+    Route::get('profile', [UserController::class, 'showProfile'])->name('profile.show');
+    Route::get('profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::post('profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::post('profile/password', [UserController::class, 'changePassword'])->name('profile.password');
+    
     //ANNOUNCEMENT
     Route::get('announcements', [AnnouncementController::class, 'studentIndex'])->name('announcements.index');
     Route::get('announcements/{announcement}', [AnnouncementController::class, 'showForStudent'])->name('announcements.show');
 
-    //APPLICATION
+    //Application
     Route::get('applications',[ApplicationController::class, 'studentApplicationIndex'])->name('application.index');
-    Route::post('applications/submit/{GameID}',[ApplicationController::class, 'submitApplication'])->name('application.submit');
     Route::get('events/{EventID}', [ApplicationController::class, 'studentEventShow'])->name('events.show');
-    
+
     //GAMEINFO
     Route::get('/game-info',[GameInfoController::class, 'studentIndex'])->name('gameinfo.index');
     Route::get('/game-info/{GameID}',[GameInfoController::class, 'studentShow'])->name('gameinfo.show');
 
-    //STATUS
+    //status
     Route::get('applications/status',[ApplicationController::class, 'studentApplicationsStatus'])->name('applications.status');
+    
+    Route::middleware(['profileCompleted'])->group(function () {
+    
+    //APPLICATION
+    Route::post('applications/submit/{GameID}',[ApplicationController::class, 'submitApplication'])->name('application.submit');
+    
+    
+    });
 });

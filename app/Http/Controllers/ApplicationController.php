@@ -45,8 +45,7 @@ class ApplicationController extends Controller
     }
 
     /* =======================
-     | ✅ ADDED BACK
-     | UPDATE EVENT
+     | ✅ UPDATE EVENT
      ======================= */
     public function updateEvent(Request $request, $EventID)
     {
@@ -66,13 +65,8 @@ class ApplicationController extends Controller
             'games.*.Capacity' => 'nullable|integer|min:1',
             'games.*.GameDate' => 'required|date',
 
-            // ✅ ACCEPT HH:MM OR HH:MM:SS
-            'games.*.TimeStart' => ['required',
-            'regex:/^\d{2}:\d{2}(:\d{2})?$/'
-            ],
-            'games.*.TimeEnd' => ['required',
-            'regex:/^\d{2}:\d{2}(:\d{2})?$/'
-            ],
+            'games.*.TimeStart' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'games.*.TimeEnd' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
         ]);
 
         DB::beginTransaction();
@@ -90,11 +84,8 @@ class ApplicationController extends Controller
             ]);
 
             foreach ($validated['games'] ?? [] as $g) {
-
-                // ✅ NORMALIZE TIME TO HH:MM:SS
                 $timeStart = substr($g['TimeStart'], 0, 5);
                 $timeEnd   = substr($g['TimeEnd'], 0, 5);
-
 
                 if (!empty($g['GameID'])) {
                     GameInfo::where('GameID', $g['GameID'])->update([
@@ -116,17 +107,16 @@ class ApplicationController extends Controller
                         'Capacity' => $g['Capacity'] ?? null,
                         'Status' => 'Open',
                     ]);
-                    }
+                }
             }
 
             DB::commit();
-                return redirect()->route('admin.events.list')
-                    ->with('success', 'Event updated successfully.');
+            return redirect()->route('admin.events.list')->with('success', 'Event updated successfully.');
 
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return back()->withInput()->with('error', $e->getMessage());
-            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     public function storeEvent(Request $request)
@@ -176,8 +166,7 @@ class ApplicationController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.events.list')
-                ->with('success', 'Event created successfully.');
+            return redirect()->route('admin.events.list')->with('success', 'Event created successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -192,21 +181,13 @@ class ApplicationController extends Controller
     public function viewApplicantsByGame($GameID)
     {
         $game = GameInfo::with('event')->findOrFail($GameID);
-
-        $applications = Application::with('user')
-            ->where('GameID', $GameID)
-            ->orderBy('DateApplied', 'asc')
-            ->get();
-
+        $applications = Application::with('user')->where('GameID', $GameID)->orderBy('DateApplied', 'asc')->get();
         return view('application.admin.ViewApplicants', compact('game', 'applications'));
     }
 
     public function selectApplicant(Request $request, $ApplicationID)
     {
-        $request->validate([
-            'action' => 'required|in:approve,reject'
-        ]);
-
+        $request->validate(['action' => 'required|in:approve,reject']);
         $application = Application::findOrFail($ApplicationID);
 
         if ($application->ApplicationStatus !== 'pending') {
@@ -222,7 +203,6 @@ class ApplicationController extends Controller
         }
 
         $application->save();
-
         return back()->with('success', 'Application updated successfully.');
     }
 
@@ -240,8 +220,7 @@ class ApplicationController extends Controller
             })->with(['applications' => function ($q3) {
                 $q3->where('ApplicationStatus', 'approved')
                    ->whereIn('SelectionStatus', ['in_selection', 'selected', 'rejected'])
-                   ->with('user')
-                   ->orderBy('DateApplied');
+                   ->with('user')->orderBy('DateApplied');
             }]);
         }])->get();
 
@@ -250,22 +229,15 @@ class ApplicationController extends Controller
 
     public function updateSelection(Request $request, $ApplicationID)
     {
-        $request->validate([
-            'decision' => 'required|in:selected,rejected'
-        ]);
-
+        $request->validate(['decision' => 'required|in:selected,rejected']);
         $application = Application::findOrFail($ApplicationID);
 
-        if (
-            $application->ApplicationStatus !== 'approved' ||
-            $application->SelectionStatus !== 'in_selection'
-        ) {
+        if ($application->ApplicationStatus !== 'approved' || $application->SelectionStatus !== 'in_selection') {
             return back()->with('error', 'This application is not eligible for selection.');
         }
 
         $application->SelectionStatus = $request->decision;
         $application->save();
-
         return back()->with('success', 'Selection decision recorded.');
     }
 
@@ -276,10 +248,8 @@ class ApplicationController extends Controller
     public function studentApplicationIndex()
     {
         $studentId = $this->getUserId();
-
         $events = Event::with(['games' => function ($q) use ($studentId) {
-            $q->where('Status', 'Open')
-              ->withCount(['applications as total_applied'])
+            $q->where('Status', 'Open')->withCount(['applications as total_applied'])
               ->with(['applications' => function ($q2) use ($studentId) {
                   $q2->where('UserID', $studentId);
               }]);
@@ -288,30 +258,35 @@ class ApplicationController extends Controller
         return view('application.student.AthleteApplication', compact('events'));
     }
 
-    /* =======================
-     | ✅ ADDED BACK
-     | STUDENT EVENT DETAILS
-     ======================= */
     public function studentEventShow($EventID)
     {
         $studentId = $this->getUserId();
-
         $event = Event::with(['games' => function ($q) use ($studentId) {
-            $q->where('Status', 'Open')
-              ->withCount(['applications as total_applied'])
+            $q->where('Status', 'Open')->withCount(['applications as total_applied'])
               ->with(['applications' => function ($q2) use ($studentId) {
                   $q2->where('UserID', $studentId);
               }]);
-        }])
-        ->where('Status', 'Open')
-        ->findOrFail($EventID);
+        }])->where('Status', 'Open')->findOrFail($EventID);
 
         return view('application.student.EventDetails', compact('event'));
     }
 
+    /**
+     * ✅ UPDATED: Submit Application with Profile Completion Check
+     */
     public function submitApplication(Request $request, $GameID)
     {
         $studentId = $this->getUserId();
+        $student = Auth::user();
+
+        // 🔒 MANDATORY PROFILE COMPLETION CHECK
+        if ($student->Role === 'student' && !$student->ProfileCompleted) {
+            $status = $student->getCompletionStatus();
+            return back()->with(
+                'error',
+                "Your profile is only {$status['percentage']}% complete. Please complete your profile to apply for games."
+            );
+        }
 
         $game = GameInfo::with('event')->withCount('applications')->findOrFail($GameID);
 
@@ -334,6 +309,7 @@ class ApplicationController extends Controller
             }
         }
 
+        // Time clash check
         $existing = Application::where('UserID', $studentId)
             ->whereHas('game', function ($q) use ($game) {
                 $q->where('GameDate', $game->GameDate)
@@ -364,10 +340,8 @@ class ApplicationController extends Controller
     public function studentApplicationsStatus()
     {
         $studentId = $this->getUserId();
-
         $events = Event::with(['games.applications' => function ($q) use ($studentId) {
-            $q->where('UserID', $studentId)
-              ->orderBy('DateApplied', 'desc');
+            $q->where('UserID', $studentId)->orderBy('DateApplied', 'desc');
         }])->whereHas('games.applications', function ($q) use ($studentId) {
             $q->where('UserID', $studentId);
         })->get();

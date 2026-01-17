@@ -11,11 +11,14 @@ return new class extends Migration {
             $table->id('UserID');
             $table->string('Name');
             $table->string('Email')->unique();
+            $table->string('PhoneNumber')->nullable();
             $table->string('Password');
             $table->string('MatricNo')->nullable();
             $table->string('Role'); // admin, student
             $table->text('MedicalHistory')->nullable();
             $table->text('Achievement')->nullable();
+            $table->string('ProfilePhoto')->nullable();
+            $table->boolean('ProfileCompleted')->default(false);
             $table->timestamps();
         });
     }

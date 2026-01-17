@@ -11,21 +11,29 @@ return new class extends Migration {
             $table->id('GameID');
 
             $table->unsignedBigInteger('EventID');
-            $table->string('GameName');
-            $table->string('Category');
+
+            $table->string('GameName', 255);
+            $table->string('Category', 255);
+
             $table->date('GameDate');
             $table->time('TimeStart');
             $table->time('TimeEnd');
-            $table->string('SelectionPlace')->nullable();
-            $table->string('CoachName')->nullable();
-            $table->string('CoachPhone')->nullable();
+
+            $table->string('GameVenue', 255)->nullable();
+
+            $table->string('PICName', 255)->nullable();
+            $table->string('PICPhone', 255)->nullable();
+
             $table->integer('Capacity')->nullable();
+
             $table->text('Rules')->nullable();
             $table->text('Description')->nullable();
-            $table->string('Status')->default('Open');
+
+            $table->string('Status', 255)->default('Open');
 
             $table->timestamps();
 
+            // Foreign key
             $table->foreign('EventID')
                 ->references('EventID')
                 ->on('events')
