@@ -25,20 +25,19 @@
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
-    
+
     .aura-glow {
         position: absolute;
         top: -100px;
         right: -30px;
         width: 350px;
         height: 350px;
-        /* Updated to Teal Blue */
         background: radial-gradient(circle, rgba(0, 128, 128, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
         border-radius: 50%;
         z-index: 0;
     }
 
-    /* 2. Announcement Card System */
+    /* 2. Announcement Card */
     .announce-card {
         background: #fff;
         border-radius: 20px;
@@ -52,7 +51,6 @@
 
     .announce-card:hover {
         transform: translateY(-8px);
-        /* Updated to Teal Blue Shadow */
         box-shadow: 0 20px 40px rgba(0, 128, 128, 0.1);
         border-color: #008080;
     }
@@ -87,10 +85,16 @@
     .date-tag {
         font-size: 0.65rem;
         font-weight: 800;
-        /* Updated to Teal Blue */
         color: #008080;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        margin-bottom: 6px;
+    }
+
+    .time-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6B7280;
         margin-bottom: 10px;
     }
 
@@ -121,51 +125,58 @@
         align-items: center;
     }
 
-    /* Updated Branding Color */
     .text-teal-blue { color: #008080 !important; }
-    
+
     .btn-teal-link {
         color: #008080;
         text-decoration: none;
         font-weight: 700;
         font-size: 0.85rem;
-        transition: color 0.2s;
     }
-    
+
     .btn-teal-link:hover {
         color: #005656;
     }
 </style>
 
 <div class="container pb-5">
+    {{-- Header --}}
     <div class="premium-header-rounded">
         <div class="aura-glow"></div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h6 class="fw-bold text-uppercase tracking-widest mb-2 text-teal-blue" style="font-size: 0.7rem;">Student Portal</h6>
-                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.02em;">Live <span class="text-teal-blue">Announcements</span></h1>
-                <p class="text-muted small mb-0">Stay updated with the latest sports news and recruitment notices.</p>
+                <h6 class="fw-bold text-uppercase tracking-widest mb-2 text-teal-blue" style="font-size: 0.7rem;">
+                    Student Portal
+                </h6>
+                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem;">
+                    Live <span class="text-teal-blue">Announcements</span>
+                </h1>
+                <p class="text-muted small mb-0">
+                    Stay updated with the latest sports news and recruitment notices.
+                </p>
             </div>
             <div class="col-md-4 text-md-end d-none d-lg-block">
-                {{-- Teal Badge --}}
-                <span class="badge bg-info bg-opacity-10 text-teal-blue rounded-pill px-3 py-2 fw-bold border border-info border-opacity-25" style="font-size: 0.6rem; letter-spacing: 0.05em;">
+                <span class="badge bg-info bg-opacity-10 text-teal-blue rounded-pill px-3 py-2 fw-bold border border-info border-opacity-25"
+                      style="font-size: 0.6rem; letter-spacing: 0.05em;">
                     <i class="bi bi-broadcast me-1"></i> LIVE UPDATES
                 </span>
             </div>
         </div>
     </div>
 
+    {{-- Announcement Grid --}}
     <div class="row g-4">
         @forelse($announcements as $announce)
             <div class="col-md-6 col-lg-4">
                 <div class="announce-card">
                     <div class="card-media">
                         <div class="badge-overlay">
-                            <span class="badge bg-white text-dark shadow-sm fw-bold uppercase" style="font-size: 0.6rem;">
+                            <span class="badge bg-white text-dark shadow-sm fw-bold uppercase"
+                                  style="font-size: 0.6rem;">
                                 {{ $announce->Category ?? 'General' }}
                             </span>
                         </div>
-                        
+
                         @if($announce->Image)
                             <img src="{{ asset('storage/' . $announce->Image) }}" alt="Announcement">
                         @else
@@ -176,16 +187,27 @@
                     </div>
 
                     <div class="card-body-custom">
+                        {{-- Date & Time --}}
                         <div class="date-tag">
-                            {{ \Carbon\Carbon::parse($announce->Date)->format('d F, Y') }}
+                            Closes on {{ \Carbon\Carbon::parse($announce->DateClose)->format('d F Y') }}
                         </div>
+
+                        @if($announce->TimeClose)
+                            <div class="time-tag">
+                                <i class="bi bi-clock me-1"></i>
+                                {{ \Carbon\Carbon::parse($announce->TimeClose)->format('h:i A') }}
+                            </div>
+                        @endif
+
                         <h3 class="announce-title">{{ $announce->Title }}</h3>
+
                         <p class="announce-excerpt">
                             {{ Str::limit(strip_tags($announce->Description), 100) }}
                         </p>
 
                         <div class="card-footer-custom mt-auto">
-                            <a href="{{ route('student.announcements.show', $announce->AnnouncementID) }}" class="btn-teal-link">
+                            <a href="{{ route('student.announcements.show', $announce->AnnouncementID) }}"
+                               class="btn-teal-link">
                                 Read More <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
@@ -196,7 +218,9 @@
             <div class="col-12 text-center py-5">
                 <div class="bg-white rounded-5 border border-dashed p-5">
                     <i class="bi bi-journal-x text-light h1"></i>
-                    <p class="text-muted mt-3 fw-bold uppercase tracking-widest small">No announcements found at this time.</p>
+                    <p class="text-muted mt-3 fw-bold uppercase tracking-widest small">
+                        No announcements found at this time.
+                    </p>
                 </div>
             </div>
         @endforelse
