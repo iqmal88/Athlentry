@@ -14,14 +14,15 @@ return new class extends Migration {
             $table->string('GameName');
             $table->string('Category');
             $table->date('GameDate');
-            $table->time('GameTime');
-            $table->string('SelectionPlace');
-            $table->string('CoachName');
-            $table->string('CoachPhone');
-            $table->integer('Capacity');
-            $table->text('Rules');
-            $table->text('Description');
-            $table->string('Status');
+            $table->time('TimeStart');
+            $table->time('TimeEnd');
+            $table->string('SelectionPlace')->nullable();
+            $table->string('CoachName')->nullable();
+            $table->string('CoachPhone')->nullable();
+            $table->integer('Capacity')->nullable();
+            $table->text('Rules')->nullable();
+            $table->text('Description')->nullable();
+            $table->string('Status')->default('Open');
 
             $table->timestamps();
 

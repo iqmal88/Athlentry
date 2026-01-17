@@ -15,16 +15,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('GameID');
 
             $table->string('ApplicationStatus');
-            $table->string('SelectionStatus');
-            $table->string('SportType');
+            $table->string('SelectionStatus')->nullable();
             $table->date('DateApplied');
-
-            // Snapshot fields
-            $table->string('SnapshotEventName');
-            $table->string('SnapshotGameName');
-            $table->date('SnapshotGameDate');
-            $table->string('SnapshotLocation');
-            $table->integer('SnapshotCapacity');
 
             $table->timestamps();
 

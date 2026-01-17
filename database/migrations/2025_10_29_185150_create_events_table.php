@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->text('Description');
             $table->unsignedBigInteger('CreatedBy');
             $table->string('Status');
+            $table->integer('MaxGamesPerStudent')->nullable();
 
             $table->timestamps();
 

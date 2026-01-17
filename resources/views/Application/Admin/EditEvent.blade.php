@@ -1,259 +1,374 @@
 @extends('layouts.admin')
 
+@section('title', 'Edit Event')
+
 @section('content')
-<div class="min-h-screen bg-[#F8F9FA] pb-24 font-sans antialiased">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-    {{-- Aesthetic Header Card --}}
-    <div class="relative px-6 py-6">        
-        <div class="max-w-7xl mx-auto bg-white border border-gray-100 shadow-sm rounded-[2rem] px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-            {{-- Subtle Background Glow --}}
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-[#800000]/5 rounded-full blur-3xl"></div>
+<style>
+    body {
+        background-color: #F8F9FA;
+        font-family: 'Inter', -apple-system, sans-serif;
+        color: #1A1C1E;
+        padding-top: 20px;
+    }
 
-            <div class="relative z-10 flex items-center gap-5">
-                <a href="{{ route('admin.events.list') }}" class="group flex items-center justify-center w-12 h-12 bg-gray-50 rounded-2xl hover:bg-[#800000] hover:text-white transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </a>
-                <div class="h-10 w-px bg-gray-100 hidden md:block"></div>
-                <div>
-                    <h1 class="text-3xl font-black text-gray-900 tracking-tight leading-none uppercase italic">EDIT <span class="text-[#800000] not-italic">EVENT</span></h1>
-                    <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-bold mt-2">Modifying: {{ $event->EventName }}</p>
-                </div>
-            </div>
+    /* 1. Rounded Island Header */
+    .premium-header-rounded {
+        background: #fff;
+        border-radius: 24px;
+        padding: 24px 40px;
+        margin-bottom: 30px;
+        border: 1px solid #E5E7EB;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    
+    .aura-glow {
+        position: absolute;
+        top: -100px;
+        right: -30px;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(128, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+    }
 
-            <div class="relative z-10 hidden md:block">
-                <div class="px-5 py-2 bg-gray-50 rounded-xl border border-gray-100 text-[10px] font-black text-gray-400 tracking-widest uppercase">
-                    ID: #{{ $event->EventID }}
+    /* 2. Content Island Card */
+    .form-island-card {
+        background: #fff;
+        border-radius: 24px;
+        border: 1px solid #E5E7EB;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        margin-bottom: 50px;
+    }
+
+    .form-label-studio {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #800000;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .input-studio {
+        border-radius: 12px;
+        padding: 12px 16px;
+        border: 1px solid #E5E7EB;
+        background-color: #F9FAFB;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+    }
+
+    .input-studio:focus {
+        background-color: #fff;
+        border-color: #800000;
+        box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05);
+        outline: none;
+    }
+
+    /* Professional Status Dropdown */
+    .status-dropdown {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+        transition: all 0.3s ease;
+    }
+    .status-open { background-color: #059669 !important; color: white !important; }
+    .status-closed { background-color: #4B5563 !important; color: white !important; }
+    .status-cancelled { background-color: #DC2626 !important; color: white !important; }
+
+    /* 3. Sport Item Card */
+    .sport-item-card {
+        background: #F9FAFB;
+        border: 1px solid #F3F4F6;
+        border-radius: 16px;
+        padding: 24px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .sport-item-card:hover {
+        background: #fff;
+        border-color: #800000;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    .btn-remove-game {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #fff;
+        border: 1px solid #FEE2E2;
+        color: #EF4444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+    }
+
+    .btn-remove-game:hover {
+        background: #EF4444;
+        color: #fff;
+        border-color: #EF4444;
+    }
+
+    /* 4. Action Buttons */
+    .btn-maroon-pill {
+        background: #800000;
+        color: #fff !important;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 12px 36px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-maroon-pill:hover {
+        background: #600000;
+        transform: translateY(-2px);
+    }
+
+    .btn-discard {
+        background: transparent;
+        color: #9CA3AF !important;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 12px 24px;
+        border: none;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-discard:hover {
+        color: #1A1C1E !important;
+        text-decoration: underline;
+    }
+
+    .btn-add-discipline {
+        background: #111827;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.7rem;
+        padding: 8px 20px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        border: none;
+    }
+</style>
+
+<div class="container pb-5">
+    <form action="{{ route('admin.events.update', $event->EventID) }}" method="POST" id="eventEditForm">
+        @csrf
+        @method('PUT')
+
+        {{-- HEADER ISLAND --}}
+        <div class="premium-header-rounded">
+            <div class="aura-glow"></div>
+            <div class="row align-items-center position-relative">
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{{ route('admin.events.list') }}" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        <div>
+                            <h1 class="fw-bold text-dark mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">Edit <span style="color: #800000;">Event</span></h1>
+                            <p class="text-muted small mb-0">Registry: {{ $event->EventName }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {{-- Main Content Container --}}
-    <div class="max-w-7xl mx-auto px-6 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
-        {{-- Notification Alerts --}}
-        @if(session('success'))
-            <div class="mb-8 p-5 rounded-[1.5rem] bg-green-50 border border-green-100 text-green-700 text-sm font-bold flex items-center gap-3">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                {{ session('success') }}
-            </div>
-        @endif
+        {{-- FORM BODY --}}
+        <div class="form-island-card">
+            @if ($errors->any())
+                <div class="alert alert-danger rounded-4 border-0 mb-5">
+                    <ul class="mb-0 small fw-bold">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        <form id="editEventForm" action="{{ route('admin.events.update', $event->EventID) }}" method="POST">
-            @csrf
-            @method('POST') {{-- Adjust to @method('PUT') if your route expects PUT --}}
+            <div class="row g-5">
+                
+                {{-- Left: Primary Event Data --}}
+                <div class="col-lg-7">
+                    <div class="mb-4">
+                        <label class="form-label-studio">Event Name</label>
+                        <input name="EventName" value="{{ old('EventName',$event->EventName) }}" required class="form-control input-studio fw-bold">
+                    </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    <div class="mb-4">
+                        <label class="form-label-studio">Location / Venue</label>
+                        <input name="Location" value="{{ old('Location',$event->Location) }}" class="form-control input-studio">
+                    </div>
 
-                {{-- Left Column: Event Core Details --}}
-                <div class="lg:col-span-2 space-y-8">
-                    <div class="bg-white rounded-[2.5rem] p-10 md:p-12 border border-gray-100 shadow-sm space-y-10 relative overflow-hidden">
-                        <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#800000]/5 rounded-full blur-3xl"></div>
-
-                        <div class="relative z-10">
-                            <label class="text-[10px] font-black uppercase tracking-[0.3em] text-[#800000] ml-1">Event Name</label>
-                            <input name="EventName" type="text" required value="{{ old('EventName', $event->EventName) }}"
-                                   class="mt-3 w-full rounded-2xl bg-gray-50 border-2 border-transparent p-5 text-xl font-bold text-gray-900 focus:outline-none focus:border-[#800000]/20 focus:bg-white transition-all shadow-sm">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label-studio">Start Date</label>
+                            <input type="date" name="StartDate" value="{{ optional($event->StartDate)->format('Y-m-d') }}" class="form-control input-studio">
                         </div>
-
-                        <div class="relative z-10">
-                            <label class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Location / Venue</label>
-                            <input name="Location" type="text" value="{{ old('Location', $event->Location) }}"
-                                   class="mt-3 w-full rounded-2xl bg-gray-50 border-2 border-transparent p-4 font-bold text-gray-900 focus:outline-none focus:border-[#800000]/20 focus:bg-white transition-all shadow-sm">
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                            <div>
-                                <label class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Commencement Date</label>
-                                <input name="StartDate" type="date" value="{{ old('StartDate', $event->StartDate ? $event->StartDate->format('Y-m-d') : '') }}"
-                                       class="mt-3 w-full rounded-2xl bg-gray-50 border-2 border-transparent p-4 font-bold text-gray-900 focus:outline-none focus:border-[#800000]/20 focus:bg-white transition-all shadow-sm">
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Conclusion Date</label>
-                                <input name="EndDate" type="date" value="{{ old('EndDate', $event->EndDate ? $event->EndDate->format('Y-m-d') : '') }}"
-                                       class="mt-3 w-full rounded-2xl bg-gray-50 border-2 border-transparent p-4 font-bold text-gray-900 focus:outline-none focus:border-[#800000]/20 focus:bg-white transition-all shadow-sm">
-                            </div>
-                        </div>
-
-                        <div class="relative z-10">
-                            <label class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Narrative Description</label>
-                            <textarea name="Description" rows="5"
-                                      class="mt-3 w-full rounded-3xl bg-gray-50 border-2 border-transparent p-5 font-medium text-gray-700 focus:outline-none focus:border-[#800000]/20 focus:bg-white transition-all leading-relaxed shadow-sm">{{ old('Description', $event->Description) }}</textarea>
+                        <div class="col-md-6">
+                            <label class="form-label-studio">End Date</label>
+                            <input type="date" name="EndDate" value="{{ optional($event->EndDate)->format('Y-m-d') }}" class="form-control input-studio">
                         </div>
                     </div>
 
-                    {{-- Dynamic Games Section --}}
-                    <div class="space-y-6">
-                        <div class="flex items-center justify-between px-4">
-                            <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Included Sport Components</h3>
-                            <button type="button" id="addGameBtn" class="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#800000] transition-all shadow-lg">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                                Add Component
-                            </button>
-                        </div>
+                    <div class="mb-5">
+                        <label class="form-label-studio">Event Description</label>
+                        <textarea name="Description" rows="4" class="form-control input-studio">{{ old('Description',$event->Description) }}</textarea>
+                    </div>
 
-                        <div id="gamesContainer" class="space-y-4">
-                            @foreach($event->games as $i => $game)
-                                <div class="relative group bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm transition-all hover:border-[#800000]/10">
-                                    <input type="hidden" name="games[{{ $i }}][GameID]" value="{{ $game->GameID }}">
-                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-                                        <div class="md:col-span-5">
-                                            <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block ml-1">Sport Name</label>
-                                            <input name="games[{{ $i }}][GameName]" type="text" required value="{{ old("games.{$i}.GameName", $game->GameName) }}"
-                                                   class="w-full rounded-xl bg-gray-50 border-0 p-4 font-bold text-gray-900 focus:ring-2 focus:ring-[#800000]/20 transition-all">
-                                        </div>
-                                        <div class="md:col-span-4">
-                                            <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block ml-1">Category</label>
-                                            <select name="games[{{ $i }}][Category]" class="w-full rounded-xl bg-gray-50 border-0 p-4 font-bold text-gray-700 focus:ring-2 focus:ring-[#800000]/20 transition-all">
-                                                <option value="Male" {{ old("games.{$i}.Category", $game->Category) == 'Male' ? 'selected' : '' }}>Male</option>
-                                                <option value="Female" {{ old("games.{$i}.Category", $game->Category) == 'Female' ? 'selected' : '' }}>Female</option>
-                                                <option value="Mixed" {{ old("games.{$i}.Category", $game->Category) == 'Mixed' ? 'selected' : '' }}>Mixed</option>
-                                                <option value="Open" {{ old("games.{$i}.Category", $game->Category) == 'Open' ? 'selected' : '' }}>Open</option>
-                                            </select>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block ml-1">Cap.</label>
-                                            <input name="games[{{ $i }}][Capacity]" type="number" min="0" value="{{ old("games.{$i}.Capacity", $game->Capacity) }}"
-                                                   class="w-full rounded-xl bg-gray-50 border-0 p-4 font-bold text-gray-900 focus:ring-2 focus:ring-[#800000]/20 transition-all">
-                                        </div>
-                                        <div class="md:col-span-1 flex justify-center pb-1">
-                                            <button type="button" class="remove-game p-3 text-gray-300 hover:text-red-600 transition-colors">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                            </button>
+                    {{-- Sports Disciplines List --}}
+                    <div class="d-flex justify-content-between align-items-center mb-4 pt-4 border-top">
+                        <h5 class="fw-bold mb-0">Sporting <span class="text-muted">Disciplines</span></h5>
+                        <button type="button" id="addGameBtn" class="btn-add-discipline shadow-sm">
+                            <i class="bi bi-plus-lg me-1"></i> Add Sport
+                        </button>
+                    </div>
+
+                    <div id="gamesContainer" class="row g-3">
+                        @foreach($event->games as $i => $game)
+                        <div class="col-12 game-row">
+                            <div class="sport-item-card">
+                                <input type="hidden" name="games[{{ $i }}][GameID]" value="{{ $game->GameID }}">
+                                
+                                <button type="button" class="btn-remove-game" onclick="removeGameRow(this)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Sport Name</label>
+                                        <input name="games[{{ $i }}][GameName]" value="{{ $game->GameName }}" class="form-control input-studio py-2 fw-bold" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Category</label>
+                                        <select name="games[{{ $i }}][Category]" class="form-select input-studio py-2">
+                                            @foreach(['Male','Female','Mixed','Open'] as $c)
+                                                <option value="{{ $c }}" {{ $game->Category==$c?'selected':'' }}>{{ $c }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Intake Limit</label>
+                                        <input type="number" name="games[{{ $i }}][Capacity]" value="{{ $game->Capacity }}" class="form-control input-studio py-2">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row g-2">
+                                            <div class="col-4">
+                                                <label class="text-[9px] fw-bold text-muted mb-1">Date</label>
+                                                <input type="date" name="games[{{ $i }}][GameDate]" value="{{ $game->GameDate?->format('Y-m-d') }}" class="form-control input-studio py-2" required>
+                                            </div>
+                                            <div class="col-4">
+                                                <label class="text-[9px] fw-bold text-muted mb-1">Start</label>
+                                                <input type="time" name="games[{{ $i }}][TimeStart]" value="{{ $game->TimeStart }}" class="form-control input-studio py-2" required>
+                                            </div>
+                                            <div class="col-4">
+                                                <label class="text-[9px] fw-bold text-muted mb-1">End</label>
+                                                <input type="time" name="games[{{ $i }}][TimeEnd]" value="{{ $game->TimeEnd }}" class="form-control input-studio py-2" required>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Right Column: Status & Sidebar --}}
-                <div class="space-y-8">
-                    {{-- Status Card --}}
-                    <div class="bg-gray-900 rounded-[2.5rem] p-10 shadow-2xl shadow-gray-200">
-                        <label class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Live Registry Status</label>
-                        <div class="relative">
-                            <select name="Status" class="mt-5 w-full rounded-2xl bg-white/5 border-0 p-5 font-bold text-white focus:outline-none focus:ring-2 focus:ring-[#800000] transition-all appearance-none">
-                                <option value="Open" {{ old('Status', $event->Status)=='Open' ? 'selected' : '' }} class="text-black">OPEN (Active)</option>
-                                <option value="Closed" {{ old('Status', $event->Status)=='Closed' ? 'selected' : '' }} class="text-black">CLOSED</option>
-                                <option value="Cancelled" {{ old('Status', $event->Status)=='Cancelled' ? 'selected' : '' }} class="text-black">CANCELLED</option>
-                            </select>
-                            <div class="absolute right-5 top-1/2 mt-2.5 pointer-events-none text-gray-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </div>
                         </div>
-                    </div>
-
-                    {{-- Quick Info Card --}}
-                    <div class="bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm">
-                        <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-6">Editing Protocol</h3>
-                        <ul class="space-y-6">
-                            <li class="flex gap-4">
-                                <span class="w-5 h-5 rounded-full bg-gray-50 text-[10px] font-black flex items-center justify-center shrink-0">1</span>
-                                <p class="text-xs text-gray-500 font-medium leading-relaxed">Ensure <span class="text-gray-900 font-bold">Temporal Sync</span> between start and end dates.</p>
-                            </li>
-                            <li class="flex gap-4">
-                                <span class="w-5 h-5 rounded-full bg-gray-50 text-[10px] font-black flex items-center justify-center shrink-0">2</span>
-                                <p class="text-xs text-gray-500 font-medium leading-relaxed">Updating <span class="text-gray-900 font-bold">Capacity</span> will affect future intake immediately.</p>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {{-- Form Actions --}}
-                    <div class="pt-4 space-y-4">
-                        <button type="submit" class="w-full py-5 bg-[#800000] text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-xl shadow-red-900/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                            Save Parameters
-                        </button>
-                        <a href="{{ route('admin.events.list') }}" class="block w-full py-4 bg-white text-gray-400 text-center rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest border border-gray-100 hover:bg-gray-50 transition-all">
-                            Discard Changes
-                        </a>
+                        @endforeach
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
-</div>
 
-{{-- Template for new game --}}
-<template id="gameTemplate">
-    <div class="relative group bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm animate-in fade-in zoom-in-95 duration-300">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-            <div class="md:col-span-5">
-                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block ml-1">Sport Name</label>
-                <input name="__GNAME__" type="text" required placeholder="e.g. Volleyball"
-                       class="w-full rounded-xl bg-gray-50 border-0 p-4 font-bold text-gray-900 focus:ring-2 focus:ring-[#800000]/20 transition-all">
-            </div>
-            <div class="md:col-span-4">
-                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block ml-1">Category</label>
-                <select name="__GCAT__" class="w-full rounded-xl bg-gray-50 border-0 p-4 font-bold text-gray-700 focus:ring-2 focus:ring-[#800000]/20 transition-all">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Mixed">Mixed</option>
-                    <option value="Open">Open</option>
-                </select>
-            </div>
-            <div class="md:col-span-2">
-                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block ml-1">Cap.</label>
-                <input name="__GCAP__" type="number" min="0" placeholder="0"
-                       class="w-full rounded-xl bg-gray-50 border-0 p-4 font-bold text-gray-900 focus:ring-2 focus:ring-[#800000]/20 transition-all">
-            </div>
-            <div class="md:col-span-1 flex justify-center pb-1">
-                <button type="button" class="remove-game p-3 text-gray-300 hover:text-red-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
+                {{-- Right: Side Rules --}}
+                <div class="col-lg-5">
+                    <div class="p-4 rounded-4 shadow-sm" id="statusBox" style="background: #111827; transition: all 0.3s ease;">
+                        <label class="form-label-studio text-gray-500">Registry Status</label>
+                        <select name="Status" id="statusSelect" class="form-select input-studio border-0 status-dropdown fw-black">
+                            @foreach(['Open','Closed','Cancelled'] as $s)
+                                <option value="{{ $s }}" {{ $event->Status==$s?'selected':'' }}>{{ strtoupper($s) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mt-4 p-4 border rounded-4 bg-light bg-opacity-50">
+                        <label class="form-label-studio">Max Games Per Student</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-shield-check text-maroon h4 mb-0"></i>
+                            <input type="number" name="MaxGamesPerStudent" value="{{ old('MaxGamesPerStudent',$event->MaxGamesPerStudent) }}" class="form-control input-studio">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- FORM ACTIONS (Inside the Island Card) --}}
+                <div class="col-12 mt-5 pt-5 border-top d-flex justify-content-end align-items-center gap-3">
+                    <a href="{{ route('admin.events.list') }}" class="btn-discard" onclick="return confirm('Discard all unsaved changes?')">
+                        Discard Changes
+                    </a>
+                    <button type="submit" class="btn-maroon-pill shadow-lg">
+                        <i class="bi bi-cloud-check-fill me-2"></i> Save All Changes
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</template>
+    </form>
+</div>
 
 <script>
-(function(){
-    const container = document.getElementById('gamesContainer');
-    const template = document.getElementById('gameTemplate').innerHTML;
-    const addBtn = document.getElementById('addGameBtn');
+    // Status Dropdown Logic
+    const statusSelect = document.getElementById('statusSelect');
+    function updateStatusUI() {
+        const val = statusSelect.value.toLowerCase();
+        statusSelect.classList.remove('status-open', 'status-closed', 'status-cancelled');
+        if (val === 'open') statusSelect.classList.add('status-open');
+        else if (val === 'closed') statusSelect.classList.add('status-closed');
+        else if (val === 'cancelled') statusSelect.classList.add('status-cancelled');
+    }
+    statusSelect.addEventListener('change', updateStatusUI);
+    window.addEventListener('load', updateStatusUI);
 
+    // Dynamic Rows Logic
     let idx = {{ $event->games->count() }};
+    function removeGameRow(btn) {
+        if(confirm('Are you sure you want to remove this discipline?')) {
+            const row = btn.closest('.game-row');
+            row.style.opacity = '0';
+            row.style.transform = 'scale(0.95)';
+            setTimeout(() => row.remove(), 300);
+        }
+    }
 
-    function addRow() {
-        let html = template
-            .replace(/__GNAME__/g, `games[${idx}][GameName]`)
-            .replace(/__GCAT__/g, `games[${idx}][Category]`)
-            .replace(/__GCAP__/g, `games[${idx}][Capacity]`);
-
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper.firstElementChild);
-
-        const last = container.lastElementChild;
-        last.querySelector('.remove-game').addEventListener('click', function(){ 
-            last.classList.add('fade-out', 'zoom-out-95');
-            setTimeout(() => last.remove(), 200);
-        });
+    document.getElementById('addGameBtn').onclick = () => {
+        const c = document.getElementById('gamesContainer');
+        const newRow = `
+        <div class="col-12 mb-3 game-row animate-in fade-in slide-in-from-top-2">
+            <div class="sport-item-card border-maroon" style="border-style: dashed;">
+                <button type="button" class="btn-remove-game" onclick="removeGameRow(this)">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <div class="row g-3">
+                    <div class="col-md-8"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Sport Name</label><input name="games[${idx}][GameName]" class="form-control input-studio py-2 fw-bold" placeholder="New Sport Name"></div>
+                    <div class="col-md-4"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Category</label><select name="games[${idx}][Category]" class="form-select input-studio py-2"><option>Male</option><option>Female</option><option>Mixed</option><option selected>Open</option></select></div>
+                    <div class="col-md-4"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Intake Limit</label><input type="number" name="games[${idx}][Capacity]" class="form-control input-studio py-2" placeholder="Capacity"></div>
+                    <div class="col-md-8"><div class="row g-2"><div class="col-4"><input type="date" name="games[${idx}][GameDate]" class="form-control input-studio py-2"></div><div class="col-4"><input type="time" name="games[${idx}][TimeStart]" class="form-control input-studio py-2"></div><div class="col-4"><input type="time" name="games[${idx}][TimeEnd]" class="form-control input-studio py-2"></div></div></div>
+                </div>
+            </div>
+        </div>`;
+        c.insertAdjacentHTML('afterbegin', newRow);
         idx++;
-    }
-
-    document.querySelectorAll('.remove-game').forEach(btn => {
-        btn.addEventListener('click', function(){ 
-            const row = this.closest('.relative');
-            row.classList.add('fade-out', 'zoom-out-95');
-            setTimeout(() => row.remove(), 200);
-        });
-    });
-
-    addBtn.addEventListener('click', addRow);
-})();
+    };
 </script>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em; }
-    
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(15%) sepia(95%) saturate(6932%) hue-rotate(358deg) brightness(95%) contrast(107%);
-        cursor: pointer;
-    }
-</style>
 @endsection

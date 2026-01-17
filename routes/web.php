@@ -58,7 +58,7 @@ Route::middleware(['auth', 'is_admin'])
     Route::get('events/create', [ApplicationController::class, 'createEvent'])->name('events.create');
     Route::post('events', [ApplicationController::class, 'storeEvent'])->name('events.store');
     Route::get('events/{EventID}/edit', [ApplicationController::class, 'editEvent'])->name('events.edit');
-    Route::post('events/{EventID}/update', [ApplicationController::class, 'updateEvent'])->name('events.update');
+    Route::put('events/{EventID}/update', [ApplicationController::class, 'updateEvent'])->name('events.update');
 
     /* Applications */
     Route::get('applications/{ApplicationID}', [ApplicationController::class, 'showApplication'])->name('applications.show');

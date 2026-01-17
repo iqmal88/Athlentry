@@ -14,7 +14,6 @@
         padding-top: 20px;
     }
 
-    /* 1. Rounded Island Header */
     .premium-header-rounded {
         background: #fff;
         border-radius: 24px;
@@ -25,7 +24,7 @@
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
-    
+
     .aura-glow {
         position: absolute;
         top: -100px;
@@ -37,7 +36,6 @@
         z-index: 0;
     }
 
-    /* 2. Compact Entity Container */
     .menu-category-block {
         background: #ffffff;
         border-radius: 16px;
@@ -65,13 +63,11 @@
         margin-bottom: 0;
     }
 
-    /* Professional Details Link */
     .details-link {
         font-size: 0.75rem;
         font-weight: 700;
         color: #800000;
         text-decoration: none;
-        transition: all 0.2s ease;
         display: inline-flex;
         align-items: center;
         gap: 4px;
@@ -90,7 +86,6 @@
         letter-spacing: 0.05em;
     }
 
-    /* 3. Game Card - Compressed "Menu Item" */
     .menu-item-card {
         background: #F9FAFB;
         border: 1px solid #F3F4F6;
@@ -126,13 +121,20 @@
         font-size: 0.9rem;
         margin-bottom: 4px;
         color: #111827;
-        line-height: 1.2;
     }
 
     .item-stats {
         font-size: 0.75rem;
         font-weight: 600;
         color: #6B7280;
+        line-height: 1.5;
+    }
+
+    /* Minimal addition: Style for the minimal icons */
+    .stat-icon {
+        font-size: 0.85rem;
+        color: #9CA3AF;
+        margin-right: 4px;
     }
 
     .btn-mcd-action {
@@ -148,7 +150,6 @@
         align-items: center;
         justify-content: center;
         text-decoration: none;
-        transition: 0.2s;
     }
 
     .btn-mcd-action:hover {
@@ -166,70 +167,112 @@
 </style>
 
 <div class="container">
+
+    {{-- HEADER --}}
     <div class="premium-header-rounded">
         <div class="aura-glow"></div>
         <div class="row align-items-center position-relative">
             <div class="col-7">
-                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.02em;">Events <span style="color: #800000;">Hub</span></h1>
-                <p class="text-muted small mb-0">Unified tournament registry and intake control.</p>
+                <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
+                    Events <span style="color:#800000;">Hub</span>
+                </h1>
+                <p class="text-muted small mb-0">
+                    Unified tournament registry and intake control.
+                </p>
             </div>
             <div class="col-5 text-end">
-                <a href="{{ route('admin.events.create') }}" class="btn btn-dark btn-sm fw-bold px-4 py-2 rounded-3 shadow-sm">
+                <a href="{{ route('admin.events.create') }}"
+                   class="btn btn-dark btn-sm fw-bold px-4 py-2 rounded-3">
                     <i class="bi bi-plus-lg me-1"></i> NEW EVENT
                 </a>
             </div>
         </div>
     </div>
 
-    <div id="eventsGrid">
-        @foreach($events as $event)
-        <div class="menu-category-block">
-            
-            <div class="category-header">
-                <div class="d-flex align-items-center gap-3">
-                    {{-- Functionality Removed from Name --}}
-                    <h2 class="category-title">{{ $event->EventName }}</h2>
-                    <span class="badge badge-status {{ $event->Status == 'Open' ? 'bg-success text-white' : 'bg-light text-muted border' }}">
-                        {{ $event->Status }}
-                    </span>
-                    <div class="category-meta d-none d-md-block">
-                        {{ $event->StartDate ? \Carbon\Carbon::parse($event->StartDate)->format('M d') : 'TBD' }} - {{ $event->EndDate ? \Carbon\Carbon::parse($event->EndDate)->format('d, Y') : '' }}
-                    </div>
-                </div>
+    {{-- EVENTS --}}
+    @foreach($events as $event)
+    <div class="menu-category-block">
 
-                {{-- New "More Details" Functionality on the right --}}
-                <div class="text-end">
-                    <a href="{{ route('admin.events.edit', $event->EventID) }}" class="details-link">
-                        More Details <i class="bi bi-chevron-right" style="font-size: 0.6rem;"></i>
-                    </a>
-                </div>
+        {{-- EVENT HEADER --}}
+        <div class="category-header">
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <h2 class="category-title">{{ $event->EventName }}</h2>
+
+                <span class="badge badge-status {{ $event->Status == 'Open' ? 'bg-success text-white' : 'bg-light text-muted border' }}">
+                    {{ $event->Status }}
+                </span>
+
+                @if($event->MaxGamesPerStudent)
+                    <div class="category-meta">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Max {{ $event->MaxGamesPerStudent }} game(s) / student
+                    </div>
+                @endif
             </div>
 
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
-                @foreach($event->games as $game)
-                <div class="col">
-                    <div class="menu-item-card">
-                        <div class="item-icon-area">
-                            <i class="bi bi-trophy"></i>
-                        </div>
-                        
-                        <div class="category-meta mb-1" style="font-size: 0.6rem;">{{ $game->Category ?? 'ALL' }}</div>
-                        <h3 class="item-name">{{ $game->GameName }}</h3>
-                        
-                        <div class="item-stats mt-2">
-                            Intake: <span class="text-dark">{{ $game->applications_count ?? 0 }}</span> / {{ $game->Capacity ?? '∞' }}
-                        </div>
-
-                        <a href="{{ route('admin.games.applicants', $game->GameID) }}" class="btn-mcd-action">
-                            <i class="bi bi-chevron-right"></i>
-                        </a>
-                    </div>
-                </div>
-                @endforeach
-            </div>
+            <a href="{{ route('admin.events.edit', $event->EventID) }}" class="details-link">
+                More Details <i class="bi bi-chevron-right"></i>
+            </a>
         </div>
-        @endforeach
-    </div>
-</div>
 
+        {{-- GAMES --}}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+            @foreach($event->games as $game)
+            <div class="col">
+                <div class="menu-item-card">
+
+                    <div class="item-icon-area">
+                        <i class="bi bi-trophy"></i>
+                    </div>
+
+                    <div class="category-meta mb-1 text-truncate">
+                        <i class="bi bi-tag me-1"></i>{{ $game->Category ?? 'ALL' }}
+                    </div>
+
+                    <h3 class="item-name text-truncate">{{ $game->GameName }}</h3>
+
+                    {{-- GAME DATE & TIME --}}
+                    <div class="item-stats mt-2">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-calendar2-week stat-icon"></i>
+                            <span>{{ \Carbon\Carbon::parse($game->GameDate)->format('d M Y') }}</span>
+                        </div>
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-clock stat-icon"></i>
+                            <span>
+                                {{ \Carbon\Carbon::parse($game->TimeStart)->format('H:i') }}
+                                –
+                                {{ \Carbon\Carbon::parse($game->TimeEnd)->format('H:i') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {{-- INTAKE --}}
+                    <div class="item-stats mt-2">
+                        <i class="bi bi-people stat-icon"></i>
+                        Intake:
+                        <span class="text-dark">{{ $game->applications_count ?? 0 }}</span>
+                        / {{ $game->Capacity ?? '∞' }}
+                    </div>
+
+                    {{-- GAME STATUS --}}
+                    @if($game->Status !== 'Open')
+                        <span class="badge bg-light text-muted mt-2 border">
+                            <i class="bi bi-lock me-1"></i>{{ $game->Status }}
+                        </span>
+                    @endif
+
+                    <a href="{{ route('admin.games.applicants', $game->GameID) }}" class="btn-mcd-action shadow-sm">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+    </div>
+    @endforeach
+
+</div>
 @endsection

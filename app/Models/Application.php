@@ -18,20 +18,14 @@ class Application extends Model
         'EventID',
         'GameID',
 
-        // NEW STATUS SYSTEM
+        // Status system
         'ApplicationStatus',
         'SelectionStatus',
 
-        'SportType',
+        // Applicant info
         'Achievement',
         'MedicalHistory',
         'DateApplied',
-
-        'SnapshotEventName',
-        'SnapshotGameName',
-        'SnapshotGameDate',
-        'SnapshotLocation',
-        'SnapshotCapacity',
     ];
 
     protected $casts = [
@@ -43,32 +37,23 @@ class Application extends Model
      | RELATIONSHIPS
      ========================= */
 
-    /**
-     * Applicant (Student)
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'UserID', 'UserID');
     }
 
-    /**
-     * Related Event
-     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'EventID', 'EventID');
     }
 
-    /**
-     * Related Game / Sport
-     */
     public function game(): BelongsTo
     {
         return $this->belongsTo(GameInfo::class, 'GameID', 'GameID');
     }
 
     /* =========================
-     | HELPER METHODS (OPTIONAL BUT GOOD)
+     | STATUS HELPERS
      ========================= */
 
     public function isPending(): bool

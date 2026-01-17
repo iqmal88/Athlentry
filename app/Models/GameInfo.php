@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GameInfo extends Model
 {
@@ -15,45 +17,32 @@ class GameInfo extends Model
         'GameName',
         'Category',
         'GameDate',
-        'GameTime',
+        'TimeStart',
+        'TimeEnd',
         'SelectionPlace',
         'CoachName',
         'CoachPhone',
         'Capacity',
         'Rules',
         'Description',
-        'Status'
+        'Status',
     ];
 
-    // Relationship to parent event
-    public function event()
+    protected $casts = [
+        'GameDate'  => 'date',
+        'TimeStart' => 'string', // IMPORTANT
+        'TimeEnd'   => 'string', // IMPORTANT
+    ];
+
+    /* RELATIONSHIPS */
+
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Event::class, 'EventID', 'EventID');
+        return $this->belongsTo(Event::class, 'EventID', 'EventID');
     }
 
-    // Relationship to applications (optional/useful)
-    public function applications()
+    public function applications(): HasMany
     {
-        return $this->hasMany(\App\Models\Application::class, 'GameID', 'GameID');
-    }
-
-    /**
-     * Effective status: if parent event is not Open, return the event's status,
-     * otherwise return the game's own Status.
-     *
-     * Usage in blade: $game->final_status
-     */
-    public function getFinalStatusAttribute()
-    {
-        // ensure event relationship available
-        if (! $this->relationLoaded('event')) {
-            $this->load('event');
-        }
-
-        if ($this->event && in_array($this->event->Status, ['Closed', 'Cancelled'])) {
-            return $this->event->Status;
-        }
-
-        return $this->Status ?? 'Open';
+        return $this->hasMany(Application::class, 'GameID', 'GameID');
     }
 }
