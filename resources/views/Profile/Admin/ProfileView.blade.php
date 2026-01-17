@@ -3,79 +3,95 @@
 @section('title', 'Admin Profile')
 
 @section('content')
-<div class="min-h-screen bg-[#F8F9FA] pb-24 font-sans antialiased">
-    
-    {{-- Header --}}
-    <div class="relative px-6 py-6">        
-        <div class="max-w-7xl mx-auto bg-white border border-gray-100 shadow-sm rounded-[2rem] px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-[#800000]/5 rounded-full blur-3xl"></div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-            <div class="relative z-10 flex items-center gap-6">
-                <a href="{{ route('admin.announcements.index') }}" class="group flex items-center justify-center w-12 h-12 bg-gray-50 rounded-2xl hover:bg-[#800000] hover:text-white transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
-                </a>
-                <div class="h-10 w-px bg-gray-100 hidden md:block"></div>
-                <div>
-                    <h1 class="text-3xl font-black text-gray-900 tracking-tight leading-none uppercase italic">USER <span class="text-[#800000] not-italic">PROFILE</span></h1>
-                    <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-bold mt-2">Administrative Identity Management</p>
-                </div>
+<style>
+    body { background-color: #F2F4F7; font-family: 'Inter', sans-serif; color: #1A1C1E; padding-top: 20px; }
+    
+    .premium-header-rounded {
+        background: #fff; border-radius: 24px; padding: 24px 40px; margin-bottom: 30px;
+        border: 1px solid #E5E7EB; position: relative; overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .aura-glow {
+        position: absolute; top: -100px; right: -30px; width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(128,0,0,0.05) 0%, rgba(255,255,255,0) 70%);
+        border-radius: 50%;
+    }
+
+    .info-block {
+        background: #ffffff; border-radius: 16px; padding: 32px;
+        border: 1px solid #E5E7EB; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .meta-label { font-size: 0.7rem; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; }
+    .data-value { font-weight: 700; color: #1A1C1E; font-size: 1.1rem; }
+    .text-maroon { color: #800000 !important; }
+</style>
+
+<div class="container pb-5">
+    {{-- Header Matched to Game Info --}}
+    <div class="premium-header-rounded">
+        <div class="aura-glow"></div>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-7">
+                <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
+                    User <span class="text-maroon">Profile</span>
+                </h1>
+                <p class="text-muted small mb-0">Administrative Identity Management</p>
             </div>
-            
-            <div class="relative z-10">
-                <a href="{{ route('admin.profile.edit') }}" class="px-8 py-4 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest rounded-[1.5rem] shadow-xl hover:bg-[#800000] hover:scale-105 transition-all flex items-center gap-3">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                    Edit Profile
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                <a href="{{ route('admin.profile.edit') }}" class="btn btn-dark fw-bold rounded-pill px-4 shadow-sm" style="font-size: 0.8rem; background: #1A1C1E;">
+                    <i class="bi bi-pencil-square me-2"></i>Edit Profile
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 mt-4">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {{-- Left Bento --}}
-            <div class="lg:col-span-4 space-y-8">
-                <div class="bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm text-center relative overflow-hidden group">
-                    <div class="w-44 h-44 rounded-[3rem] bg-gray-50 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center mx-auto mb-6">
-                        <div class="w-full h-full flex items-center justify-center text-6xl font-black text-[#800000] italic">
-                            {{ strtoupper(substr($admin->Name, 0, 1)) }}
-                        </div>
-                    </div>
-                    <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tight">{{ $admin->Name }}</h2>
-                    <p class="text-[10px] font-black text-[#800000] uppercase tracking-[0.2em] mt-1 italic">Master Admin</p>
+    <div class="row g-4">
+        {{-- Avatar Section --}}
+        <div class="col-lg-4">
+            <div class="info-block text-center h-100">
+                <div class="mx-auto mb-4 d-flex align-items-center justify-content-center border-4 border-white shadow-lg italic font-black text-white" 
+                     style="width: 150px; height: 150px; border-radius: 40px; background: #800000; font-size: 4rem;">
+                    {{ strtoupper(substr($admin->Name, 0, 1)) }}
                 </div>
-
-                <div class="bg-gray-900 rounded-[2.5rem] p-8 text-white shadow-2xl">
-                    <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Account Active Since</p>
-                    <p class="text-xl font-bold tracking-tight italic">{{ $admin->created_at->format('M d, Y') }}</p>
+                <h3 class="fw-bold mb-1">{{ $admin->Name }}</h3>
+                <span class="badge bg-danger bg-opacity-10 text-maroon rounded-pill px-3 py-2 fw-800 italic" style="font-size: 0.65rem; letter-spacing: 0.1em;">MASTER ADMIN</span>
+                
+                <div class="mt-4 pt-4 border-top">
+                    <p class="meta-label mb-1">Account Active Since</p>
+                    <p class="fw-bold text-dark">{{ $admin->created_at->format('M d, Y') }}</p>
                 </div>
             </div>
+        </div>
 
-            {{-- Right Bento --}}
-            <div class="lg:col-span-8">
-                <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-gray-100 shadow-sm min-h-[450px]">
-                    <div class="flex items-center gap-4 mb-14">
-                        <h3 class="text-[10px] font-black text-[#800000] uppercase tracking-[0.3em]">Credential Matrix</h3>
-                        <div class="flex-1 h-px bg-gray-50"></div>
+        {{-- Details Section --}}
+        <div class="col-lg-8">
+            <div class="info-block h-100">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-2 border-bottom">
+                    <i class="bi bi-shield-lock text-maroon h4 mb-0"></i>
+                    <h5 class="fw-800 text-uppercase mb-0" style="letter-spacing: 1px; font-size: 0.9rem;">Credential Matrix</h5>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <p class="meta-label mb-1">Full Name</p>
+                        <p class="data-value">{{ $admin->Name }}</p>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-12">
-                        <div>
-                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Full Name</p>
-                            <p class="text-lg font-bold text-gray-900">{{ $admin->Name }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Matric Identifier</p>
-                            <p class="text-lg font-bold text-gray-900">{{ $admin->MatricNo }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Secure Email</p>
-                            <p class="text-lg font-bold text-gray-900">{{ $admin->Email }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Contact Number</p>
-                            <p class="text-lg font-bold text-gray-900">{{ $admin->PhoneNumber ?? 'N/A' }}</p>
-                        </div>
+                    <div class="col-md-6">
+                        <p class="meta-label mb-1">Matric Identifier</p>
+                        <p class="data-value text-maroon italic">{{ $admin->MatricNo }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="meta-label mb-1">Secure Email</p>
+                        <p class="data-value">{{ $admin->Email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="meta-label mb-1">Contact Number</p>
+                        <p class="data-value">{{ $admin->PhoneNumber ?? 'Not Linked' }}</p>
                     </div>
                 </div>
             </div>

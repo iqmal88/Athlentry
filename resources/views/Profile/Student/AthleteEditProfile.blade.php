@@ -3,75 +3,139 @@
 @section('title', 'Edit Athlete Profile')
 
 @section('content')
-<div class="min-h-screen bg-[#F8FAFC] pb-24 font-sans antialiased">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-    {{-- HEADER --}}
-    <div class="relative px-6 py-6">
-        <div class="max-w-5xl mx-auto bg-white border border-slate-100 shadow-sm rounded-[2.5rem] px-10 py-8 flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-black italic uppercase tracking-tight text-slate-900">
-                    Edit <span class="text-teal-600 not-italic">Profile</span>
-                </h1>
-                <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold mt-2">Update recruitment details</p>
+<style>
+    body { background-color: #F2F4F7; font-family: 'Inter', sans-serif; color: #1A1C1E; padding-top: 20px; }
+    
+    .premium-header-rounded {
+        background: #fff; border-radius: 24px; padding: 24px 40px; margin-bottom: 30px;
+        border: 1px solid #E5E7EB; position: relative; overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .aura-glow {
+        position: absolute; top: -100px; right: -30px; width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(0, 128, 128, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+    }
+
+    .form-block {
+        background: #ffffff; border-radius: 20px; padding: 32px; margin-bottom: 30px;
+        border: 1px solid #E5E7EB; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .form-label-caps { font-size: 0.65rem; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.1em; margin-left: 4px; }
+    .custom-input { border-radius: 12px; padding: 14px 18px; border: 2px solid #F3F4F6; background: #F9FAFB; font-weight: 600; transition: all 0.2s; }
+    .custom-input:focus { border-color: rgba(0, 128, 128, 0.2); background: #fff; box-shadow: none; outline: none; }
+    .text-teal { color: #008080 !important; }
+</style>
+
+<div class="container pb-5">
+    <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data">
+        @csrf
+
+        {{-- Header Matched to Game Info --}}
+        <div class="premium-header-rounded">
+            <div class="aura-glow"></div>
+            <div class="row align-items-center position-relative">
+                <div class="col-md-7">
+                    <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
+                        Edit <span class="text-teal">Profile</span>
+                    </h1>
+                    <p class="text-muted small mb-0">Update your athlete information and credentials</p>
+                </div>
+                <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                    <a href="{{ route('student.profile.show') }}" class="btn btn-light fw-bold rounded-pill px-4 border shadow-sm small">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-dark fw-bold rounded-pill px-4 shadow-sm ms-2" style="background: #008080; border: none;">
+                        Save Changes
+                    </button>
+                </div>
             </div>
-            <a href="{{ route('student.profile.show') }}" class="px-6 py-3 rounded-2xl bg-slate-100 text-slate-600 text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition">← Back</a>
         </div>
-    </div>
 
-    <div class="max-w-5xl mx-auto px-6 mt-6">
-        <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data">
-            @csrf
-
-            <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-sm space-y-12">
-
-                {{-- PHOTO UPLOAD SECTION --}}
-                <div class="flex flex-col md:flex-row items-center gap-10 bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
-                    <img class="h-32 w-32 object-cover rounded-3xl border-4 border-white shadow-lg" 
-                         src="{{ $user->ProfilePhoto ? asset('storage/' . $user->ProfilePhoto) : 'https://ui-avatars.com/api/?name='.urlencode($user->Name).'&background=0D9488&color=fff' }}" 
-                         alt="Current photo">
-                    <div class="flex-1">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Profile Photo</label>
-                        <input type="file" name="ProfilePhoto" class="mt-3 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-teal-600 file:text-white hover:file:bg-teal-700">
-                        <p class="mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic italic">PNG, JPG or JPEG (Max 2MB)</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Name (Locked)</label>
-                        <input type="text" value="{{ $user->Name }}" readonly class="mt-2 w-full rounded-2xl bg-slate-100 border border-slate-200 p-4 font-bold text-slate-600 cursor-not-allowed">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Address</label>
-                        <input type="email" name="Email" value="{{ old('Email', $user->Email) }}" required class="mt-2 w-full rounded-2xl border-slate-200 p-4 font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Matric Number (Locked)</label>
-                        <input type="text" value="{{ $user->MatricNo }}" readonly class="mt-2 w-full rounded-2xl bg-slate-100 border border-slate-200 p-4 font-bold text-slate-600 cursor-not-allowed">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Phone Number</label>
-                        <input type="text" name="PhoneNumber" value="{{ old('PhoneNumber', $user->PhoneNumber) }}" required class="mt-2 w-full rounded-2xl border-slate-200 p-4 font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 block">Sports Achievement</label>
-                    <textarea name="Achievement" rows="4" class="w-full rounded-2xl border border-slate-200 p-5 font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500" placeholder="List your relevant sports experience...">{{ old('Achievement', $user->Achievement) }}</textarea>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 block">Medical History</label>
-                    <textarea name="MedicalHistory" rows="4" class="w-full rounded-2xl border border-slate-200 p-5 font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500" placeholder="Specify any allergies or previous injuries...">{{ old('MedicalHistory', $user->MedicalHistory) }}</textarea>
-                </div>
-
-                <div class="flex justify-end gap-4 pt-8 border-t border-slate-100">
-                    <a href="{{ route('student.profile.show') }}" class="px-8 py-4 rounded-2xl bg-slate-100 text-slate-500 text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition">Cancel</a>
-                    <button type="submit" class="px-10 py-4 rounded-2xl bg-teal-600 text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-teal-600/25 hover:brightness-110 active:scale-95 transition">Save Changes</button>
-                </div>
-
+        @if(session('success'))
+            <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 fw-bold">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
             </div>
-        </form>
-    </div>
+        @endif
+
+        <div class="row g-4">
+            {{-- Left Column: Avatar --}}
+            <div class="col-lg-4">
+                <div class="form-block text-center">
+                    <h6 class="form-label-caps mb-4">Profile Picture</h6>
+                    <div class="mx-auto mb-4 border-4 border-white shadow-lg overflow-hidden" 
+                         style="width: 140px; height: 140px; border-radius: 40px;">
+                        <img src="{{ $user->ProfilePhoto ? asset('storage/' . $user->ProfilePhoto) : 'https://ui-avatars.com/api/?name='.urlencode($user->Name).'&background=008080&color=fff' }}" 
+                             class="w-100 h-100 object-cover" id="previewImg" alt="Profile">
+                    </div>
+                    <input type="file" name="ProfilePhoto" class="form-control form-control-sm border-0 bg-light rounded-3" 
+                           onchange="previewFile(this)" style="font-size: 0.7rem;">
+                    <p class="mt-3 text-muted" style="font-size: 0.65rem;">Recommended: Square image, Max 2MB</p>
+                </div>
+            </div>
+
+            {{-- Right Column: Form Fields --}}
+            <div class="col-lg-8">
+                <div class="form-block">
+                    <h6 class="form-label-caps text-teal mb-4">Personal Details</h6>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-caps">Full Name (Locked)</label>
+                            <input type="text" value="{{ $user->Name }}" readonly class="form-control custom-input opacity-75">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-caps">Matric Number (Locked)</label>
+                            <input type="text" value="{{ $user->MatricNo }}" readonly class="form-control custom-input opacity-75">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-caps">Email Address</label>
+                            <input type="email" name="Email" value="{{ old('Email', $user->Email) }}" required class="form-control custom-input">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-caps">Phone Number</label>
+                            <input type="text" name="PhoneNumber" value="{{ old('PhoneNumber', $user->PhoneNumber) }}" required class="form-control custom-input">
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label-caps">Sports Achievement</label>
+                            <textarea name="Achievement" rows="3" class="form-control custom-input" placeholder="List your relevant sports experience...">{{ old('Achievement', $user->Achievement) }}</textarea>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label-caps text-danger">Medical History</label>
+                            <textarea name="MedicalHistory" rows="3" class="form-control custom-input" placeholder="Specify any allergies or previous injuries...">{{ old('MedicalHistory', $user->MedicalHistory) }}</textarea>
+                        </div>
+                    </div>
+
+                    <h6 class="form-label-caps text-teal mt-4 mb-4">Security Protocol</h6>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label-caps">New Password (Leave blank to keep current)</label>
+                            <input name="Password" type="password" class="form-control custom-input" placeholder="••••••••">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+
+<script>
+    function previewFile(input) {
+        var file = input.files[0];
+        if(file) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                document.getElementById("previewImg").src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

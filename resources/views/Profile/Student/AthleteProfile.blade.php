@@ -3,91 +3,125 @@
 @section('title', 'My Athlete Profile')
 
 @section('content')
-<div class="min-h-screen bg-[#F8FAFC] pb-24 font-sans antialiased">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-    {{-- HEADER --}}
-    <div class="relative px-6 py-6">
-        <div class="max-w-5xl mx-auto bg-white border border-slate-100 shadow-sm rounded-[2.5rem] px-10 py-8 flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-black italic uppercase tracking-tight text-slate-900">
-                    Athlete <span class="text-teal-600 not-italic">Profile</span>
+<style>
+    body { background-color: #F2F4F7; font-family: 'Inter', sans-serif; color: #1A1C1E; padding-top: 20px; }
+    
+    .premium-header-rounded {
+        background: #fff; border-radius: 24px; padding: 24px 40px; margin-bottom: 30px;
+        border: 1px solid #E5E7EB; position: relative; overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .aura-glow {
+        position: absolute; top: -100px; right: -30px; width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(0, 128, 128, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+    }
+
+    .info-block {
+        background: #ffffff; border-radius: 20px; padding: 32px; margin-bottom: 30px;
+        border: 1px solid #E5E7EB; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .meta-label { font-size: 0.65rem; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.1em; }
+    .data-value { font-weight: 700; color: #1A1C1E; font-size: 1rem; }
+    .text-teal { color: #008080 !important; }
+    
+    .progress-custom { height: 8px; border-radius: 10px; background: #F3F4F6; overflow: hidden; }
+    .progress-bar-teal { background: #008080; box-shadow: 0 0 10px rgba(0, 128, 128, 0.2); }
+</style>
+
+<div class="container pb-5">
+    {{-- Header Matched to Game Info --}}
+    <div class="premium-header-rounded">
+        <div class="aura-glow"></div>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-7">
+                <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
+                    Athlete <span class="text-teal">Profile</span>
                 </h1>
-                <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold mt-2">
-                    Official Recruitment Identity
-                </p>
+                <p class="text-muted small mb-0">Official Recruitment Identity & Verification</p>
             </div>
-
-            <a href="{{ route('student.profile.edit') }}"
-               class="px-8 py-3 rounded-2xl bg-teal-600 text-white text-xs font-black uppercase tracking-widest hover:brightness-110 transition shadow-lg shadow-teal-600/20">
-                Edit Profile
-            </a>
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                <a href="{{ route('student.profile.edit') }}" class="btn btn-dark fw-bold rounded-pill px-4 shadow-sm" style="font-size: 0.8rem; background: #1A1C1E;">
+                    <i class="bi bi-pencil-square me-2"></i>Edit My Profile
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="max-w-5xl mx-auto px-6 mt-6 space-y-6">
-
-        {{-- PROGRESS TRACKER --}}
-        @php $status = auth()->user()->getCompletionStatus(); @endphp
-        <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm">
-            <div class="flex justify-between items-end mb-6">
-                <div>
-                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-800">Completion Progress</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-1">
-                        {{ $status['is_complete'] ? 'Profile verified' : 'Required for event applications' }}
-                    </p>
+    {{-- Progress Tracker Island --}}
+    @php $status = auth()->user()->getCompletionStatus(); @endphp
+    <div class="info-block">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h6 class="meta-label mb-2">Completion Progress</h6>
+                <div class="progress-custom mt-3">
+                    <div class="progress-bar progress-bar-teal" role="progressbar" style="width: {{ $status['percentage'] }}%"></div>
                 </div>
-                <span class="text-3xl font-black italic text-teal-600">{{ $status['percentage'] }}%</span>
             </div>
-            
-            <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden shadow-inner">
-                <div class="bg-teal-500 h-full transition-all duration-1000 ease-out shadow-[0_0_20px_rgba(20,184,166,0.4)]" 
-                     style="width: {{ $status['percentage'] }}%"></div>
+            <div class="col-md-4 text-md-end">
+                <span class="h2 fw-black italic text-teal">{{ $status['percentage'] }}%</span>
+                <p class="text-muted small fw-bold mb-0 uppercase tracking-widest" style="font-size: 0.6rem;">
+                    {{ $status['is_complete'] ? 'Profile Verified' : 'Complete to apply for games' }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {{-- Avatar & Basic Stats --}}
+        <div class="col-lg-4">
+            <div class="info-block text-center h-100">
+                <div class="mx-auto mb-4 border-4 border-white shadow-lg overflow-hidden" 
+                     style="width: 160px; height: 160px; border-radius: 40px;">
+                    <img src="{{ $user->ProfilePhoto ? asset('storage/' . $user->ProfilePhoto) : 'https://ui-avatars.com/api/?name='.urlencode($user->Name).'&background=008080&color=fff&size=512' }}" 
+                         class="w-100 h-100 object-cover" alt="Profile">
+                </div>
+                <h4 class="fw-bold mb-1 uppercase tracking-tight text-dark">{{ $user->Name }}</h4>
+                <p class="text-teal fw-bold italic small mb-0">{{ $user->MatricNo }}</p>
+                
+                <div class="mt-4 pt-4 border-top">
+                    <div class="row">
+                        <div class="col-6 border-end">
+                            <p class="meta-label mb-0">Role</p>
+                            <p class="fw-bold small text-dark mb-0 uppercase">Student</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="meta-label mb-0">Status</p>
+                            <p class="fw-bold small text-success mb-0 uppercase">Active</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {{-- MAIN INFO CARD --}}
-        <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-12">
-            
-            {{-- PROFILE PHOTO --}}
-            <div class="flex flex-col items-center text-center">
-                <div class="relative">
-                    <img class="h-48 w-48 object-cover rounded-[2.5rem] border-8 border-slate-50 shadow-xl" 
-                         src="{{ $user->ProfilePhoto ? asset('storage/' . $user->ProfilePhoto) : 'https://ui-avatars.com/api/?name='.urlencode($user->Name).'&background=0D9488&color=fff&size=512' }}" 
-                         alt="Profile photo">
-                    @if($status['is_complete'])
-                        <div class="absolute -bottom-2 -right-2 bg-teal-500 text-white p-2 rounded-2xl shadow-lg border-4 border-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        {{-- Details Island --}}
+        <div class="col-lg-8">
+            <div class="info-block h-100">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <p class="meta-label mb-1">Email Address</p>
+                        <p class="data-value">{{ $user->Email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="meta-label mb-1">Contact Number</p>
+                        <p class="data-value">{{ $user->PhoneNumber ?? '-' }}</p>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 rounded-4 bg-light border border-dashed">
+                            <p class="meta-label mb-2"><i class="bi bi-trophy-fill text-teal me-2"></i>Sports Achievement</p>
+                            <p class="data-value small mb-0" style="white-space: pre-wrap;">{{ $user->Achievement ?? 'No achievements listed.' }}</p>
                         </div>
-                    @endif
-                </div>
-                <h2 class="mt-6 text-2xl font-black text-slate-900 uppercase italic">{{ $user->Name }}</h2>
-                <span class="mt-1 text-[10px] font-black uppercase tracking-widest text-teal-600 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 italic">{{ $user->MatricNo }}</span>
-            </div>
-
-            {{-- DETAILS --}}
-            <div class="md:col-span-2 space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Address</label>
-                        <p class="mt-2 text-slate-700 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">{{ $user->Email }}</p>
                     </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Phone Number</label>
-                        <p class="mt-2 text-slate-700 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">{{ $user->PhoneNumber ?? 'Not set' }}</p>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Sports Achievement</label>
-                    <div class="mt-2 text-slate-700 font-medium bg-slate-50 p-6 rounded-2xl border border-slate-100 min-h-[100px]">
-                        {{ $user->Achievement ?? 'No achievements listed yet.' }}
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Medical History</label>
-                    <div class="mt-2 text-slate-700 font-medium bg-slate-50 p-6 rounded-2xl border border-slate-100 min-h-[100px]">
-                        {{ $user->MedicalHistory ?? 'No medical history recorded.' }}
+                    <div class="col-12">
+                        <div class="p-3 rounded-4 bg-light border border-dashed">
+                            <p class="meta-label mb-2"><i class="bi bi-heart-pulse-fill text-danger me-2"></i>Medical History</p>
+                            <p class="data-value small mb-0" style="white-space: pre-wrap;">{{ $user->MedicalHistory ?? 'No medical history recorded.' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
