@@ -16,25 +16,31 @@ class GameInfo extends Model
         'EventID',
         'GameName',
         'Category',
+
         'GameDate',
         'TimeStart',
         'TimeEnd',
+
         'SelectionPlace',
         'CoachName',
         'CoachPhone',
+
         'Capacity',
         'Rules',
         'Description',
+
         'Status',
     ];
 
     protected $casts = [
         'GameDate'  => 'date',
-        'TimeStart' => 'string', // IMPORTANT
-        'TimeEnd'   => 'string', // IMPORTANT
+        'TimeStart' => 'string',
+        'TimeEnd'   => 'string',
     ];
 
-    /* RELATIONSHIPS */
+    /* =========================
+     | RELATIONSHIPS
+     ========================= */
 
     public function event(): BelongsTo
     {
@@ -44,5 +50,34 @@ class GameInfo extends Model
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class, 'GameID', 'GameID');
+    }
+
+    /* =========================
+     | HELPER METHODS (FOR CLASH LOGIC)
+     ========================= */
+
+    /**
+     * Check if this game overlaps with another game
+     */
+    public function overlapsWith(GameInfo $other): bool
+    {
+        if ($this->GameDate->ne($other->GameDate)) {
+            return false;
+        }
+
+        return !(
+            $this->TimeEnd <= $other->TimeStart ||
+            $this->TimeStart >= $other->TimeEnd
+        );
+    }
+
+    public function getTimeStartAttribute($value)
+    {
+        return substr($value, 0, 5);
+    }
+
+    public function getTimeEndAttribute($value)
+    {
+        return substr($value, 0, 5);
     }
 }

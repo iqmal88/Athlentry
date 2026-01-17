@@ -92,8 +92,9 @@ class ApplicationController extends Controller
             foreach ($validated['games'] ?? [] as $g) {
 
                 // ✅ NORMALIZE TIME TO HH:MM:SS
-                $timeStart = strlen($g['TimeStart']) === 5 ? $g['TimeStart'] . ':00' : $g['TimeStart'];
-                $timeEnd   = strlen($g['TimeEnd']) === 5 ? $g['TimeEnd'] . ':00' : $g['TimeEnd'];
+                $timeStart = substr($g['TimeStart'], 0, 5);
+                $timeEnd   = substr($g['TimeEnd'], 0, 5);
+
 
                 if (!empty($g['GameID'])) {
                     GameInfo::where('GameID', $g['GameID'])->update([
@@ -128,9 +129,6 @@ class ApplicationController extends Controller
             }
     }
 
-
-
-
     public function storeEvent(Request $request)
     {
         $validated = $request->validate([
@@ -147,7 +145,7 @@ class ApplicationController extends Controller
             'games.*.Category'  => 'required|string|max:100',
             'games.*.GameDate'  => 'required|date',
             'games.*.TimeStart' => 'required|date_format:H:i',
-            'games.*.TimeEnd'   => 'required|date_format:H:i|after:games.*.TimeStart',
+            'games.*.TimeEnd'   => 'required|date_format:H:i|after:TimeStart',
             'games.*.Capacity'  => 'nullable|integer|min:1',
         ]);
 
@@ -232,6 +230,43 @@ class ApplicationController extends Controller
     {
         $application = Application::with(['user', 'event', 'game'])->findOrFail($ApplicationID);
         return view('application.admin.ApplicationDetails', compact('application'));
+    }
+
+    public function selectionIndex()
+    {
+        $events = Event::with(['games' => function ($q) {
+            $q->whereHas('applications', function ($q2) {
+                $q2->where('ApplicationStatus', 'approved');
+            })->with(['applications' => function ($q3) {
+                $q3->where('ApplicationStatus', 'approved')
+                   ->whereIn('SelectionStatus', ['in_selection', 'selected', 'rejected'])
+                   ->with('user')
+                   ->orderBy('DateApplied');
+            }]);
+        }])->get();
+
+        return view('Status.Admin.StatusView', compact('events'));
+    }
+
+    public function updateSelection(Request $request, $ApplicationID)
+    {
+        $request->validate([
+            'decision' => 'required|in:selected,rejected'
+        ]);
+
+        $application = Application::findOrFail($ApplicationID);
+
+        if (
+            $application->ApplicationStatus !== 'approved' ||
+            $application->SelectionStatus !== 'in_selection'
+        ) {
+            return back()->with('error', 'This application is not eligible for selection.');
+        }
+
+        $application->SelectionStatus = $request->decision;
+        $application->save();
+
+        return back()->with('success', 'Selection decision recorded.');
     }
 
     /* =========================================================
