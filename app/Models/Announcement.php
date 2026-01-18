@@ -24,11 +24,7 @@ class Announcement extends Model
 
     protected $casts = [
         'DateClose' => 'date',
-        'TimeClose' => 'datetime:H:i',
-    ];
-
-    protected $dates = [
-        'deleted_at',
+        'TimeClose' => 'time',
     ];
 
     // Announcement belongs to user (creator)

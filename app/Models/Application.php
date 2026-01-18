@@ -10,7 +10,7 @@ class Application extends Model
     protected $table = 'applications';
     protected $primaryKey = 'ApplicationID';
     public $incrementing = true;
-    protected $keyType = 'int';
+    protected $keyType = 'bigInt';
     public $timestamps = true;
 
     protected $fillable = [
@@ -23,8 +23,6 @@ class Application extends Model
         'SelectionStatus',
 
         // Applicant info
-        'Achievement',
-        'MedicalHistory',
         'DateApplied',
     ];
 
