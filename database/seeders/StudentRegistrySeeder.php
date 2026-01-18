@@ -26,6 +26,7 @@ class StudentRegistrySeeder extends Seeder
             ['MatricNo' => 'CB23145', 'Name' => 'MOHAMAD HILMAN NAFIS BIN MOHD AFFENDEY', 'Department' => 'Software Engineering'],
             ['MatricNo' => 'CA22033', 'Name' => 'MUHAMMAD AIMAN BIN TAN', 'Department' => 'Software Engineering'],
             ['MatricNo' => 'CA22074', 'Name' => 'ISMA IWANI BINTI ISMAIL', 'Department' => 'Software Engineering'],
+            ['MatricNo' => 'CB22130', 'Name' => 'NASRIN SYAMIMI BINTI SUHAIMEE', 'Department' => 'Software Engineering'],
 
             // Add more students as needed. Format: ['MatricNo' => 'CBXXXXXX', 'Name' => 'Full Name', 'Department' => 'Department']
         ];
