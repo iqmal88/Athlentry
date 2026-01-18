@@ -48,7 +48,10 @@
         <div class="h-20 flex items-center px-8">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-[#0D9488] rounded-lg flex items-center justify-center shadow-lg shadow-teal-900/20">
-                    <i class="bi bi-intersect text-white text-lg"></i> </div>
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
                 <div class="flex flex-col">
                     <span class="text-md font-extrabold tracking-tight uppercase text-teal-950">Student <span class="text-[#0D9488]">Studio</span></span>
                     <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none">Athlete Portal</span>

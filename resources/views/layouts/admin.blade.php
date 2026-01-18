@@ -142,7 +142,9 @@
         <div class="h-20 flex items-center px-8">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-[#800000] rounded-lg flex items-center justify-center shadow-lg shadow-red-900/20">
-                    <i class="bi bi-intersect text-white text-lg"></i>
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
                 </div>
                 <div class="flex flex-col">
                     <span class="text-md font-extrabold tracking-tight uppercase">Admin <span class="text-[#800000]">Studio</span></span>
