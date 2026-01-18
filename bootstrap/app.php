@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'isAdmin'   => \App\Http\Middleware\IsAdmin::class,
             'isStudent' => \App\Http\Middleware\IsStudent::class,
             'profileCompleted' => \App\Http\Middleware\EnsureProfileCompleted::class,
+            $middleware->trustProxies(at: '*'),
     ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
