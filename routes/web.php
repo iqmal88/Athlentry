@@ -9,6 +9,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\GameInfoController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,14 @@ Route::middleware(['auth', 'is_student'])
 
     //status
     Route::get('applications/status',[ApplicationController::class, 'studentApplicationsStatus'])->name('applications.status');
+    
+    // Notifications
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+    Route::get('notifications/recent', [NotificationController::class, 'getRecent'])->name('notifications.recent');
+    Route::post('notifications/{notificationId}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::post('notifications/{notificationId}/delete', [NotificationController::class, 'delete'])->name('notifications.delete');
     
     Route::middleware(['profileCompleted'])->group(function () {
     

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\GameInfo;
 use App\Models\Application;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -197,12 +198,18 @@ class ApplicationController extends Controller
         if ($request->action === 'approve') {
             $application->ApplicationStatus = 'approved';
             $application->SelectionStatus   = 'in_selection';
+            $statusText = 'Approved';
         } else {
             $application->ApplicationStatus = 'rejected';
             $application->SelectionStatus   = null;
+            $statusText = 'Rejected';
         }
 
         $application->save();
+        
+        // 🔔 Send notification to student
+        NotificationService::notifyApplicationStatusUpdate($application, $statusText);
+        
         return back()->with('success', 'Application updated successfully.');
     }
 
@@ -238,6 +245,11 @@ class ApplicationController extends Controller
 
         $application->SelectionStatus = $request->decision;
         $application->save();
+        
+        // 🔔 Send notification to student
+        $statusText = $request->decision === 'selected' ? 'Selected' : 'Not Selected';
+        NotificationService::notifySelectionStatusUpdate($application, $statusText);
+        
         return back()->with('success', 'Selection decision recorded.');
     }
 

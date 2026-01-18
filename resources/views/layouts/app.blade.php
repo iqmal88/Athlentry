@@ -133,6 +133,19 @@
                     <span id="live-time" class="text-sm font-bold text-gray-900 tabular-nums leading-none">00:00:00</span>
                     <span class="text-[9px] font-black text-gray-300 uppercase tracking-widest mt-1">Local Time</span>
                 </div>
+
+                {{-- Notification Bell --}}
+                @php 
+                    $unreadCount = App\Models\Notification::unreadCount(Auth::user()->UserID);
+                @endphp
+                <a href="{{ route('student.notifications.index') }}" class="relative text-gray-600 hover:text-[#0D9488] transition-colors">
+                    <i class="bi bi-bell text-lg"></i>
+                    @if($unreadCount > 0)
+                        <span class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {{ $unreadCount > 9 ? '9+' : $unreadCount }}
+                        </span>
+                    @endif
+                </a>
                 
                 @php $status = auth()->user()->getCompletionStatus(); @endphp
                 <div class="flex items-center gap-3">
