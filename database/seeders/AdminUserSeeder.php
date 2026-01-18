@@ -11,10 +11,10 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'Name'           => 'MUHAMMAD IQMAL HAFIY BIN TAJUDIN',
-            'MatricNo'       => 'CB22047',
-            'Email'          => 'admin@athlentry.com',
-            'Password'       => Hash::make('Admin2425'),
+            'Name'           => 'MUHAMMAD ADEEB IRFAAN BIN ABDUL HANIM',
+            'MatricNo'       => 'adminpetakom2190',
+            'Email'          => 'admin2425@gmail.com',
+            'Password'       => Hash::make('superadmin2190@'),
             'Role'           => 'admin',
             'PhoneNumber'    => '0123456789', // Added default phone
             'created_at'     => now(),
