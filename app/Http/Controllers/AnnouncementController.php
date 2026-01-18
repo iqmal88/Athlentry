@@ -16,7 +16,7 @@ class AnnouncementController extends Controller
     public function studentIndex()
     {
         $announcements = Announcement::latest()->get();
-        return view('Announcement.Student.homepage', compact('announcements'));
+        return view('Announcement.Student.Homepage', compact('announcements'));
     }
 
     /**
