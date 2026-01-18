@@ -22,7 +22,7 @@
         border: 1px solid #E5E7EB;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
     }
     
     .aura-glow {
@@ -31,9 +31,8 @@
         right: -30px;
         width: 350px;
         height: 350px;
-        background: radial-gradient(circle, rgba(128, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        background: radial-gradient(circle, rgba(128,0,0,0.05) 0%, rgba(255,255,255,0) 70%);
         border-radius: 50%;
-        z-index: 0;
     }
 
     /* 2. Unified Master Container per Event */
@@ -155,7 +154,7 @@
         <div class="aura-glow"></div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.5rem; letter-spacing: -0.02em;">Selection <span class="text-maroon">Panel</span></h1>
+                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.02em;">Selection <span class="text-maroon">Panel</span></h1>
                 <p class="text-muted small mb-0">Review student applications and finalize team rosters.</p>
             </div>
         </div>

@@ -84,4 +84,36 @@ class NotificationService
                         'read_at' => now(),
                     ]);
     }
+
+    /**
+     * Create notification for all admins when student applies for a game
+     */
+    public static function notifyAdminNewApplication($application)
+    {
+        $student = $application->user;
+        $event = $application->event;
+        $game = $application->game;
+
+        $title = 'New Game Application';
+        $message = "📋 New Application Received\n\n";
+        $message .= "Student: {$student->Name}\n";
+        $message .= "Event: {$event->EventName}\n";
+        $message .= "Game: {$game->GameName}\n";
+        $message .= "Category: {$game->Category}\n";
+        $message .= "Applied on: " . $application->DateApplied->format('Y-m-d H:i:s');
+
+        // Get all admins
+        $admins = User::where('Role', 'admin')->get();
+
+        // Create notification for each admin
+        foreach ($admins as $admin) {
+            Notification::create([
+                'user_id' => $admin->UserID,
+                'title' => $title,
+                'message' => $message,
+                'type' => 'new_application',
+                'application_id' => $application->ApplicationID,
+            ]);
+        }
+    }
 }

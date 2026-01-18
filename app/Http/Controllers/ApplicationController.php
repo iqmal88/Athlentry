@@ -346,6 +346,10 @@ class ApplicationController extends Controller
             'DateApplied'       => now(),
         ]);
 
+        // 🔔 Send notification to all admins
+        $application = Application::with(['user', 'event', 'game'])->where('UserID', $studentId)->where('GameID', $GameID)->latest()->first();
+        NotificationService::notifyAdminNewApplication($application);
+
         return back()->with('success', 'Application submitted successfully.');
     }
 

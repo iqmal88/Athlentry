@@ -25,6 +25,21 @@ class NotificationController extends Controller
     }
 
     /**
+     * Show all notifications for the admin
+     */
+    public function adminIndex()
+    {
+        $userId = Auth::user()->UserID;
+        $notifications = Notification::getAllForUser($userId);
+        $unreadCount = NotificationService::getUnreadCount($userId);
+
+        return view('Notification.AdminIndex', [
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
+        ]);
+    }
+
+    /**
      * Get unread notifications count (for AJAX)
      */
     public function getUnreadCount()

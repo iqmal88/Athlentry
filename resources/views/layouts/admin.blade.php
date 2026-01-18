@@ -129,6 +129,11 @@
         }
 
         .content-body { flex: 1; padding: 2rem; width: 100%; overflow-y: auto; }
+
+        /* Remove underlines from all text */
+        a, span {
+            text-decoration: none !important;
+        }
     </style>
 </head>
 <body class="flex overflow-hidden">
@@ -226,10 +231,10 @@
                     <span class="text-[9px] font-black text-gray-300 uppercase tracking-widest mt-1">System Live</span>
                 </div>
                 
-                <button class="w-10 h-10 rounded-xl hover:bg-gray-100 transition-all flex items-center justify-center text-gray-500 relative">
+                <a href="{{ route('admin.notifications.index') }}" class="w-10 h-10 rounded-xl hover:bg-gray-100 transition-all flex items-center justify-center text-gray-500 relative">
                     <i class="bi bi-bell"></i>
                     <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-[#800000] rounded-full border-2 border-white"></span>
-                </button>
+                </a>
             </div>
         </header>
 

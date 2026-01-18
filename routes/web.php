@@ -94,6 +94,14 @@ Route::middleware(['auth', 'is_admin'])
     Route::get('reports/export/selected/csv', [ReportController::class, 'exportSelectedCSV'])->name('reports.export.selected.csv');
     Route::get('reports/export/selected/pdf',[ReportController::class, 'exportSelectedPDF'])->name('reports.export.selected.pdf');
 
+    /* Notifications */
+    Route::get('notifications', [NotificationController::class, 'adminIndex'])->name('notifications.index');
+    Route::get('notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+    Route::get('notifications/recent', [NotificationController::class, 'getRecent'])->name('notifications.recent');
+    Route::post('notifications/{notificationId}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::post('notifications/{notificationId}/delete', [NotificationController::class, 'delete'])->name('notifications.delete');
+
 });
 
 /*
