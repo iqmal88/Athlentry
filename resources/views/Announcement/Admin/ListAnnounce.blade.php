@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manage Announcements')
+@section('title', 'Announcements')
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -149,8 +149,8 @@
     <div class="premium-header-rounded">
         <div class="row align-items-center">
             <div class="col-md-7">
-                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.02em;">Manage <span style="color: #800000;">Announcements</span></h1>
-                <p class="text-muted small mb-0">Make Announcement for Everything Related With Sport.</p>
+                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.02em;">Announcements <span style="color: #800000;">Publisher</span></h1>
+                <p class="text-muted small mb-0">Make Announcement for Everything Related With Sport and Athlete Recruitment.</p>
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0">
                 <a href="{{ route('admin.announcements.create') }}" class="btn-new-announcement shadow-sm">
@@ -176,7 +176,7 @@
                     </div>
 
                     <div class="card-body-custom">
-                        <div class="date-tag">
+                        <div class="date-tag">Application Close Date: 
                             {{ \Carbon\Carbon::parse($announce->DateClose)->format('d M, Y') }}
                         </div>
                         <h3 class="announce-title">{{ $announce->Title }}</h3>
@@ -196,7 +196,7 @@
             <div class="col-12 text-center py-5">
                 <div class="bg-white rounded-5 border border-dashed p-5">
                     <i class="bi bi-megaphone text-light display-1"></i>
-                    <p class="text-muted mt-3 fw-bold">No announcements registered yet.</p>
+                    <p class="text-muted mt-3 fw-bold">No announcements have been made yet.</p>
                 </div>
             </div>
         @endforelse

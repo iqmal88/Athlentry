@@ -72,10 +72,10 @@
       <div class="lg:col-span-8">
         <div class="bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-sm min-h-[400px]">
           <h3 class="text-[10px] font-black text-teal-600 uppercase tracking-[0.3em] mb-12">
-            Full Details
+            Description
           </h3>
 
-          <div class="prose prose-xl max-w-none text-slate-600 leading-relaxed font-medium italic">
+          <div class="prose prose-xl max-w-none text-slate-600 leading-relaxed font-medium">
             {!! nl2br(e($announcement->Description ?? 'No description provided.')) !!}
           </div>
         </div>
@@ -86,26 +86,20 @@
         <div class="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl">
 
           <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-12">
-            Event Information
+            Announcement Information
           </h3>
 
           <div class="space-y-12">
 
             {{-- DATE --}}
             <div>
-              <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Closing Date</p>
+              <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Application Closing Date</p>
               <p class="text-xl font-bold">{{ $dateHuman }}</p>
-            </div>
-
-            {{-- LOCATION --}}
-            <div>
-              <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Venue</p>
-              <p class="text-xl font-bold">{{ $announcement->Location }}</p>
             </div>
 
             {{-- TIME --}}
             <div>
-              <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Closing Time</p>
+              <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Application Closing Time</p>
               <p class="text-xl font-bold">{{ $timeHuman }}</p>
             </div>
 

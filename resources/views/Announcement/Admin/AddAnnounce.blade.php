@@ -125,12 +125,9 @@
                     </a>
                     <div>
                         <h1 class="fw-bold text-dark mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">Publish <span style="color: #800000;">Announcement</span></h1>
-                        <p class="text-muted small mb-0">Fill in the parameters for the new broadcast.</p>
+                        <p class="text-muted small mb-0">Fill in the the form for the new announcements.</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-5 text-md-end d-none d-md-block">
-                <span class="badge bg-light text-muted border px-3 py-2 fw-bold" style="font-size: 0.6rem; letter-spacing: 0.1em;">BROADCAST STUDIO</span>
             </div>
         </div>
     </div>
@@ -143,7 +140,7 @@
                 <div class="col-lg-7">
                     <div class="mb-4">
                         <label class="form-label-custom">Headline Title</label>
-                        <input type="text" name="Title" class="form-control input-custom" required value="{{ old('Title') }}" placeholder="e.g. Annual Sport Fest Registration">
+                        <input type="text" name="Title" class="form-control input-custom" required value="{{ old('Title') }}" placeholder="e.g. Kejohanan Sukan Antara Fakulti ">
                     </div>
 
                     <div class="mb-0">
@@ -155,21 +152,15 @@
                 <div class="col-lg-5">
                     <div class="row g-4">
                         <div class="col-12">
-                            <label class="form-label-custom">Close Date</label>
+                            <label class="form-label-custom">Application Close Date</label>
                             <input type="date" name="DateClose" class="form-control input-custom" required value="{{ old('DateClose') }}">
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label-custom">Close Time</label>
+                            <label class="form-label-custom">Application Close Time</label>
                             <input type="time" name="TimeClose" class="form-control input-custom" value="{{ old('TimeClose') }}">
                         </div>
                         <div class="col-12">
-    <label class="form-label-custom">Location</label>
-    <input type="text"
-           name="Location"
-           class="form-control input-custom"
-           placeholder="e.g. UMP Sports Complex"
-           value="{{ old('Location') }}">
 </div>
 
 
@@ -193,7 +184,7 @@
                 <div class="col-12 text-end pt-5 border-top mt-5">
                     <a href="{{ route('admin.announcements.index') }}" class="btn btn-link text-muted text-decoration-none me-4 fw-bold small">Cancel Drafting</a>
                     <button type="submit" class="btn-maroon-pill">
-                        <i class="bi bi-send-check-fill me-2"></i>Publish Broadcast
+                        <i class="bi bi-send-check-fill me-2"></i>Blast
                     </button>
                 </div>
             </div>

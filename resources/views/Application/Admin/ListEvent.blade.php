@@ -157,6 +157,18 @@
         color: #fff;
     }
 
+    .btn-new-events {
+        background: #800000;
+        color: #fff !important;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        padding: 10px 24px;
+        border: none;
+        transition: all 0.3s ease;
+        text-transform: capitalize;
+    }
+
     .badge-status {
         font-size: 0.6rem;
         font-weight: 800;
@@ -174,16 +186,16 @@
         <div class="row align-items-center position-relative">
             <div class="col-7">
                 <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
-                    Events <span style="color:#800000;">Hub</span>
+                    Sport <span style="color:#800000;">Events</span>
                 </h1>
                 <p class="text-muted small mb-0">
-                    Unified tournament registry and intake control.
+                    Manage New Event and Games To Recruit Athlete.
                 </p>
             </div>
-            <div class="col-5 text-end">
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
                 <a href="{{ route('admin.events.create') }}"
-                   class="btn btn-dark btn-sm fw-bold px-4 py-2 rounded-3">
-                    <i class="bi bi-plus-lg me-1"></i> NEW EVENT
+                   class="btn-new-events shadow-sm">
+                    <i class="bi bi-plus-circle me-2"></i> New Event
                 </a>
             </div>
         </div>

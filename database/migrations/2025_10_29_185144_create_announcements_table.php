@@ -11,7 +11,6 @@ return new class extends Migration {
             $table->id('AnnouncementID');
 
             $table->string('Title');
-            $table->string('Location');
             $table->date('DateClose');
             $table->time('TimeClose');
             $table->text('Description');

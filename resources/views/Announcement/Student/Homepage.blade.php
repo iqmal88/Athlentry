@@ -55,8 +55,7 @@
         <div class="aura-glow"></div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h6 class="fw-bold text-uppercase tracking-widest mb-2 text-teal-blue" style="font-size: 0.7rem;">Student Portal</h6>
-                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem;">Live <span class="text-teal-blue">Announcements</span></h1>
+                <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem;">Official <span class="text-teal-blue">Announcements</span></h1>
                 <p class="text-muted small mb-0">Stay updated with the latest sports news and recruitment notices.</p>
             </div>
         </div>

@@ -96,18 +96,18 @@
                         <div class="flex-1 h-px bg-gray-100"></div>
                     </div>
 
-                    <div class="text-gray-600 text-lg font-medium leading-relaxed" style="white-space: pre-line;">
+                    <div class="text-gray-600 text-lg font-medium leading-relaxed">
                         {!! nl2br(e($announcement->Description)) !!}
                     </div>
                 </div>
             </div>
 
-            {{-- Logistics Sidebar --}}
+            {{-- Announcement Sidebar --}}
             <div class="lg:col-span-4 space-y-8">
                 <div class="logistics-island relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
                     
-                    <h3 class="field-label-caps mb-12 text-gray-400">Logistics Center</h3>
+                    <h3 class="field-label-caps mb-12 text-gray-400">Application Information</h3>
 
                     <div class="space-y-12">
                         <div class="flex items-center gap-6">
@@ -115,7 +115,7 @@
                                 <i class="bi bi-calendar-check h4 mb-0"></i>
                             </div>
                             <div>
-                                <p class="field-label-caps mb-1">Close Date</p>
+                                <p class="field-label-caps mb-1">Application Close Date</p>
                                 <p class="text-2xl font-bold tracking-tight">{{ $dateHuman }}</p>
                             </div>
                         </div>
@@ -125,18 +125,8 @@
                                 <i class="bi bi-clock h4 mb-0"></i>
                             </div>
                             <div>
-                                <p class="field-label-caps mb-1">Close Time</p>
+                                <p class="field-label-caps mb-1">Application Close Time</p>
                                 <p class="text-2xl font-bold tracking-tight">{{ $timeHuman }}</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-red-500 border border-white/10">
-                                <i class="bi bi-geo-alt h4 mb-0"></i>
-                            </div>
-                            <div>
-                                <p class="field-label-caps mb-1">Location / Venue</p>
-                                <p class="text-2xl font-bold tracking-tight">{{ $announcement->Location ?? 'TBA' }}</p>
                             </div>
                         </div>
                     </div>
@@ -175,18 +165,13 @@
                 </div>
 
                 <div>
-                    <label class="field-label-caps mb-2 block">Close Date</label>
+                    <label class="field-label-caps mb-2 block">Application Close Date</label>
                     <input type="date" name="DateClose" value="{{ \Carbon\Carbon::parse($announcement->DateClose)->format('Y-m-d') }}" class="w-full p-4 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-[#800000]/20 font-bold">
                 </div>
 
                 <div>
-                    <label class="field-label-caps mb-2 block">Close Time</label>
+                    <label class="field-label-caps mb-2 block">Application Close Time</label>
                     <input type="time" name="TimeClose" value="{{ \Carbon\Carbon::parse($announcement->TimeClose)->format('H:i') }}" class="w-full p-4 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-[#800000]/20 font-bold">
-                </div>
-
-                <div class="md:col-span-2">
-                    <label class="field-label-caps mb-2 block">Location</label>
-                    <input name="Location" value="{{ $announcement->Location }}" class="w-full p-4 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-[#800000]/20 font-bold">
                 </div>
 
                 <div class="md:col-span-2">
@@ -195,7 +180,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="field-label-caps mb-2 block">Replace Thumbnail (Optional)</label>
+                    <label class="field-label-caps mb-2 block">Replace Thumbnail Poster (Optional)</label>
                     <input type="file" name="Image" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[#800000]/10 file:text-[#800000] font-black uppercase tracking-widest">
                 </div>
             </div>
