@@ -255,7 +255,7 @@
             @foreach($event->games as $game)
                 @php
                     $application = $game->applications->where('UserID', auth()->id())->first();
-                    $appliedCount = $game->applications->count();
+                    $appliedCount = $game->applications()->count();
                     $percent = $game->Capacity ? ($appliedCount / $game->Capacity) * 100 : 0;
                 @endphp
 
