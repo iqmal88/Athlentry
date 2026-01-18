@@ -11,7 +11,6 @@
         background-color: #F8F9FA;
         font-family: 'Inter', -apple-system, sans-serif;
         color: #1A1C1E;
-        padding-top: 20px;
     }
 
     .premium-header-rounded {

@@ -9,7 +9,6 @@
         background-color: #F8F9FA;
         font-family: 'Inter', -apple-system, sans-serif;
         color: #1A1C1E;
-        padding-top: 20px;
     }
 
     /* 1. Rounded Island Header - EXACT CLONE OF LIST PAGE */

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <style>
-    body { background-color: #F8F9FA; font-family: 'Inter', sans-serif; padding-top: 20px; }
+    body { background-color: #F8F9FA; font-family: 'Inter', sans-serif; }
     .premium-header-rounded { background: #fff; border-radius: 24px; padding: 24px 40px; margin-bottom: 30px; border: 1px solid #E5E7EB; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); }
     .aura-glow { position: absolute; top: -100px; right: -30px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(0, 128, 128, 0.08) 0%, rgba(255, 255, 255, 0) 70%); border-radius: 50%; z-index: 0; }
     .announce-card { background: #fff; border-radius: 20px; border: 1px solid #E5E7EB; overflow: hidden; height: 100%; transition: all 0.3s ease; display: flex; flex-direction: column; }

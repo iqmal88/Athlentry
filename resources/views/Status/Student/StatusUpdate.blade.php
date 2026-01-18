@@ -11,7 +11,6 @@
         background-color: #F2F4F7;
         font-family: 'Inter', -apple-system, sans-serif;
         color: #1A1C1E;
-        padding-top: 20px;
     }
 
     /* 1. Premium Header (Consistent with Portal) */
@@ -193,12 +192,6 @@
                                         <i class="bi bi-x-circle me-1"></i> Not Selected
                                     </span>
                                 @endif
-                                
-                                <div class="mt-1">
-                                    <a href="{{ route('student.gameinfo.show', $game->GameID) }}" class="text-decoration-none fw-bold" style="font-size: 0.6rem; color: #9CA3AF;">
-                                        View Game Details <i class="bi bi-chevron-right small"></i>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     @endforeach

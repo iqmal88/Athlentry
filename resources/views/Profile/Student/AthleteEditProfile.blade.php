@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <style>
-    body { background-color: #F2F4F7; font-family: 'Inter', sans-serif; color: #1A1C1E; padding-top: 20px; }
+    body { background-color: #F2F4F7; font-family: 'Inter', sans-serif; color: #1A1C1E; }
     
     .premium-header-rounded {
         background: #fff; border-radius: 24px; padding: 24px 40px; margin-bottom: 30px;

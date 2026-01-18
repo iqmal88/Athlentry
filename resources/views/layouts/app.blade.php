@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
+        html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F2F4F7; color: #1A1D1F; overflow: hidden; width: 100vw; }
         
         /* --- Sidebar --- */
@@ -38,7 +39,7 @@
         
         /* --- FULL SCREEN FIX --- */
         .main-content { height: 100vh; overflow-y: auto; flex: 1 1 0%; display: flex; flex-direction: column; width: 100%; }
-        .content-body { flex: 1; padding: 2rem; width: 100%; }
+        .content-body { flex: 1; padding: 2rem; width: 100%; overflow-y: auto; }
     </style>
 </head>
 <body class="flex">
