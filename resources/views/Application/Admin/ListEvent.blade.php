@@ -261,7 +261,7 @@
                     {{-- INTAKE --}}
                     <div class="item-stats mt-2">
                         <i class="bi bi-people stat-icon"></i>
-                        Intake:
+                        Student Applied:
                         <span class="text-dark">{{ $game->applications_count ?? 0 }}</span>
                         / {{ $game->Capacity ?? '∞' }}
                     </div>

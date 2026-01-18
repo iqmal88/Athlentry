@@ -128,7 +128,7 @@
                         <h1 class="fw-bold mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">
                             Game <span class="text-teal">Details</span>
                         </h1>
-                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Athlete Information Hub</p>
+                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Athlete Information</p>
                     </div>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                     </div>
                 @else
                     <div class="text-center py-4 bg-light rounded-4 border border-dashed">
-                        <p class="text-muted small mb-0 italic">General sporting regulations apply.</p>
+                        <p class="text-muted small mb-0 italic">General games regulations apply.</p>
                     </div>
                 @endif
             </div>

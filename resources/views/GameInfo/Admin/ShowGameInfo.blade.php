@@ -124,7 +124,7 @@
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0 d-flex gap-2 justify-content-md-end">
                 <a href="{{ route('admin.gameinfo.edit', $game->GameID) }}" class="btn-maroon-pill">
-                    <i class="bi bi-pencil-square me-2"></i> Modify Game
+                    <i class="bi bi-pencil-square me-2"></i> Edit Game
                 </a>
                 <form action="{{ route('admin.gameinfo.destroy', $game->GameID) }}" method="POST" onsubmit="return confirm('Delete this game?');">
                     @csrf @method('DELETE')
@@ -204,7 +204,7 @@
                 <i class="bi bi-geo-alt position-absolute opacity-10" style="font-size: 5rem; bottom: -10px; right: -10px;"></i>
                 
                 <div class="mb-4">
-                    <p class="meta-label text-danger">Game Venue</p>
+                    <p class="meta-label text-danger">Game Location</p>
                     <p class="h4 fw-bold tracking-tight text-white">{{ $game->GameVenue ?: 'To Be Announced' }}</p>
                 </div>
 
@@ -249,7 +249,7 @@
                 <div class="row g-3">
                     <div class="col-6">
                         <div class="p-1">
-                            <span class="meta-label">Specification</span>
+                            <span class="meta-label">Category</span>
                             <p class="fw-bold text-dark small mb-0">{{ $game->Category }}</p>
                         </div>
                     </div>
@@ -262,7 +262,6 @@
                 </div>
             </div>
 
-            {{-- FOOTER HELP --}}
         </div>
     </div>
 </div>

@@ -120,19 +120,18 @@
 
       <div class="max-w-md">
         <h2 class="text-6xl font-black leading-[0.9] tracking-tighter mb-6 uppercase italic text-slate-900">
-          Recover <br><span class="text-[color:var(--brand)] not-italic">Access.</span>
+          Recover <br><span class="text-[color:var(--brand)] not-italic">Password.</span>
         </h2>
         <p class="text-slate-700 text-lg font-medium leading-relaxed">
-          Security protocol initiated. Students may verify identity to establish a new access key.
-          Administrative accounts require manual authorization.
+          Don’t miss this golden opportunity to showcase your potential! 
         </p>
       </div>
     </div>
 
     <div class="relative z-10 flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-      <span>© {{ date('Y') }} Security Module</span>
+      <span>Persatuan Mahasiswa Teknologi Komputer</span>
       <div class="w-12 h-px bg-slate-300"></div>
-      <span>v2.0 Beta</span>
+      <span>Faculty of Computing</span>
     </div>
   </aside>
 

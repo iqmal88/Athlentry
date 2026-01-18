@@ -237,17 +237,6 @@
             <div class="max-w-[1600px] mx-auto">
                 @yield('content')
             </div>
-
-            <footer class="mt-20 py-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">© 2026 Admin Studio • v2.5.0</span>
-                <div class="flex items-center gap-4">
-                    <div class="flex gap-1.5 opacity-30">
-                        <div class="w-1.5 h-1.5 rounded-full bg-[#800000]"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-                    </div>
-                </div>
-            </footer>
         </div>
     </main>
 

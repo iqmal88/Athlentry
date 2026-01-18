@@ -200,7 +200,7 @@
                     @else
                         <div class="px-4 d-flex align-items-center gap-2 text-muted">
                             <i class="bi bi-lock-fill small"></i>
-                            <span class="meta-text">Decision Final</span>
+                            <span class="meta-text">Decision Finalised</span>
                         </div>
                     @endif
                 </div>
@@ -209,7 +209,7 @@
         @empty
             <div class="text-center py-5 bg-white rounded-4 border border-dashed mt-4">
                 <i class="bi bi-people text-light display-1"></i>
-                <p class="text-muted fw-bold mt-3">No candidates registered for this discipline.</p>
+                <p class="text-muted fw-bold mt-3">No students apply for this game.</p>
             </div>
         @endforelse
     </div>

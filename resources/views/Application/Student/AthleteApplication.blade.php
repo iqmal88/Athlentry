@@ -183,7 +183,7 @@
                         </span>
                         <div>
                             <h6 class="fw-bold text-dark mb-0">Applications Locked ({{ $status['percentage'] }}%)</h6>
-                            <p class="text-muted small mb-0">Please complete your profile to enable registration.</p>
+                            <p class="text-muted small mb-0">Please complete your profile to enable applications.</p>
                         </div>
                     </div>
                     <div class="progress mt-3" style="height: 6px; border-radius: 10px; background: #FEF3C7;">
@@ -205,9 +205,9 @@
         <div class="row align-items-center position-relative">
             <div class="col-8">
                 <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
-                    Athlete <span class="text-teal">Recruitment</span>
+                    Athlete <span class="text-teal">Applications</span>
                 </h1>
-                <p class="text-muted small mb-0">Explore competitive opportunities and secure your spot.</p>
+                <p class="text-muted small mb-0">Explore games opportunities and secure your spot.</p>
             </div>
             <div class="col-4 text-end">
                 <p class="meta-text-caps mb-1">Active Events</p>
@@ -227,7 +227,7 @@
                 </div>
             </div>
             <a href="{{ route('student.events.show', $event->EventID) }}" class="btn btn-light btn-sm fw-bold rounded-pill px-3 border" style="font-size: 0.65rem;">
-                EVENT INTEL
+                More Details
             </a>
         </div>
 
@@ -263,7 +263,7 @@
                                 <i class="bi bi-clock me-1"></i> {{ $game->TimeStart }}
                             </div>
                             <div class="item-stats">
-                                <i class="bi bi-people me-1"></i> Intake: <span class="text-dark">{{ $appliedCount }}/{{ $game->Capacity ?? '∞' }}</span>
+                                <i class="bi bi-people me-1"></i> Student Applied: <span class="text-dark">{{ $appliedCount }}/{{ $game->Capacity ?? '∞' }}</span>
                             </div>
 
                             {{-- Button Logic --}}
@@ -305,7 +305,7 @@
                                 <form method="POST" action="{{ route('student.application.submit', $game->GameID) }}">
                                     @csrf
                                     <div class="d-grid gap-2 mt-4">
-                                        <button type="submit" class="btn-apply-teal py-3 m-0" style="font-size: 0.8rem;">Confirm Registration</button>
+                                        <button type="submit" class="btn-apply-teal py-3 m-0" style="font-size: 0.8rem;">Confirm Applications</button>
                                         <button type="button" class="btn btn-link text-muted fw-bold text-decoration-none small" data-bs-dismiss="modal">Cancel</button>
                                     </div>
                                 </form>

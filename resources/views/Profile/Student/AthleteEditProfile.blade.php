@@ -44,7 +44,7 @@
                     <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
                         Edit <span class="text-teal">Profile</span>
                     </h1>
-                    <p class="text-muted small mb-0">Update your athlete information and credentials</p>
+                    <p class="text-muted small mb-0">Update your Profile Information</p>
                 </div>
                 <div class="col-md-5 text-md-end mt-3 mt-md-0">
                     <a href="{{ route('student.profile.show') }}" class="btn btn-light fw-bold rounded-pill px-4 border shadow-sm small">
@@ -113,7 +113,7 @@
                         </div>
                     </div>
 
-                    <h6 class="form-label-caps text-teal mt-4 mb-4">Security Protocol</h6>
+                    <h6 class="form-label-caps text-teal mt-4 mb-4">Password</h6>
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label-caps">New Password (Leave blank to keep current)</label>

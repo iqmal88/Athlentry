@@ -125,8 +125,7 @@
           <span class="text-[color:var(--brand)] not-italic">ELITE.</span>
         </h2>
         <p class="text-slate-700 text-lg font-medium leading-relaxed">
-          The central hub for campus athletes. Register your profile to access premium tournament registries and track your performance history.
-        </p>
+        Are you a student with a talent for sports? Here’s your chance to join the Faculty of Computing’s sports team! We’re on the lookout for the best athletes to represent our faculty in every exciting inter-faculty sports competition. 💪✨        </p>
       </div>
     </div>
 

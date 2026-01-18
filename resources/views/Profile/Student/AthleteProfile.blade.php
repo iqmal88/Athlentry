@@ -43,7 +43,7 @@
                 <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
                     Athlete <span class="text-teal">Profile</span>
                 </h1>
-                <p class="text-muted small mb-0">Official Recruitment Identity & Verification</p>
+                <p class="text-muted small mb-0">Official Students Details & Verification</p>
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0">
                 <a href="{{ route('student.profile.edit') }}" class="btn btn-dark fw-bold rounded-pill px-4 shadow-sm" style="font-size: 0.8rem; background: #1A1C1E;">
@@ -89,10 +89,6 @@
                         <div class="col-6 border-end">
                             <p class="meta-label mb-0">Role</p>
                             <p class="fw-bold small text-dark mb-0 uppercase">Student</p>
-                        </div>
-                        <div class="col-6">
-                            <p class="meta-label mb-0">Status</p>
-                            <p class="fw-bold small text-success mb-0 uppercase">Active</p>
                         </div>
                     </div>
                 </div>

@@ -209,11 +209,11 @@
                         <p class="info-value mb-0">{{ $application->event->EventName ?? '-' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <span class="meta-label">Sporting Discipline</span>
+                        <span class="meta-label">Games</span>
                         <p class="info-value mb-0">{{ $application->game->GameName ?? '-' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <span class="meta-label">Competition Category</span>
+                        <span class="meta-label">Category</span>
                         <p class="info-value mb-0">{{ $application->game->Category ?? '-' }}</p>
                     </div>
                     <div class="col-md-6">
@@ -259,7 +259,7 @@
                     @else
                         <div class="d-flex align-items-center gap-2 text-muted bg-light p-3 rounded-4 border border-dashed">
                             <i class="bi bi-lock-fill"></i>
-                            <span class="small fw-bold text-uppercase tracking-widest">Decision finalized. No further modifications permitted.</span>
+                            <span class="small fw-bold text-uppercase tracking-widest">Decision finalized. No further modifications allowed.</span>
                         </div>
                     @endif
                 </div>

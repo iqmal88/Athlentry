@@ -91,7 +91,10 @@
           Enter the <br><span class="text-[color:var(--brand)] not-italic">Arena.</span>
         </h2>
         <p class="text-slate-700 text-lg font-medium leading-relaxed">
-          The unified registry for student athletes. Securely manage your matches, track progress, and stay updated with the sports community.
+          Elevate your game, ignite your passion!
+        </p>
+        <p class="text-slate-700 text-lg font-medium leading-relaxed">
+        Let’s unite as one Arctic Fox pack and bring glory to Faculty of Computing! 🦊🔥
         </p>
       </div>
     </div>

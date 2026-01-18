@@ -40,7 +40,7 @@
                 <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
                     User <span class="text-maroon">Profile</span>
                 </h1>
-                <p class="text-muted small mb-0">Administrative Identity Management</p>
+                <p class="text-muted small mb-0">Admin Identity Management</p>
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0">
                 <a href="{{ route('admin.profile.edit') }}" class="btn btn-dark fw-bold rounded-pill px-4 shadow-sm" style="font-size: 0.8rem; background: #1A1C1E;">

@@ -164,10 +164,6 @@
             <div class="w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
                 @yield('content')
             </div>
-
-            <footer class="mt-20 py-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">© 2026 Athlentry Student Studio • v2.5.0</span>
-            </footer>
         </div>
     </main>
 

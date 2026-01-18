@@ -144,7 +144,7 @@
                             </span>
                             <span class="meta-text">
                                 <i class="bi bi-geo-alt text-teal me-1"></i> 
-                                {{ $event->Location ?? 'Main Campus' }}
+                                {{ $event->Location ?? 'UMPSA Pekan' }}
                             </span>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
         {{-- LEFT: DESCRIPTION --}}
         <div class="col-lg-8">
             <div class="details-island-card">
-                <span class="section-label-studio">Tournament Prospectus</span>
+                <span class="section-label-studio">Event Details</span>
                 <div class="text-dark leading-relaxed" style="font-size: 1rem; line-height: 1.7; white-space: pre-line; opacity: 0.85;">
                     {!! nl2br(e($event->Description ?? 'Specific event details and tournament rules will be briefed by the coordinator during the opening ceremony.')) !!}
                 </div>
@@ -173,13 +173,13 @@
         {{-- RIGHT: SIDEBAR (TECHNICAL DATA - REDESIGNED) --}}
         <div class="col-lg-4">
             <div class="details-island-card">
-                <span class="section-label-studio">Technical Data</span>
+                <span class="section-label-studio">Event Information</span>
                 
                 <div class="d-flex flex-column gap-4">
                     
                     {{-- 1. DURATION BOX (Bento Style) --}}
                     <div class="p-3 rounded-4 bg-light border border-white shadow-sm">
-                        <p class="meta-text mb-3" style="color: #6B7280;">Tournament Duration</p>
+                        <p class="meta-text mb-3" style="color: #6B7280;">Event Duration</p>
                         <div class="d-flex align-items-center gap-3">
                             <div class="bg-white text-teal rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; border: 1px solid #E5E7EB;">
                                 <i class="bi bi-calendar-check-fill" style="font-size: 1.25rem;"></i>
@@ -202,7 +202,7 @@
 
                     {{-- 2. VENUE BOX --}}
                     <div class="p-3">
-                        <p class="meta-text mb-2" style="color: #6B7280;">Primary Venue</p>
+                        <p class="meta-text mb-2" style="color: #6B7280;">Primary Location</p>
                         <div class="d-flex align-items-start gap-3">
                             <i class="bi bi-geo-alt-fill text-teal mt-1"></i>
                             <div>

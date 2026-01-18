@@ -119,7 +119,7 @@
                         </a>
                         <div>
                             <h1 class="fw-bold text-dark mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">Create <span style="color: #800000;">Event</span></h1>
-                            <p class="text-muted small mb-0">Initialize a new tournament registry and sporting disciplines.</p>
+                            <p class="text-muted small mb-0">Create New Sport Event and Games To Recruit Athlete.</p>
                         </div>
                     </div>
                 </div>

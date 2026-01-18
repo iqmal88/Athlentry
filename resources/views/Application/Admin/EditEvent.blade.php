@@ -214,7 +214,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label-studio">Location</label>
+                        <label class="form-label-studio">Primary Location</label>
                         <input name="Location" value="{{ old('Location',$event->Location) }}" class="form-control input-studio">
                     </div>
 

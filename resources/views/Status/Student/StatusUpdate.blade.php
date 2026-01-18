@@ -205,7 +205,7 @@
                 <i class="bi bi-clipboard-x"></i>
             </div>
             <h3 class="fw-black text-dark h5 mb-2">No Active Records Found</h3>
-            <p class="text-muted small px-lg-5">You haven't submitted any sports applications yet. Visit the recruitment page to begin your registration.</p>
+            <p class="text-muted small px-lg-5">You haven't submitted any sports applications yet. Visit the apply page to begin your application.</p>
             <a href="{{ route('student.application.index') }}" class="btn btn-dark rounded-pill px-4 py-2 fw-bold mt-3" style="font-size: 0.75rem;">
                 Browse Available Sports
             </a>

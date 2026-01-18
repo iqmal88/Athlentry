@@ -45,7 +45,7 @@
                     <h1 class="fw-bold mb-1" style="font-size:1.75rem;">
                         Edit <span class="text-maroon">Profile</span>
                     </h1>
-                    <p class="text-muted small mb-0">Update Administrative Credentials</p>
+                    <p class="text-muted small mb-0">Update Admin Profile</p>
                 </div>
                 <div class="col-md-5 text-md-end mt-3 mt-md-0">
                     <a href="{{ route('admin.profile.view') }}" class="btn btn-light fw-bold rounded-pill px-4 border shadow-sm small">
