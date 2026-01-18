@@ -29,8 +29,7 @@ class Application extends Model
     ];
 
     protected $casts = [
-        'DateApplied'      => 'datetime',
-        'SnapshotGameDate' => 'date',
+        'DateApplied'      => 'date',
     ];
 
     /* =========================

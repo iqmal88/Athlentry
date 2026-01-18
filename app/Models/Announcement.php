@@ -15,7 +15,6 @@ class Announcement extends Model
 
     protected $fillable = [
         'Title',
-        'Location',
         'DateClose',
         'TimeClose',
         'Description',
