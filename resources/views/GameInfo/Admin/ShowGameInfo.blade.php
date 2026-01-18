@@ -118,7 +118,7 @@
                         <h1 class="fw-bold mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">
                             Game <span class="text-maroon">Details</span>
                         </h1>
-                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Unified Management Hub</p>
+                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Manage and monitor all games grouped by event.</p>
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
             <div class="detail-island">
                 <div class="d-flex align-items-center gap-2 mb-4">
                     <i class="bi bi-people-fill text-maroon"></i>
-                    <span class="meta-label mb-0">Personnel & Staffing</span>
+                    <span class="meta-label mb-0">Person In Charge</span>
                 </div>
                 
                 <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-white shadow-sm mb-4">
@@ -263,11 +263,6 @@
             </div>
 
             {{-- FOOTER HELP --}}
-            <div class="text-center p-3 rounded-4 bg-white border border-dashed shadow-sm">
-                <p class="text-muted small mb-0 fw-bold">
-                    <i class="bi bi-info-circle me-1 text-maroon"></i> Live Oversight Active
-                </p>
-            </div>
         </div>
     </div>
 </div>

@@ -127,7 +127,7 @@
                         <h1 class="fw-bold mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">
                             Edit <span class="text-maroon">Game</span>
                         </h1>
-                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Registry Control Hub / ID #{{ $game->GameID }}</p>
+                        <p class="text-muted small mb-0 uppercase fw-bold tracking-wider" style="font-size: 0.65rem;">Manage and monitor all games grouped by event / ID #{{ $game->GameID }}</p>
                     </div>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                 
                 {{-- IDENTITY CARD --}}
                 <div class="detail-island">
-                    <span class="meta-label text-maroon mb-4">Core Identity</span>
+                    <span class="meta-label text-maroon mb-4">Game Information</span>
                     
                     <div class="row g-4">
                         <div class="col-12">
@@ -180,7 +180,7 @@
 
                 {{-- DOCUMENTATION CARD --}}
                 <div class="detail-island">
-                    <span class="meta-label text-maroon mb-4">Documentation</span>
+                    <span class="meta-label text-maroon mb-4">Game Details</span>
                     
                     <div class="mb-4">
                         <label class="meta-label">About the Game</label>
@@ -201,7 +201,7 @@
                 
                 {{-- STATUS BENTO --}}
                 <div class="bento-dark shadow-xl mb-4">
-                    <span class="meta-label text-secondary mb-4">Publishing Status</span>
+                    <span class="meta-label text-secondary mb-4">Game Status</span>
                     <select name="Status" class="form-select form-select-island bg-white text-dark border-0">
                         @foreach(['Open','Closed','Cancelled'] as $st)
                             <option value="{{ $st }}" {{ old('Status', $game->Status) === $st ? 'selected' : '' }}>{{ strtoupper($st) }}</option>
@@ -212,7 +212,7 @@
 
                 {{-- LOGISTICS ISLAND --}}
                 <div class="detail-island">
-                    <span class="meta-label text-maroon mb-4">Logistics & Timing</span>
+                    <span class="meta-label text-maroon mb-4">Venue, Date & Time</span>
                     
                     <div class="mb-4">
                         <label class="meta-label">Game Venue</label>
@@ -221,7 +221,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="meta-label">Competition Date</label>
+                        <label class="meta-label">Game Date</label>
                         <input type="date" name="GameDate" class="form-control form-control-island" 
                                value="{{ old('GameDate', $game->GameDate?->format('Y-m-d')) }}">
                     </div>
@@ -244,12 +244,12 @@
                 <div class="detail-island">
                     <div class="d-flex align-items-center gap-2 mb-4">
                         <i class="bi bi-people-fill text-maroon"></i>
-                        <span class="meta-label mb-0 text-maroon">Personnel & Staffing</span>
+                        <span class="meta-label mb-0 text-maroon">Person In Charge</span>
                     </div>
                     
                     <div class="mb-4 p-3 rounded-4 bg-light border border-white shadow-sm">
                         <div class="mb-3">
-                            <label class="meta-label" style="font-size: 0.6rem;">Person In-Charge Name</label>
+                            <label class="meta-label" style="font-size: 0.6rem;">PIC Name</label>
                             <input type="text" name="PICName" class="form-control form-control-island bg-white shadow-sm" 
                                    value="{{ old('PICName', $game->PICName) }}" placeholder="Full Name">
                         </div>
@@ -263,11 +263,11 @@
 
                     <div class="row g-3 pt-2">
                         <div class="col-6">
-                            <span class="meta-label" style="font-size: 0.55rem;">Specification</span>
+                            <span class="meta-label" style="font-size: 0.55rem;">Category</span>
                             <p class="fw-bold text-dark small mb-0">{{ $game->Category }}</p>
                         </div>
                         <div class="col-6 border-start">
-                            <span class="meta-label" style="font-size: 0.55rem;">Current Cap</span>
+                            <span class="meta-label" style="font-size: 0.55rem;">Current Capacity</span>
                             <p class="fw-bold text-dark small mb-0">{{ $game->Capacity }} Pax</p>
                         </div>
                     </div>
@@ -276,10 +276,10 @@
                 {{-- FINAL ACTIONS --}}
                 <div class="mt-4">
                     <button type="submit" class="btn-maroon-pill shadow-lg mb-3">
-                        <i class="bi bi-cloud-arrow-up-fill me-2"></i> Commit Changes
+                        <i class="bi bi-cloud-arrow-up-fill me-2"></i> Save Changes
                     </button>
                     <a href="{{ route('admin.gameinfo.show', $game->GameID) }}" class="btn btn-link w-100 text-muted fw-bold text-decoration-none small">
-                        Discard Edits
+                        Discard
                     </a>
                 </div>
 

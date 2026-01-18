@@ -132,12 +132,12 @@
                 <div class="col-lg-7">
                     <div class="mb-4">
                         <label class="form-label-studio">Event Name</label>
-                        <input name="EventName" value="{{ old('EventName') }}" required class="form-control input-studio fw-bold" placeholder="e.g. Annual Sports Fest 2026">
+                        <input name="EventName" value="{{ old('EventName') }}" required class="form-control input-studio fw-bold" placeholder="e.g. Kejohanan Sukan Antara Fakulti ">
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label-studio">Location / Venue</label>
-                        <input name="Location" value="{{ old('Location') }}" class="form-control input-studio" placeholder="Specify Stadium or Campus Area">
+                        <label class="form-label-studio">Primary Location</label>
+                        <input name="Location" value="{{ old('Location') }}" class="form-control input-studio" placeholder="UMPSA Pekan">
                     </div>
 
                     <div class="row g-3 mb-4">
@@ -148,15 +148,15 @@
                     <div class="mb-5"><label class="form-label-studio">Event Description</label><textarea name="Description" rows="4" class="form-control input-studio">{{ old('Description') }}</textarea></div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4 pt-4 border-top">
-                        <h5 class="fw-bold mb-0">Sporting <span class="text-muted">Disciplines</span></h5>
-                        <button type="button" id="addGameBtn" class="btn-add-discipline shadow-sm"><i class="bi bi-plus-lg me-1"></i> Add Sport</button>
+                        <h5 class="fw-bold mb-0">List Of<span class="text-muted">Games</span></h5>
+                        <button type="button" id="addGameBtn" class="btn-add-discipline shadow-sm"><i class="bi bi-plus-lg me-1"></i> Add Games</button>
                     </div>
                     <div id="gamesContainer" class="row g-3"></div>
                 </div>
 
                 <div class="col-lg-5">
                     <div class="p-4 rounded-4 shadow-sm" id="statusBox" style="background: #111827; transition: all 0.3s ease;">
-                        <label class="form-label-studio text-gray-500">Initial Status</label>
+                        <label class="form-label-studio text-gray-500">Event Status</label>
                         <select name="Status" id="statusSelect" class="form-select input-studio border-0 status-dropdown fw-black">
                             <option value="Open" selected>OPEN</option>
                             <option value="Closed">CLOSED</option>
@@ -174,8 +174,8 @@
                 </div>
 
                 <div class="col-12 mt-5 pt-5 border-top d-flex justify-content-end align-items-center gap-3">
-                    <a href="{{ route('admin.events.list') }}" class="btn-discard">Cancel Registration</a>
-                    <button type="submit" class="btn-maroon-pill shadow-lg"><i class="bi bi-cloud-plus-fill me-2"></i> Initialize Event</button>
+                    <a href="{{ route('admin.events.list') }}" class="btn-discard">Cancel</a>
+                    <button type="submit" class="btn-maroon-pill shadow-lg"><i class="bi bi-cloud-plus-fill me-2"></i> Add Event</button>
                 </div>
             </div>
         </div>
@@ -207,10 +207,10 @@
             <div class="sport-item-card border-maroon" style="border-style: dashed;">
                 <button type="button" class="btn-remove-game" onclick="removeGameRow(this)"><i class="bi bi-x-lg"></i></button>
                 <div class="row g-3">
-                    <div class="col-md-8"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Sport Name</label><input name="games[${idx}][GameName]" class="form-control input-studio py-2 fw-bold" placeholder="e.g. Football"></div>
-                    <div class="col-md-4"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Category</label><select name="games[${idx}][Category]" class="form-select input-studio py-2"><option>Male</option><option>Female</option><option>Mixed</option><option selected>Open</option></select></div>
-                    <div class="col-md-4"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Intake Limit</label><input type="number" name="games[${idx}][Capacity]" class="form-control input-studio py-2" placeholder="Capacity"></div>
-                    <div class="col-md-8"><div class="row g-2"><div class="col-4"><label class="text-[9px] fw-bold text-muted">Date</label><input type="date" name="games[${idx}][GameDate]" class="form-control input-studio py-2"></div><div class="col-4"><label class="text-[9px] fw-bold text-muted">Start</label><input type="time" name="games[${idx}][TimeStart]" class="form-control input-studio py-2"></div><div class="col-4"><label class="text-[9px] fw-bold text-muted">End</label><input type="time" name="games[${idx}][TimeEnd]" class="form-control input-studio py-2"></div></div></div>
+                    <div class="col-md-8"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Game Name</label><input name="games[${idx}][GameName]" class="form-control input-studio py-2 fw-bold" placeholder="e.g. Football"></div>
+                    <div class="col-md-4"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Game Category</label><select name="games[${idx}][Category]" class="form-select input-studio py-2"><option>Male</option><option>Female</option><option>Mixed</option><option selected>Open</option></select></div>
+                    <div class="col-md-4"><label class="text-[9px] fw-bold text-muted uppercase tracking-widest mb-1 d-block">Capacity</label><input type="number" name="games[${idx}][Capacity]" class="form-control input-studio py-2" placeholder="Capacity"></div>
+                    <div class="col-md-8"><div class="row g-2"><div class="col-4"><label class="text-[9px] fw-bold text-muted">Game Date</label><input type="date" name="games[${idx}][GameDate]" class="form-control input-studio py-2"></div><div class="col-4"><label class="text-[9px] fw-bold text-muted">TIme Start</label><input type="time" name="games[${idx}][TimeStart]" class="form-control input-studio py-2"></div><div class="col-4"><label class="text-[9px] fw-bold text-muted">Time End</label><input type="time" name="games[${idx}][TimeEnd]" class="form-control input-studio py-2"></div></div></div>
                 </div>
             </div>
         </div>`;

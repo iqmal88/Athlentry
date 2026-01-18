@@ -186,7 +186,7 @@
                         </a>
                         <div>
                             <h1 class="fw-bold text-dark mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">Edit <span style="color: #800000;">Event</span></h1>
-                            <p class="text-muted small mb-0">Registry: {{ $event->EventName }}</p>
+                            <p class="text-muted small mb-0">Events: {{ $event->EventName }}</p>
                         </div>
                     </div>
                 </div>
@@ -215,7 +215,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label-studio">Location / Venue</label>
+                        <label class="form-label-studio">Location</label>
                         <input name="Location" value="{{ old('Location',$event->Location) }}" class="form-control input-studio">
                     </div>
 
@@ -237,9 +237,9 @@
 
                     {{-- Sports Disciplines List --}}
                     <div class="d-flex justify-content-between align-items-center mb-4 pt-4 border-top">
-                        <h5 class="fw-bold mb-0">Sporting <span class="text-muted">Disciplines</span></h5>
+                        <h5 class="fw-bold mb-0">List Of <span class="text-muted">Games</span></h5>
                         <button type="button" id="addGameBtn" class="btn-add-discipline shadow-sm">
-                            <i class="bi bi-plus-lg me-1"></i> Add Sport
+                            <i class="bi bi-plus-lg me-1"></i> Add Games
                         </button>
                     </div>
 
@@ -296,7 +296,7 @@
                 {{-- Right: Side Rules --}}
                 <div class="col-lg-5">
                     <div class="p-4 rounded-4 shadow-sm" id="statusBox" style="background: #111827; transition: all 0.3s ease;">
-                        <label class="form-label-studio text-gray-500">Registry Status</label>
+                        <label class="form-label-studio text-gray-500">Event Status</label>
                         <select name="Status" id="statusSelect" class="form-select input-studio border-0 status-dropdown fw-black">
                             @foreach(['Open','Closed','Cancelled'] as $s)
                                 <option value="{{ $s }}" {{ $event->Status==$s?'selected':'' }}>{{ strtoupper($s) }}</option>
@@ -319,7 +319,7 @@
                         Discard Changes
                     </a>
                     <button type="submit" class="btn-maroon-pill shadow-lg">
-                        <i class="bi bi-cloud-check-fill me-2"></i> Save All Changes
+                        <i class="bi bi-cloud-check-fill me-2"></i> Save Changes
                     </button>
                 </div>
             </div>

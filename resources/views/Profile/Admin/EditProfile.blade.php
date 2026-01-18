@@ -62,15 +62,15 @@
             {{-- Personal Identity --}}
             <div class="col-lg-8">
                 <div class="info-block">
-                    <h6 class="form-label-caps text-maroon mb-4">Personal Identity</h6>
+                    <h6 class="form-label-caps text-maroon mb-4">Admin Details</h6>
                     
                     <div class="row g-3">
                         <div class="col-12 mb-3">
-                            <label class="form-label-caps">Full Display Name</label>
+                            <label class="form-label-caps">Full Name</label>
                             <input name="name" type="text" value="{{ old('name', $admin->Name) }}" required class="form-control custom-input">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label-caps">Secure Email</label>
+                            <label class="form-label-caps">Email</label>
                             <input name="email" type="email" value="{{ old('email', $admin->Email) }}" required class="form-control custom-input">
                         </div>
                         <div class="col-md-6 mb-3">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
 
-                    <h6 class="form-label-caps text-maroon mt-4 mb-4">Security Protocol</h6>
+                    <h6 class="form-label-caps text-maroon mt-4 mb-4">Password</h6>
                     <div class="row g-3">
                         <div class="col-md-6 position-relative">
                             <label class="form-label-caps">New Password</label>

@@ -158,7 +158,7 @@
                     </p>
 
                     <div class="mb-5 pt-4 border-top">
-                        <span class="meta-label text-teal">Game Prospectus</span>
+                        <span class="meta-label text-teal">Game Description</span>
                         <p class="fs-5 text-secondary fw-light leading-relaxed" style="white-space: pre-line;">
                             {{ $game->Description ?: 'Specific game details and procedures will be briefed by the Person In-Charge.' }}
                         </p>
@@ -203,7 +203,7 @@
                 <i class="bi bi-geo-alt position-absolute opacity-10" style="font-size: 5rem; bottom: -10px; right: -10px;"></i>
                 
                 <div class="mb-4">
-                    <p class="meta-label text-teal">Competition Venue</p>
+                    <p class="meta-label text-teal">Game Venue</p>
                     <p class="h4 fw-bold tracking-tight text-white">{{ $game->GameVenue ?: 'To Be Announced' }}</p>
                     <small class="text-secondary opacity-75" style="font-size: 0.7rem;">Please arrive 15 minutes before the match.</small>
                 </div>
@@ -234,7 +234,7 @@
                     <div>
                         <span class="meta-label" style="font-size: 0.6rem; color: #008080;">Person In-Charge</span>
                         <p class="fw-black text-dark mb-0" style="font-size: 0.95rem;">
-                            {{ $game->PICName ?: 'Staff On-Duty' }}
+                            {{ $game->PICName ?: 'Person In Charge' }}
                         </p>
                         @if($game->PICPhone)
                             <p class="text-muted mb-0 small fw-bold">
@@ -261,15 +261,8 @@
             {{-- ACTION BUTTON --}}
             <div class="mt-4">
                 <a href="{{ route('student.application.index') }}" class="btn-apply-teal shadow-lg text-decoration-none d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-plus-circle-fill"></i> Register for Game
+                    <i class="bi bi-plus-circle-fill"></i> Apply for This Game
                 </a>
-            </div>
-
-            {{-- FOOTER HELP --}}
-            <div class="text-center p-3 mt-4 rounded-4 bg-white border border-dashed shadow-sm">
-                <p class="text-muted small mb-0 fw-bold">
-                    <i class="bi bi-info-circle me-1 text-teal"></i> Registration status is live
-                </p>
             </div>
         </div>
     </div>

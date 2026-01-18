@@ -73,7 +73,7 @@
             <div class="info-block h-100">
                 <div class="d-flex align-items-center gap-3 mb-4 pb-2 border-bottom">
                     <i class="bi bi-shield-lock text-maroon h4 mb-0"></i>
-                    <h5 class="fw-800 text-uppercase mb-0" style="letter-spacing: 1px; font-size: 0.9rem;">Credential Matrix</h5>
+                    <h5 class="fw-800 text-uppercase mb-0" style="letter-spacing: 1px; font-size: 0.9rem;">Credential Information</h5>
                 </div>
 
                 <div class="row g-4 mt-2">
@@ -82,11 +82,11 @@
                         <p class="data-value">{{ $admin->Name }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p class="meta-label mb-1">Matric Identifier</p>
+                        <p class="meta-label mb-1">Admin ID</p>
                         <p class="data-value text-maroon italic">{{ $admin->MatricNo }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p class="meta-label mb-1">Secure Email</p>
+                        <p class="meta-label mb-1">Email</p>
                         <p class="data-value">{{ $admin->Email }}</p>
                     </div>
                     <div class="col-md-6">

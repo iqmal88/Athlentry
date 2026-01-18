@@ -134,7 +134,7 @@
                         <h1 class="fw-bold text-dark mb-0" style="font-size: 1.75rem; letter-spacing: -0.02em;">
                             {{ $game->GameName }} <span style="color: #800000;">Applicants</span>
                         </h1>
-                        <p class="text-muted small mb-0">Unified registry and selection control hub.</p>
+                        <p class="text-muted small mb-0">Manage New Event and Games To Recruit Athlete.</p>
                     </div>
                 </div>
             </div>
