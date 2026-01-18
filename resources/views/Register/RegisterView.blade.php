@@ -155,12 +155,25 @@
 
       @if ($errors->any())
         <div class="mb-8 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-600 text-xs font-bold uppercase tracking-wide">
+          @if ($errors->has('registration'))
+            <div class="mb-3 pb-3 border-b border-red-200">
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">⚠️</span>
+                <div>
+                  <p class="font-black text-sm mb-1">Registration Verification Failed</p>
+                  <p class="text-red-500 text-xs leading-relaxed">{{ $errors->first('registration') }}</p>
+                </div>
+              </div>
+            </div>
+          @endif
           <ul class="space-y-1">
             @foreach ($errors->all() as $error)
-              <li class="flex items-center gap-2">
-                <span class="w-1 h-1 bg-red-500 rounded-full"></span>
-                {{ $error }}
-              </li>
+              @if (!str_contains($error, 'Invalid matric'))
+                <li class="flex items-center gap-2">
+                  <span class="w-1 h-1 bg-red-500 rounded-full"></span>
+                  {{ $error }}
+                </li>
+              @endif
             @endforeach
           </ul>
         </div>
@@ -173,23 +186,32 @@
           <div class="space-y-2">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Full Name</label>
             <input type="text" name="Name" value="{{ old('Name') }}" required
-                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm @error('registration') border-red-400 @enderror"
                    placeholder="Muhammad Iqmal Hafiy Bin Tajudin">
+            @error('registration')
+              <p class="text-xs text-red-600 font-semibold mt-1">⚠️ Please check your name and matric ID</p>
+            @enderror
           </div>
 
           <div class="space-y-2">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Matric ID</label>
             <input type="text" name="MatricNo" value="{{ old('MatricNo') }}" required
-                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm uppercase"
+                   class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm uppercase @error('registration') border-red-400 @enderror"
                    placeholder="CB22000">
+            @error('registration')
+              <p class="text-xs text-red-600 font-semibold mt-1">⚠️ Not recognized in registry</p>
+            @enderror
           </div>
         </div>
 
         <div class="space-y-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Email</label>
-          <input type="email" name="Email" value="{{ old('Email') }}" required
-                 class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm"
-                 placeholder="name@gmail.com">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">Phone Number</label>
+          <input type="tel" name="PhoneNumber" value="{{ old('PhoneNumber') }}" required
+                 class="form-input w-full rounded-2xl px-5 py-4 font-bold text-sm @error('PhoneNumber') border-red-400 @enderror"
+                 placeholder="+60123456789">
+          @error('PhoneNumber')
+            <p class="text-xs text-red-600 font-semibold mt-1">{{ $message }}</p>
+          @enderror
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -177,8 +177,8 @@
 
                 <div class="text-start space-y-3">
                     <div class="mb-3">
-                        <span class="meta-label">Email Address</span>
-                        <span class="info-value">{{ $application->user->Email ?? '-' }}</span>
+                        <span class="meta-label">Phone Number</span>
+                        <span class="info-value">{{ $application->user->PhoneNumber ?? '-' }}</span>
                     </div>
                     <div class="mb-3">
                         <span class="meta-label">User Role</span>

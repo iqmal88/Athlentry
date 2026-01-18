@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\StudentRegistry;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -61,18 +63,27 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'Name'     => 'required|string|max:255',
-            'MatricNo' => 'required|string|unique:users,MatricNo',
-            'Email'    => 'required|email|unique:users,Email',
-            'password' => 'required|string|min:8|confirmed',
+            'Name'      => 'required|string|max:255',
+            'MatricNo'  => 'required|string|unique:users,MatricNo',
+            'PhoneNumber' => 'required|string|unique:users,PhoneNumber',
+            'password'  => 'required|string|min:8|confirmed',
         ]);
 
+        // ✅ VALIDATE: Check if matric number and name combination exists in student registry
+        $studentRecord = StudentRegistry::findByMatricAndName($data['MatricNo'], $data['Name']);
+
+        if (!$studentRecord) {
+            return back()->withErrors([
+                'registration' => 'Invalid matric number and name combination. Please ensure you enter your correct details as per the official student registry.'
+            ])->withInput();
+        }
+
         $user = User::create([
-            'Name'     => $data['Name'],
-            'MatricNo' => $data['MatricNo'],
-            'Email'    => $data['Email'],
-            'Password' => Hash::make($data['password']),
-            'Role'     => 'student',
+            'Name'      => $data['Name'],
+            'MatricNo'  => $data['MatricNo'],
+            'PhoneNumber' => $data['PhoneNumber'],
+            'Password'  => Hash::make($data['password']),
+            'Role'      => 'student',
             'ProfileCompleted' => false, // Ensure they start as incomplete
         ]);
 
