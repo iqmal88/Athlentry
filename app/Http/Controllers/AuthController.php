@@ -45,7 +45,7 @@ class AuthController extends Controller
         if (!$user->ProfileCompleted) {
             $status = $user->getCompletionStatus();
             
-            return redirect()->route('student.announcements.index')
+            return redirect()->route('Student.Announcements.index')
                 ->with('warning', "Welcome! Your profile is only {$status['percentage']}% complete. Please finish it to unlock all features.")
                 ->with('completion', $status['percentage']);
         }
