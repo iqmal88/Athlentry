@@ -24,7 +24,7 @@ class Announcement extends Model
 
     protected $casts = [
         'DateClose' => 'date',
-        'TimeClose' => 'time',
+        'TimeClose' => 'datetime:H:i:s',
     ];
 
     // Announcement belongs to user (creator)
