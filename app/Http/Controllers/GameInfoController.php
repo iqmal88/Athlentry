@@ -21,19 +21,19 @@ class GameInfoController extends Controller
         ->orderBy('StartDate','desc')
         ->get();
 
-        return view('gameinfo.admin.ListGameInfo', compact('events'));
+        return view('GameInfo.Admin.ListGameInfo', compact('events'));
     }
 
     public function show($GameID)
     {
         $game = GameInfo::with('event')->findOrFail($GameID);
-        return view('gameinfo.admin.ShowGameInfo', compact('game'));
+        return view('GameInfo.Admin.ShowGameInfo', compact('game'));
     }
 
     public function edit($GameID)
     {
         $game = GameInfo::with('event')->findOrFail($GameID);
-        return view('gameinfo.admin.EditGameInfo', compact('game'));
+        return view('GameInfo.Admin.EditGameInfo', compact('game'));
     }
 
     public function update(Request $request, $GameID)
@@ -88,7 +88,7 @@ class GameInfoController extends Controller
         ->orderBy('StartDate', 'desc')
         ->get();
 
-        return view('gameinfo.student.AthleteListGameInfo', compact('events'));
+        return view('GameInfo.Student.AthleteListGameInfo', compact('events'));
     }
 
     public function studentShow($GameID)
@@ -97,6 +97,6 @@ class GameInfoController extends Controller
             ->where('Status', 'Open')
             ->findOrFail($GameID);
 
-        return view('gameinfo.student.AthleteShowGameInfo', compact('game'));
+        return view('GameInfo.Student.AthleteShowGameInfo', compact('game'));
     }
 }

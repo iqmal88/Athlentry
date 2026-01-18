@@ -31,18 +31,18 @@ class ApplicationController extends Controller
             $q->withCount('applications');
         }])->orderBy('StartDate', 'desc')->get();
 
-        return view('application.admin.ListEvent', compact('events'));
+        return view('Application.Admin.ListEvent', compact('events'));
     }
 
     public function createEvent()
     {
-        return view('application.admin.AddEvent');
+        return view('Application.Admin.AddEvent');
     }
 
     public function editEvent($EventID)
     {
         $event = Event::with('games')->findOrFail($EventID);
-        return view('application.admin.EditEvent', compact('event'));
+        return view('Application.Admin.EditEvent', compact('event'));
     }
 
     /* =======================
@@ -183,7 +183,7 @@ class ApplicationController extends Controller
     {
         $game = GameInfo::with('event')->findOrFail($GameID);
         $applications = Application::with('user')->where('GameID', $GameID)->orderBy('DateApplied', 'asc')->get();
-        return view('application.admin.ViewApplicants', compact('game', 'applications'));
+        return view('Application.Admin.ViewApplicants', compact('game', 'applications'));
     }
 
     public function selectApplicant(Request $request, $ApplicationID)
@@ -216,7 +216,7 @@ class ApplicationController extends Controller
     public function showApplication($ApplicationID)
     {
         $application = Application::with(['user', 'event', 'game'])->findOrFail($ApplicationID);
-        return view('application.admin.ApplicationDetails', compact('application'));
+        return view('Application.Admin.ApplicationDetails', compact('application'));
     }
 
     public function selectionIndex()
@@ -267,7 +267,7 @@ class ApplicationController extends Controller
               }]);
         }])->where('Status', 'Open')->get();
 
-        return view('application.student.AthleteApplication', compact('events'));
+        return view('Application.Student.AthleteApplication', compact('events'));
     }
 
     public function studentEventShow($EventID)
@@ -280,7 +280,7 @@ class ApplicationController extends Controller
               }]);
         }])->where('Status', 'Open')->findOrFail($EventID);
 
-        return view('application.student.EventDetails', compact('event'));
+        return view('Application.Student.EventDetails', compact('event'));
     }
 
     /**
