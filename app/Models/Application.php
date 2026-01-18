@@ -9,8 +9,6 @@ class Application extends Model
 {
     protected $table = 'applications';
     protected $primaryKey = 'ApplicationID';
-    public $incrementing = true;
-    protected $keyType = 'bigInt';
     public $timestamps = true;
 
     protected $fillable = [
