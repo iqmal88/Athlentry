@@ -171,6 +171,48 @@
 
 <div class="container pb-5">
 
+    {{-- ALERT MESSAGES --}}
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="border-radius: 12px; border: 1px solid #F8D7DA;">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-exclamation-circle-fill text-danger" style="font-size: 1.25rem;"></i>
+                <div>
+                    <strong class="d-block mb-1">Error</strong>
+                    @foreach($errors->all() as $error)
+                        <div class="small">{{ $error }}</div>
+                    @endforeach
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="border-radius: 12px; border: 1px solid #F8D7DA;">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-exclamation-circle-fill text-danger" style="font-size: 1.25rem;"></i>
+                <div>
+                    <strong class="d-block mb-1">Error</strong>
+                    <div class="small">{{ session('error') }}</div>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="border-radius: 12px; border: 1px solid #D1E7DD;">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 1.25rem;"></i>
+                <div>
+                    <strong class="d-block mb-1">Success</strong>
+                    <div class="small">{{ session('success') }}</div>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- 1. PROGRESS WARNING ALERT --}}
     @if(auth()->user()->isStudent() && !auth()->user()->ProfileCompleted)
         @php $status = auth()->user()->getCompletionStatus(); @endphp
